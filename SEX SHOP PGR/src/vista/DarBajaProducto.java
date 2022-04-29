@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import java.awt.Toolkit;
 import javax.swing.border.BevelBorder;
 
-public class Dar_baja_producto extends JDialog {
+public class DarBajaProducto extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -28,20 +28,27 @@ public class Dar_baja_producto extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Dar_baja_producto dialog = new Dar_baja_producto();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			DarBajaProducto dialog = new DarBajaProducto();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	/**
+//	 * Create the dialog.
+//	 */
+//	//Con el segundo constructor no hace falta este
+//	public DarBajaProducto() {
+//	
+//	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public Dar_baja_producto() {
+	public DarBajaProducto(Configuracion padre, boolean modal) {
+		super(padre);
+		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		setBounds(100, 100, 503, 455);
 		getContentPane().setLayout(new BorderLayout());
@@ -56,13 +63,15 @@ public class Dar_baja_producto extends JDialog {
 		}
 		{
 			JButton btnCerrar = new JButton("Cerrar");
+			btnCerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+				cerrar();
 				}
 			});
 			btnCerrar.setForeground(Color.BLACK);
 			btnCerrar.setBackground(new Color(255, 255, 153));
-			btnCerrar.setBounds(398, 378, 75, 25);
+			btnCerrar.setBounds(362, 378, 111, 25);
 			contentPanel.add(btnCerrar);
 		}
 		{
@@ -78,11 +87,11 @@ public class Dar_baja_producto extends JDialog {
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("DAR DE BAJA EL PRODUCTO");
-			lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblNewLabel_1.setForeground(Color.WHITE);
-			lblNewLabel_1.setBounds(10, 11, 207, 14);
-			contentPanel.add(lblNewLabel_1);
+			JLabel lblNewLabel_BajaProduc = new JLabel("DAR DE BAJA EL PRODUCTO");
+			lblNewLabel_BajaProduc.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblNewLabel_BajaProduc.setForeground(Color.WHITE);
+			lblNewLabel_BajaProduc.setBounds(10, 11, 207, 14);
+			contentPanel.add(lblNewLabel_BajaProduc);
 		}
 		
 		JComboBox comboBox_Seleccion = new JComboBox();
@@ -92,11 +101,11 @@ public class Dar_baja_producto extends JDialog {
 		comboBox_Seleccion.setBounds(31, 83, 182, 22);
 		contentPanel.add(comboBox_Seleccion);
 		
-		JLabel lblNewLabel_1 = new JLabel("Datos del producto seleccionado:");
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(35, 129, 240, 25);
-		contentPanel.add(lblNewLabel_1);
+		JLabel lblNewLabel_SeleccionProduc = new JLabel("Datos del producto seleccionado:");
+		lblNewLabel_SeleccionProduc.setForeground(Color.WHITE);
+		lblNewLabel_SeleccionProduc.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_SeleccionProduc.setBounds(35, 129, 240, 25);
+		contentPanel.add(lblNewLabel_SeleccionProduc);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(216, 289, 1, -83);
@@ -109,17 +118,29 @@ public class Dar_baja_producto extends JDialog {
 			contentPanel.add(table);
 		}
 		{
-			JLabel lblNewLabel_2 = new JLabel(" Nombre del producto");
-			lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblNewLabel_2.setForeground(Color.WHITE);
-			lblNewLabel_2.setBounds(45, 165, 366, 25);
-			contentPanel.add(lblNewLabel_2);
+			JLabel lblNewLabel_Nombreproduc = new JLabel(" Nombre del producto");
+			lblNewLabel_Nombreproduc.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblNewLabel_Nombreproduc.setForeground(Color.WHITE);
+			lblNewLabel_Nombreproduc.setBounds(45, 165, 366, 25);
+			contentPanel.add(lblNewLabel_Nombreproduc);
 		}
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBackground(SystemColor.controlDkShadow);
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			JButton btnNewButton = new JButton("Aceptar");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cerrar();
+				}
+			});
+			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+			btnNewButton.setBackground(new Color(255, 255, 102));
+			btnNewButton.setBounds(22, 379, 101, 23);
+			contentPanel.add(btnNewButton);
 		}
+	}
+	
+	//Metodos
+	private void cerrar() {
+		this.dispose();
+		
 	}
 }

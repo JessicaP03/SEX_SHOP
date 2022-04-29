@@ -1,15 +1,19 @@
 package clases;
 
+import java.util.Vector;
+
 public class Persona {
 
 	//ATTRIBUTOS
 	private String codUsuario;
 	private String email;
-	private String nombre;
+	protected static String nombre;
 	private String apellido;
-	private String contraseña;
+	private String contrasena;
 	private String tipo;
 	
+	private int cont;
+	private String num="";
 	//CONSTRUCTORES
 	public Persona(String codUsuario, String email, String nombre, String apellido, String contraseña, String tipo) {
 		super();
@@ -17,7 +21,7 @@ public class Persona {
 		this.email = email;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.contraseña = contraseña;
+		this.contrasena = contraseña;
 		this.tipo = tipo;
 	}
 	
@@ -58,12 +62,12 @@ public class Persona {
 		this.apellido = apellido;
 	}
 
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasena() {
+		return contrasena;
 	}
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contraseña) {
+		this.contrasena = contraseña;
 	}
 
 	public String getTipo() {
@@ -74,9 +78,6 @@ public class Persona {
 		this.tipo = tipo;
 	}
 	
-	//GETDATOS
-	
-	//SETDATOS
 	
 	
 }

@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -57,6 +59,11 @@ public class Configuracion extends JDialog {
 		getContentPane().add(btnCerrar);
 		
 		JButton btnRegistrar_Empleado = new JButton("Registrar Empleado");
+		btnRegistrar_Empleado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				registroEmpleado();
+			}
+		});
 		btnRegistrar_Empleado.setBackground(new Color(255, 255, 153));
 		btnRegistrar_Empleado.setBounds(10, 226, 150, 23);
 		getContentPane().add(btnRegistrar_Empleado);
@@ -76,13 +83,25 @@ public class Configuracion extends JDialog {
 		btnInsertar.setForeground(Color.WHITE);
 		btnInsertar.setBackground(new Color(135, 206, 235));
 		btnInsertar.addActionListener(new ActionListener() {
+			//LLamamos al metodo insertar
 			public void actionPerformed(ActionEvent e) {
+				insertar();
 			}
+
+			
 		});
 		btnInsertar.setBounds(46, 75, 99, 23);
 		getContentPane().add(btnInsertar);
 		
 		JButton btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(new ActionListener() {
+			//Llamar al metodo modificar para ir a esa ventana
+			public void actionPerformed(ActionEvent e) {
+				modificar();
+			}
+
+			
+		});
 		btnModificar.setBackground(new Color(135, 206, 235));
 		btnModificar.setForeground(Color.WHITE);
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -94,8 +113,12 @@ public class Configuracion extends JDialog {
 		btnBaja.setForeground(Color.WHITE);
 		btnBaja.setBackground(new Color(135, 206, 235));
 		btnBaja.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
+			//Llamar al metodo de baja
+			public void actionPerformed(ActionEvent e) {
+				baja();
 			}
+
+		
 		});
 		btnBaja.setBounds(46, 165, 99, 23);
 		getContentPane().add(btnBaja);
@@ -106,4 +129,30 @@ public class Configuracion extends JDialog {
 		lblNewLabel_1.setBounds(20, 43, 203, 14);
 		getContentPane().add(lblNewLabel_1);
 	}
+	
+	protected void registroEmpleado() {
+		// TODO Auto-generated method stub
+		Registro registroEmpleado = new Registro (this, true);
+		registroEmpleado.setVisible(true);
+	}
+
+	//Metodo para que al pulsar la pantalla de insertar nos diriga a tal pantalla
+	private void insertar() {
+		// TODO Auto-generated method stub
+		InsertarProducto insertar = new InsertarProducto (this, true);
+		insertar.setVisible(true);
+	}
+	
+	private void modificar() {
+		// TODO Auto-generated method stub
+		ModificarProducto modificar = new ModificarProducto(this, true);
+		modificar.setVisible(true);
+	}
+
+	private void baja() {
+		// TODO Auto-generated method stub
+		DarBajaProducto baja = new DarBajaProducto (this, true);
+		baja.setVisible(true);
+	}
+	
 }
