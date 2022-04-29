@@ -28,20 +28,24 @@ public class Registro extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Registro dialog = new Registro();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			Registro dialog = new Registro();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public Registro() {
+
+
+	public Registro(Configuracion configuracion, boolean b) {
+		// TODO Auto-generated constructor stub
+		
 		setBounds(100, 100, 450, 439);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
@@ -134,8 +138,47 @@ public class Registro extends JDialog {
 			contentPanel.add(lblNewLabel_2);
 		}
 	}
+	
+	// Metodo para crear nueva cuenta
+	private void nuevaCuenta() {
 
-	public Registro(Configuracion configuracion, boolean b) {
-		// TODO Auto-generated constructor stub
+		ControladorBDImplementacion bd = new ControladorBDImplementacion();
+
+		// VALIDAR QUE NO FALTA CAMPOS POR RELLENAR
+		if (textNombre.getText().equals("") || textApellido.getText().equals("") || textEmail.getText().equals("")
+				|| passwordConstrasena.getText().equals("")) {
+
+			JOptionPane.showMessageDialog(null, "FALTAN CAMPOS POR RELLENAR!");
+		} else {
+
+			// COMPROBAR QUE SI EXISTE EL USUARIO
+			if (bd.existePersona(textNombre.getText()) == 0) {
+
+				// VERIFICAR QUE ES UN EMAIL
+				if (bd.esEmail(textEmail.getText())) {
+					Persona pers = new Persona();
+
+					// RECOGER DATOS DE PERSONA
+					pers.setNombre(textNombre.getText());
+					pers.setApellido(textApellido.getText());
+					pers.setEmail(textEmail.getText());
+					pers.setContrasena(passwordConstrasena.getPassword().toString());
+
+					ControladorBDImplementacion datos = new ControladorBDImplementacion();
+					datos.insertarPersona(pers);
+
+					JOptionPane.showMessageDialog(this, "EL USUARIO SE HA REGISTRADO CORRECTAMENTE!");
+				} else {
+					JOptionPane.showMessageDialog(this, "ESTO NO ES UN EMAIL!");
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "EL USUARIO YA EXISTE!");
+			}
+		}
+
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
 	}
 }
