@@ -1,2 +1,0 @@
-INDEX VERSION 1.131+C:\Users\1dam\Desktop\DAM\SEX_SHOP\SEX_SHOP\.metadata\.plugins\org.eclipse.jdt.core
-1574843208.index
