@@ -34,7 +34,8 @@ public class ControladorBDImplementacion {
 
 	// Sentencias sql
 	final String INSERTpersona = "INSERT INTO persona (nombre, apellido, email, contraseña, tipo) VALUES ( ?, ?, ?, ?,?)";
-//	final String codUsuario = "CALL codigo_automatico()"; //LLamamos al procedimiento 
+
+	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -132,36 +133,39 @@ public class ControladorBDImplementacion {
 		return mather.find();
 	}
 
-	public boolean login(Persona pers) {
+	//metodo para logearse
+	public Persona login(Persona pers) {
 
 		ResultSet rs = null;
-		String loguearse = "SELECT nombre, apellido, email, contraseña, tipo FROM PERSONA WHERE email=?";
+
 		this.openConnection();
 
 		try {
 			stmt = con.prepareStatement(loguearse);
-			stmt.setString(3, pers.getEmail());
+			stmt.setString(1, pers.getEmail());
+			stmt.setString(2, pers.getContrasena());
+			
 			rs = stmt.executeQuery();
 
+			pers = new Persona();
 			if (rs.next()) {
-
-				if (pers.getContrasena().equals(rs.getString(4))) {
-					pers.setEmail(rs.getString(3));
-					pers.setContrasena(rs.getString(4));
-
-					return true;
-
-				} else {
-					return false;
-				}
+				//RECOGEMOS LOS DATOS DE PERSONA
+				pers.setCodUsuario(rs.getInt(1));
+				pers.setNombre(rs.getString(2));
+				pers.setApellido(rs.getString(3));
+				pers.setEmail(rs.getString(4));
+				pers.setContrasena(rs.getString(5));
+				pers.setTipo(rs.getString(6));
 			}
-			return false;
 		} catch (SQLException e) {
 			Logger.getLogger(ControladorBDImplementacion.class.getName()).log(Level.SEVERE, null, e);
-			return false;
-		}
 		
-
+		}
+		return pers;
 	}
+
+	
+
+	
 
 }

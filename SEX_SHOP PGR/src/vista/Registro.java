@@ -150,6 +150,19 @@ public class Registro extends JDialog {
 			lblNewLabel_2.setBounds(391, 285, 33, 59);
 			contentPanel.add(lblNewLabel_2);
 		}
+		
+		JButton btnVolver = new JButton("VOLVER");
+		btnVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				volverInicio();
+			}
+
+			
+		});
+		btnVolver.setForeground(Color.BLACK);
+		btnVolver.setBackground(new Color(255, 255, 153));
+		btnVolver.setBounds(213, 310, 132, 23);
+		contentPanel.add(btnVolver);
 	}
 
 	// Metodo para crear nueva cuenta
@@ -175,10 +188,15 @@ public class Registro extends JDialog {
 					pers.setNombre(textNombre.getText());
 					pers.setApellido(textApellido.getText());
 					pers.setEmail(textEmail.getText());
-					pers.setContrasena(passwordConstrasena.getPassword().toString());
+					//Pasar contraseña a String
+					pers.setContrasena(new String(passwordConstrasena.getPassword()));
 
 					ControladorBDImplementacion datos = new ControladorBDImplementacion();
 					datos.insertarPersona(pers);
+					
+					InicioSesion is= new InicioSesion();
+					is.setVisible(true);
+					this.dispose();
 
 					JOptionPane.showMessageDialog(this, "EL USUARIO SE HA REGISTRADO CORRECTAMENTE!");
 				} else {
@@ -190,8 +208,14 @@ public class Registro extends JDialog {
 		}
 
 	}
-
-	public void actionPerformed(ActionEvent e) {
-
+	
+	//Boton de volver al inicio
+	private void volverInicio() {
+		InicioSesion is= new InicioSesion();
+		is.setVisible(true);
+		this.dispose();
+		
 	}
+
+	
 }
