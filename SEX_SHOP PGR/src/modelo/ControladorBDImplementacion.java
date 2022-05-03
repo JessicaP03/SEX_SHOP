@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -133,19 +135,19 @@ public class ControladorBDImplementacion {
 	public boolean login(Persona pers) {
 
 		ResultSet rs = null;
-		String loguearse = "SELECT EMAIL,CONTRASENA FROM PERSONA WHERE EMAIL=?";
+		String loguearse = "SELECT nombre, apellido, email, contraseña, tipo FROM PERSONA WHERE email=?";
 		this.openConnection();
 
 		try {
 			stmt = con.prepareStatement(loguearse);
-			stmt.setString(1, pers.getEmail());
+			stmt.setString(3, pers.getEmail());
 			rs = stmt.executeQuery();
 
 			if (rs.next()) {
 
-				if (pers.getContrasena().equals(rs.getString(2))) {
-					pers.setEmail(rs.getString(1));
-					pers.setContrasena(rs.getString(2));
+				if (pers.getContrasena().equals(rs.getString(4))) {
+					pers.setEmail(rs.getString(3));
+					pers.setContrasena(rs.getString(4));
 
 					return true;
 
@@ -155,10 +157,10 @@ public class ControladorBDImplementacion {
 			}
 			return false;
 		} catch (SQLException e) {
-			e.printStackTrace();
-
+			Logger.getLogger(ControladorBDImplementacion.class.getName()).log(Level.SEVERE, null, e);
+			return false;
 		}
-		return false;
+		
 
 	}
 

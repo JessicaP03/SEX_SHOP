@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import clases.Cliente;
 import clases.Persona;
 import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
@@ -23,6 +24,10 @@ import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -34,7 +39,7 @@ import javax.swing.JPasswordField;
 public class InicioSesion extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField text_Nombre;
+	private JTextField textEmail;
 
 	/**
 	 * Launch the application.
@@ -74,18 +79,18 @@ public class InicioSesion extends JFrame {
 		lblInicioSesion.setBounds(10, 11, 149, 14);
 		contentPane.add(lblInicioSesion);
 
-		text_Nombre = new JTextField();
-		text_Nombre.setForeground(Color.WHITE);
-		text_Nombre.setBackground(new Color(255, 0, 102));
-		text_Nombre.setBounds(24, 80, 208, 20);
-		contentPane.add(text_Nombre);
-		text_Nombre.setColumns(10);
+		textEmail = new JTextField();
+		textEmail.setForeground(Color.WHITE);
+		textEmail.setBackground(new Color(255, 0, 102));
+		textEmail.setBounds(24, 80, 208, 20);
+		contentPane.add(textEmail);
+		textEmail.setColumns(10);
 
-		JLabel lblNombreUsuario = new JLabel("NOMBRE DE USUARIO");
-		lblNombreUsuario.setForeground(SystemColor.text);
-		lblNombreUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNombreUsuario.setBounds(20, 49, 175, 14);
-		contentPane.add(lblNombreUsuario);
+		JLabel lblEmail = new JLabel("EMAIL");
+		lblEmail.setForeground(SystemColor.text);
+		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblEmail.setBounds(20, 49, 175, 14);
+		contentPane.add(lblEmail);
 
 		JLabel lblContraseNIa = new JLabel("CONTRASE\u00D1A");
 		lblContraseNIa.setForeground(Color.WHITE);
@@ -138,10 +143,10 @@ public class InicioSesion extends JFrame {
 		lblNewLabel_2.setBounds(391, 305, 33, 59);
 		contentPane.add(lblNewLabel_2);
 
-		passwordContrasenia = new JPasswordField();
-		passwordContrasenia.setBackground(new Color(255, 0, 102));
-		passwordContrasenia.setBounds(24, 161, 208, 20);
-		contentPane.add(passwordContrasenia);
+		passContrasenia = new JPasswordField();
+		passContrasenia.setBackground(new Color(255, 0, 102));
+		passContrasenia.setBounds(24, 161, 208, 20);
+		contentPane.add(passContrasenia);
 	}
 
 	// BOTON DE REGISTRARSE
@@ -152,22 +157,43 @@ public class InicioSesion extends JFrame {
 		this.dispose();
 	}
 
-	//Recorremos la informacio
-	private static List<Persona> datos = new ArrayList <Persona>();
-	private JPasswordField passwordContrasenia;
+	// Recorremos la informacion
+	private static List<Persona> datos = new ArrayList<Persona>();
+	private JPasswordField passContrasenia;
 
-	//BOTON INICIAR SESION
+	// BOTON INICIAR SESION
 	private void iniciarSesion() {
-		ControladorBDImplementacion bd = new ControladorBDImplementacion();
 		Persona pers = new Persona();
+		//RECOGER EMAIL Y CONTRASEÑA
+		pers.setEmail(textEmail.getText());
+		pers.setContrasena(new String(passContrasenia.getPassword()));
+
+		ControladorBDImplementacion datos = new ControladorBDImplementacion();
+		pers = datos.login(pers);
 		
-		String contrasena= new String(passwordContrasenia.getPassword());
-		
-		if (!passwordContrasenia.getText().equals("")||!contrasena.equals("")) {
+		//SI FALTA ALGUN CAMPO VACIO
+		if (textEmail.getText().equals("") || passContrasenia.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "FALTA CAMPOS POR RELLENAR!");
+		} else {
+			//SI EL TIPO ES IGUAL A ADMIN
+			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
+				Configuracion conf = new Configuracion();
+				conf.setVisible(true);
+				this.dispose();
+			//SI EL TIPO ES IGUAL A CLIENTE
+			} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
+				PiñaMeloco pm = new PiñaMeloco();
+				pm.setVisible(true);
+				this.dispose();
 			
-			String nuevaContrasena = hash.
+			//SI EL EMAIL O CONTRASEÑA NO COINCIDEN
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR! Email o Contraseña incorrectos");
+			}
 		}
-		
+
+		//
+
 	}
-	
+
 }
