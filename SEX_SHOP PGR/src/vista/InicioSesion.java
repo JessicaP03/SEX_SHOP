@@ -164,35 +164,33 @@ public class InicioSesion extends JFrame {
 	// BOTON INICIAR SESION
 	private void iniciarSesion() {
 		Persona pers = new Persona();
-		//RECOGER EMAIL Y CONTRASEÑA
+		// RECOGER EMAIL Y CONTRASEÑA
 		pers.setEmail(textEmail.getText());
 		pers.setContrasena(new String(passContrasenia.getPassword()));
 
 		ControladorBDImplementacion datos = new ControladorBDImplementacion();
 		pers = datos.login(pers);
-		
-		//SI FALTA ALGUN CAMPO VACIO
+
+		// SI FALTA ALGUN CAMPO VACIO
 		if (textEmail.getText().equals("") || passContrasenia.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "FALTA CAMPOS POR RELLENAR!");
 		} else {
-			//SI EL TIPO ES IGUAL A ADMIN
+			// SI EL TIPO ES IGUAL A ADMIN
 			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
 				Configuracion conf = new Configuracion();
 				conf.setVisible(true);
 				this.dispose();
-			//SI EL TIPO ES IGUAL A CLIENTE
+				// SI EL TIPO ES IGUAL A CLIENTE
 			} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
 				PiñaMeloco pm = new PiñaMeloco();
 				pm.setVisible(true);
 				this.dispose();
-			
-			//SI EL EMAIL O CONTRASEÑA NO COINCIDEN
+
+				// SI EL EMAIL O CONTRASEÑA NO COINCIDEN
 			} else {
 				JOptionPane.showMessageDialog(null, "ERROR! Email o Contraseña incorrectos");
 			}
 		}
-
-		//
 
 	}
 

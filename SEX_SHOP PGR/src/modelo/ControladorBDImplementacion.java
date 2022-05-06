@@ -48,13 +48,13 @@ public class ControladorBDImplementacion {
 	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
 
 	final String ObtenerProducto = "SELECT * FROM producto";
-	
+
 	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
 
 	final String INSERTLenceria = "INSERT INTO lenceria (idproducto, talla) VALUES (?, ?)";
-	
+
 	final String INSERTjuguete = "INSERT INTO juguete (idproducto, material) VALUES (?, ?)";
-	
+
 	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
@@ -111,7 +111,13 @@ public class ControladorBDImplementacion {
 
 			e.printStackTrace();
 		}
+		try {
+			this.closeConnection();
 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// METODO PARA VERIFICAR SI EXISTE EL USUARIO
@@ -153,7 +159,7 @@ public class ControladorBDImplementacion {
 		return mather.find();
 	}
 
-	// metodo para logearse
+	// METODO PARA LOGEARSE
 	public Persona login(Persona pers) {
 
 		ResultSet rs = null;
@@ -183,14 +189,65 @@ public class ControladorBDImplementacion {
 		}
 		return pers;
 	}
-	
-	
-	//METODO PARA INSERTAR PRODUCTO DEPENDIENDO LA CATEGORIA
-	public void insertarProducto (Producto prod) {
-		
-		
-		ResultSet rs= null;
-		
+
+	// METODO PARA INSERTAR PRODUCTO DEPENDIENDO LA CATEGORIA
+	public void insertarProducto(Producto prod) {
+
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
+
+			// Posicionamos cada valor para insertarlo en la base de datos
+			stmt.setString(1, prod.getIdProducto());
+			stmt.setString(2, prod.getNombreProd());
+			stmt.setString(3, prod.getCategoria());
+			stmt.setString(4, prod.getSexo());
+			stmt.setInt(5, prod.getPrecio());
+			stmt.setString(6, prod.getTipo());
+
+			if (stmt.executeUpdate() == 1) {
+				if (prod instanceof Lenceria) {
+					stmt = con.prepareStatement(INSERTLenceria);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Lenceria) prod).getTalla());
+					stmt.executeUpdate();
+				} else if (prod instanceof Juguete) {
+					stmt = con.prepareStatement(INSERTjuguete);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Juguete) prod).getMaterial());
+					stmt.executeUpdate();
+				} else if (prod instanceof Cosmetico) {
+					stmt = con.prepareStatement(INSERTcosmetico);
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+					stmt.executeUpdate();
+				}
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void insertarJuguete(Producto prod) {
+
+		ResultSet rs = null;
+
 		this.openConnection();
 
 		try {
@@ -203,51 +260,70 @@ public class ControladorBDImplementacion {
 			stmt.setString(3, prod.getCategoria());
 			stmt.setString(4, prod.getSexo());
 			stmt.setString(5, prod.getTipo());
-			
-			rs= stmt.executeQuery();
-			
-			if (stmt.executeQuery() != null) {
-					if (prod.getCategoria().equalsIgnoreCase("LENCERIA")) {
-						stmt = con.prepareStatement(INSERTLenceria);
-						
-						stmt.setString(1, prod.getIdProducto());
-						stmt.setString(2, ((Lenceria) prod).getTalla());
-						stmt.executeQuery();
-					
-					}else if(prod.getCategoria().equalsIgnoreCase("JUGUETES")) {
-						
-						stmt = con.prepareStatement(INSERTjuguete);
-						
-						stmt.setString(1, prod.getIdProducto());
-						stmt.setString(2, ((Juguete) prod).getMaterial());
-					
-					}else if(prod.getCategoria().equalsIgnoreCase("COSMETICOS")) {
-						
-						stmt= con.prepareStatement(INSERTcosmetico);
-						stmt.setString(1, prod.getIdProducto());
-						stmt.setString(2, ((Cosmetico) prod).getCaducidad());
-						stmt.setString(3, ((Cosmetico) prod).getIngrediente());
-					}
+
+			if (stmt.executeUpdate() == 1) {
+				stmt = con.prepareStatement(INSERTjuguete);
+
+				stmt.setString(1, prod.getIdProducto());
+				stmt.setString(2, ((Juguete) prod).getMaterial());
+				stmt.executeUpdate();
 			}
-			
-			
-			
-			
-			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	
-	//Listar los productos 
-	
+
+	public void insertarCosmetico(Producto prod) {
+
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
+
+			// Posicionamos cada valor para insertarlo en la base de datos
+			stmt.setString(1, prod.getIdProducto());
+			stmt.setString(2, prod.getNombreProd());
+			stmt.setString(3, prod.getCategoria());
+			stmt.setString(4, prod.getSexo());
+			stmt.setString(5, prod.getTipo());
+
+			if (stmt.executeUpdate() == 1) {
+
+				stmt = con.prepareStatement(INSERTcosmetico);
+				stmt.setString(1, prod.getIdProducto());
+				stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+				stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// Listar los productos
+
 	public ArrayList<Producto> listarProducto() {
 		ResultSet rs = null;
 		Producto prod;
-		ArrayList<Producto> listaProductos= new ArrayList<>();
+		ArrayList<Producto> listaProductos = new ArrayList<>();
 		this.openConnection();
 
 		try {

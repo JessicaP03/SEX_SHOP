@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -31,6 +32,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
+import java.awt.Cursor;
+import java.awt.Dialog.ModalityType;
 
 public class InsertarProducto extends JDialog implements ActionListener {
 
@@ -43,13 +46,14 @@ public class InsertarProducto extends JDialog implements ActionListener {
 	 */
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textID, textCaducidad, textMaterial, textPrecio, textInredientes, textNombreProd;
-	private JRadioButton rdbtnLenceria, rdbtnJuguete, rdbtnCosmetico, rdbtnHombre, rdbtnMujer, rdbtnUnisex, rdbtnXs,
-			rdbtnS, rdbtnM, rdbtnXL, rdbtnL;
+	private JRadioButton rdbtnLenceria, rdbtnJuguete, rdbtnCosmetico;
 	private ButtonGroup categoria, sexo, talla;
 	private JLabel lblIngredientes, lblTalla, lblCaducidad, lblMaterial;
-
+	private JComboBox comboSexo;
 	private ArrayList<Producto> productos;
 	private JTextField textTipo;
+	private ControladorBDImplementacion datos;
+	private JComboBox comboTalla;
 
 	/**
 	 * Launch the application.
@@ -68,8 +72,10 @@ public class InsertarProducto extends JDialog implements ActionListener {
 	 * Create the dialog.
 	 */
 	public InsertarProducto() {
-		setBackground(SystemColor.windowBorder);
-		setBounds(100, 100, 493, 520);
+		setForeground(new Color(0, 0, 0));
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		setBackground(new Color(0, 0, 0));
+		setBounds(100, 100, 512, 520);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -123,21 +129,21 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			contentPanel.add(lblNewLabel_Precio);
 		}
 		{
-			JLabel lblMaterial = new JLabel("Material");
+			 lblMaterial = new JLabel("Material");
 			lblMaterial.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblMaterial.setForeground(new Color(255, 255, 153));
 			lblMaterial.setBounds(32, 270, 56, 14);
 			contentPanel.add(lblMaterial);
 		}
 		{
-			JLabel lblCaducidad = new JLabel("Caducidad");
+			lblCaducidad = new JLabel("Caducidad");
 			lblCaducidad.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCaducidad.setForeground(new Color(255, 255, 153));
 			lblCaducidad.setBounds(32, 302, 103, 14);
 			contentPanel.add(lblCaducidad);
 		}
 		{
-			JLabel lblIngredientes = new JLabel("Ingredientes");
+			lblIngredientes = new JLabel("Ingredientes");
 			lblIngredientes.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblIngredientes.setForeground(new Color(255, 255, 153));
 			lblIngredientes.setBounds(32, 334, 103, 14);
@@ -166,11 +172,12 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			JButton cancelButton_Cerrar = new JButton("Cerrar");
 			cancelButton_Cerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					cerrarVentana();
 				}
 			});
 			cancelButton_Cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			cancelButton_Cerrar.setForeground(Color.BLACK);
-			cancelButton_Cerrar.setBounds(292, 438, 95, 23);
+			cancelButton_Cerrar.setBounds(312, 438, 133, 23);
 			contentPanel.add(cancelButton_Cerrar);
 			cancelButton_Cerrar.setBackground(new Color(255, 255, 153));
 			cancelButton_Cerrar.setActionCommand("Cancel");
@@ -245,7 +252,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 
 			}
 		});
-		btnAgregar.setBounds(32, 438, 95, 23);
+		btnAgregar.setBounds(32, 438, 133, 23);
 		contentPanel.add(btnAgregar);
 		{
 			JPanel buttonPane = new JPanel();
@@ -297,64 +304,8 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		});
 		rdbtnCosmetico.setForeground(new Color(255, 255, 255));
 		rdbtnCosmetico.setBackground(new Color(255, 20, 147));
-		rdbtnCosmetico.setBounds(359, 140, 86, 23);
+		rdbtnCosmetico.setBounds(359, 140, 103, 23);
 		contentPanel.add(rdbtnCosmetico);
-		{
-			rdbtnHombre = new JRadioButton("HOMBRE");
-			rdbtnHombre.setBackground(new Color(255, 20, 147));
-			rdbtnHombre.setForeground(new Color(255, 255, 255));
-			rdbtnHombre.setBounds(141, 172, 86, 23);
-			contentPanel.add(rdbtnHombre);
-		}
-		{
-			rdbtnMujer = new JRadioButton("MUJER");
-			rdbtnMujer.setForeground(new Color(255, 255, 255));
-			rdbtnMujer.setBackground(new Color(255, 20, 147));
-			rdbtnMujer.setBounds(251, 172, 86, 23);
-			contentPanel.add(rdbtnMujer);
-		}
-		{
-			rdbtnUnisex = new JRadioButton("UNISEX");
-			rdbtnUnisex.setBackground(new Color(255, 20, 147));
-			rdbtnUnisex.setForeground(new Color(255, 255, 255));
-			rdbtnUnisex.setBounds(359, 172, 86, 23);
-			contentPanel.add(rdbtnUnisex);
-		}
-		{
-			rdbtnXs = new JRadioButton("XS");
-			rdbtnXs.setForeground(Color.WHITE);
-			rdbtnXs.setBackground(new Color(255, 20, 147));
-			rdbtnXs.setBounds(127, 364, 46, 23);
-			contentPanel.add(rdbtnXs);
-		}
-		{
-			rdbtnS = new JRadioButton("S");
-			rdbtnS.setForeground(Color.WHITE);
-			rdbtnS.setBackground(new Color(255, 20, 147));
-			rdbtnS.setBounds(198, 364, 46, 23);
-			contentPanel.add(rdbtnS);
-		}
-		{
-			rdbtnM = new JRadioButton("M");
-			rdbtnM.setForeground(Color.WHITE);
-			rdbtnM.setBackground(new Color(255, 20, 147));
-			rdbtnM.setBounds(269, 364, 46, 23);
-			contentPanel.add(rdbtnM);
-		}
-		{
-			rdbtnL = new JRadioButton("L");
-			rdbtnL.setForeground(Color.WHITE);
-			rdbtnL.setBackground(new Color(255, 20, 147));
-			rdbtnL.setBounds(340, 364, 46, 23);
-			contentPanel.add(rdbtnL);
-		}
-		{
-			rdbtnXL = new JRadioButton("XL");
-			rdbtnXL.setForeground(Color.WHITE);
-			rdbtnXL.setBackground(new Color(255, 20, 147));
-			rdbtnXL.setBounds(411, 364, 46, 23);
-			contentPanel.add(rdbtnXL);
-		}
 
 		// GRUPO DE BOTONES DE CATEGORIA
 		categoria = new ButtonGroup();
@@ -364,60 +315,68 @@ public class InsertarProducto extends JDialog implements ActionListener {
 
 		// GRUPO DE BOTONES DE SEXO
 		sexo = new ButtonGroup();
-		sexo.add(rdbtnHombre);
-		sexo.add(rdbtnMujer);
-		sexo.add(rdbtnUnisex);
 
 		// GRUPO DE BOTONES DE TALLA
 		talla = new ButtonGroup();
-		talla.add(rdbtnXs);
-		talla.add(rdbtnS);
-		talla.add(rdbtnM);
-		talla.add(rdbtnL);
-		talla.add(rdbtnXL);
+
+		comboSexo = new JComboBox();
+		comboSexo.setForeground(new Color(255, 255, 255));
+		comboSexo.setBackground(new Color(255, 20, 147));
+		comboSexo.setModel(new DefaultComboBoxModel(new String[] { "MUJER", "HOMBRE", "UNISEX" }));
+		comboSexo.setBounds(226, 172, 111, 22);
+		contentPanel.add(comboSexo);
+		{
+			comboTalla = new JComboBox();
+			comboTalla.setModel(new DefaultComboBoxModel(new String[] { "XS", "S", "M", "L", "XL" }));
+			comboTalla.setForeground(new Color(255, 255, 255));
+			comboTalla.setBackground(new Color(255, 20, 147));
+			comboTalla.setBounds(226, 364, 111, 22);
+			contentPanel.add(comboTalla);
+		}
+	}
+
+	protected void cerrarVentana() {
+		this.dispose();
+
 	}
 
 	protected void categoriaElegida() {
 
 		// SI ELIGES LA CATEGORIA LENCERIA
 		if (rdbtnLenceria.isSelected()) {
-
 			// JUGUETES
 			textMaterial.setVisible(false);
-
+			lblMaterial.setVisible(false);
 			// COSMETICOS
-
+			lblCaducidad.setVisible(false);
+			lblIngredientes.setVisible(false);
+			
 			textInredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
+			
+			comboTalla.setVisible(true);
 
-			rdbtnXs.setVisible(true);
-			rdbtnS.setVisible(true);
-			rdbtnM.setVisible(true);
-			rdbtnL.setVisible(true);
-			rdbtnXL.setVisible(true);
+			// SI LA CATEGORIA ELEGIDA ES JUGUETE
 		
-			//SI LA CATEGORIA ELEGIDA ES JUGUETE
 		} else if (rdbtnJuguete.isSelected()) {
 
 			// JUGUETES
 			textMaterial.setVisible(true);
 
 			// COSMETICOS
-
+			lblCaducidad.setVisible(false);
+			lblIngredientes.setVisible(false);
+			
 			textInredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
-
-			rdbtnXs.setVisible(false);
-			rdbtnS.setVisible(false);
-			rdbtnM.setVisible(false);
-			rdbtnL.setVisible(false);
-			rdbtnXL.setVisible(false);
 			
-			//SI LA CATEGORIA ELEGIDA ES
+			comboTalla.setVisible(false);
+
+			// SI LA CATEGORIA ELEGIDA ES
 		} else if (rdbtnCosmetico.isSelected()) {
 
 			// JUGUETES
@@ -430,11 +389,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 
 			// LENCERIA
 
-			rdbtnXs.setVisible(false);
-			rdbtnS.setVisible(false);
-			rdbtnM.setVisible(false);
-			rdbtnL.setVisible(false);
-			rdbtnXL.setVisible(false);
+			comboTalla.setVisible(false);
 		} else {
 
 		}
@@ -444,52 +399,51 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		Producto prod;
 
 		// SI FALTA ALGUN CAMPO POR RELLENAR
-		if ((rdbtnHombre.isSelected() || rdbtnMujer.isSelected() || rdbtnUnisex.isSelected())
-				|| (rdbtnLenceria.isSelected() || rdbtnCosmetico.isSelected() || rdbtnJuguete.isSelected())
-				|| (rdbtnXs.isSelected()) || rdbtnS.isSelected() || rdbtnM.isSelected() || rdbtnL.isSelected()
-				|| rdbtnXL.isSelected()) {
+		 
+		// SI LA CATEGORIA ELEGIDA ES LENCERIA
+		if (rdbtnLenceria.isSelected()) {
 
+			prod = new Lenceria();
+			prod.setIdProducto(textID.getText());
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("LENCERIA");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setTipo(textTipo.getText());
+			((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
+
+			datos = new ControladorBDImplementacion();
+			datos.insertarProducto(prod);
+
+			// SI LA CATEGORIA ELEGIDA ES JUGUETE
+		} else if (rdbtnJuguete.isSelected()) {
+			prod = new Juguete();
+			prod.setIdProducto(textID.getText());
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("JUGUETE");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setTipo(textTipo.getText());
+			((Juguete) prod).setMaterial(textMaterial.getText());
+
+			datos = new ControladorBDImplementacion();
+			datos.insertarProducto(prod);
 			
-			//SI LA CATEGORIA ELEGIDA ES LENCERIA
-			if (categoria.equals("LENCERIA")) {
-
-				textMaterial.setVisible(false);
-				textCaducidad.setEnabled(false);
-				prod = new Lenceria();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Lenceria) prod).setTalla(talla.getSelection().toString());
-				
-			//SI LA CATEGORIA ELEGIDA ES JUGUETE
-			} else if (categoria.equals("JUGUETES")) {
-				prod = new Juguete();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Juguete) prod).setMaterial(textMaterial.getText());
-
-				//SI LA CATEGORIA ELEGIDA ES COSMETICO
-			} else if (categoria.equals("COSMETICOS")) {
-				prod = new Cosmetico();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Cosmetico) prod).setCaducidad(textCaducidad.getText());
-				((Cosmetico) prod).setIngrediente(textInredientes.getText());
-			}
+			// SI LA CATEGORIA ELEGIDA ES COSMETICO
+		} else if (rdbtnCosmetico.isSelected()) {
+			prod = new Cosmetico();
+			prod.setIdProducto(textID.getText());
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("COSMETICO");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setTipo(textTipo.getText());
+			((Cosmetico) prod).setCaducidad(textCaducidad.getText());
+			((Cosmetico) prod).setIngrediente(textInredientes.getText());
 			
-			JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMEMTE");
-		} else {
-
-			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");		
+			datos = new ControladorBDImplementacion();
+			datos.insertarProducto(prod);
 		}
+		
+
+		JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMEMTE");
 	}
 
 	@Override
@@ -497,26 +451,5 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-//	protected void consultarSexo() {
-//		if (comboBox_Sexo.getSelectedIndex() == -1) {
-//			JOptionPane.showMessageDialog(this, "Selecciona el sexo");
-//		} else {
-//			String cadena = (String) comboBox_Sexo.getSelectedItem();
-//			int pos = cadena.indexOf(" ");
-//
-//		}
-//	}
-
-//	private void cargarProductos(ControladorBDImplementacion datos) {
-//
-//		ArrayList<Producto> listaProductos = datos.listarProducto();
-//		comboBox_Sexo.removeAllItems();
-//
-//		for (int i = 0; i < listaProductos.size(); i++) {
-//			comboBox_Sexo.addItem(listaProductos.get(i).getSexo().toString());
-//		}
-//
-//	}
 
 }
