@@ -5,7 +5,7 @@ import java.util.Vector;
 public class Persona {
 
 	//ATTRIBUTOS
-	private String codUsuario;
+	private int codUsuario;
 	private String email;
 	protected static String nombre;
 	private String apellido;
@@ -15,7 +15,7 @@ public class Persona {
 	private int cont;
 	private String num="";
 	//CONSTRUCTORES
-	public Persona(String codUsuario, String email, String nombre, String apellido, String contraseña, String tipo) {
+	public Persona(int codUsuario, String email, String nombre, String apellido, String contraseña, String tipo) {
 		super();
 		this.codUsuario = codUsuario;
 		this.email = email;
@@ -30,12 +30,12 @@ public class Persona {
 	}
 
 	//GETTERS Y SETTERS
-	public String getCodUsuario() {
+	public int getCodUsuario() {
 		return codUsuario;
 	}
 
-	public void setCodUsuario(String codUsuario) {
-		this.codUsuario = codUsuario;
+	public void setCodUsuario(int i) {
+		this.codUsuario = i;
 	}
 
 	public String getEmail() {

@@ -6,15 +6,25 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.ComboBoxEditor;
 import javax.swing.JOptionPane;
 
+import com.mysql.cj.x.protobuf.MysqlxSql.StmtExecute;
+
+import clases.Cosmetico;
+import clases.Juguete;
+import clases.Lenceria;
 import clases.Persona;
+import clases.Producto;
 
 public class ControladorBDImplementacion {
 
@@ -36,6 +46,16 @@ public class ControladorBDImplementacion {
 	final String INSERTpersona = "INSERT INTO persona (nombre, apellido, email, contraseña, tipo) VALUES ( ?, ?, ?, ?,?)";
 
 	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
+
+	final String ObtenerProducto = "SELECT * FROM producto";
+	
+	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
+
+	final String INSERTLenceria = "INSERT INTO lenceria (idproducto, talla) VALUES (?, ?)";
+	
+	final String INSERTjuguete = "INSERT INTO juguete (idproducto, material) VALUES (?, ?)";
+	
+	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -133,7 +153,7 @@ public class ControladorBDImplementacion {
 		return mather.find();
 	}
 
-	//metodo para logearse
+	// metodo para logearse
 	public Persona login(Persona pers) {
 
 		ResultSet rs = null;
@@ -144,12 +164,12 @@ public class ControladorBDImplementacion {
 			stmt = con.prepareStatement(loguearse);
 			stmt.setString(1, pers.getEmail());
 			stmt.setString(2, pers.getContrasena());
-			
+
 			rs = stmt.executeQuery();
 
 			pers = new Persona();
 			if (rs.next()) {
-				//RECOGEMOS LOS DATOS DE PERSONA
+				// RECOGEMOS LOS DATOS DE PERSONA
 				pers.setCodUsuario(rs.getInt(1));
 				pers.setNombre(rs.getString(2));
 				pers.setApellido(rs.getString(3));
@@ -159,13 +179,113 @@ public class ControladorBDImplementacion {
 			}
 		} catch (SQLException e) {
 			Logger.getLogger(ControladorBDImplementacion.class.getName()).log(Level.SEVERE, null, e);
-		
+
 		}
 		return pers;
 	}
-
 	
-
 	
+	//METODO PARA INSERTAR PRODUCTO DEPENDIENDO LA CATEGORIA
+	public void insertarProducto (Producto prod) {
+		
+		
+		ResultSet rs= null;
+		
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
+
+			// Posicionamos cada valor para insertarlo en la base de datos
+			stmt.setString(1, prod.getIdProducto());
+			stmt.setString(2, prod.getNombreProd());
+			stmt.setString(3, prod.getCategoria());
+			stmt.setString(4, prod.getSexo());
+			stmt.setString(5, prod.getTipo());
+			
+			rs= stmt.executeQuery();
+			
+			if (stmt.executeQuery() != null) {
+					if (prod.getCategoria().equalsIgnoreCase("LENCERIA")) {
+						stmt = con.prepareStatement(INSERTLenceria);
+						
+						stmt.setString(1, prod.getIdProducto());
+						stmt.setString(2, ((Lenceria) prod).getTalla());
+						stmt.executeQuery();
+					
+					}else if(prod.getCategoria().equalsIgnoreCase("JUGUETES")) {
+						
+						stmt = con.prepareStatement(INSERTjuguete);
+						
+						stmt.setString(1, prod.getIdProducto());
+						stmt.setString(2, ((Juguete) prod).getMaterial());
+					
+					}else if(prod.getCategoria().equalsIgnoreCase("COSMETICOS")) {
+						
+						stmt= con.prepareStatement(INSERTcosmetico);
+						stmt.setString(1, prod.getIdProducto());
+						stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+						stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+					}
+			}
+			
+			
+			
+			
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//Listar los productos 
+	
+	public ArrayList<Producto> listarProducto() {
+		ResultSet rs = null;
+		Producto prod;
+		ArrayList<Producto> listaProductos= new ArrayList<>();
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerProducto);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombreproducto"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setTipo(rs.getString("tipo"));
+
+				listaProductos.add(prod);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listaProductos;
+	}
 
 }

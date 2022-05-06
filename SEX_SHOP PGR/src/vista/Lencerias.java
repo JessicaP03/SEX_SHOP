@@ -21,7 +21,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-public class Lenceria extends JDialog {
+public class Lencerias extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
@@ -30,7 +30,7 @@ public class Lenceria extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Lenceria dialog = new Lenceria();
+			Lencerias dialog = new Lencerias();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +41,7 @@ public class Lenceria extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Lenceria() {
+	public Lencerias() {
 		AbstractButton contentPanel_1 = null;
 		contentPanel_1.setLayout(null);
 		contentPanel_1.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -57,6 +57,10 @@ public class Configuracion extends JDialog {
 		getContentPane().add(btnCerrar);
 		
 		JButton btnRegistrar_Empleado = new JButton("Registrar Empleado");
+		btnRegistrar_Empleado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnRegistrar_Empleado.setBackground(new Color(255, 255, 153));
 		btnRegistrar_Empleado.setBounds(10, 226, 150, 23);
 		getContentPane().add(btnRegistrar_Empleado);

@@ -7,7 +7,7 @@ public class Cliente extends Persona {
 	private String direccion;
 
 	// Constructores
-	public Cliente(String codUsuario, String email, String nombre, String apellido, String contraseña, String tipo,
+	public Cliente(int codUsuario, String email, String nombre, String apellido, String contraseña, String tipo,
 			String direccion) {
 		super(codUsuario, email, nombre, apellido, contraseña, tipo);
 		this.direccion = direccion;

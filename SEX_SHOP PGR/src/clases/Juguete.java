@@ -11,10 +11,13 @@ public class Juguete extends Producto {
 		super(idProducto, nombreProd, categoria, sexo, precio, tipo);
 		this.material = material;
 	}
-	//GETTERS Y SETTERS
+	
 	public Juguete() {
 		super();
 	}
+	
+	
+	//GETTERS Y SETTERS
 
 	public String getMaterial() {
 		return material;
