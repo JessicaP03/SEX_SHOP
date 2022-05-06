@@ -26,20 +26,15 @@ public class Configuracion extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Configuracion dialog = new Configuracion();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	/**
 	 * Create the dialog.
 	 */
-	public Configuracion() {
+	public Configuracion(InicioSesion padre, boolean modal) {
+		super(padre);
+		this.setModal(modal);
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		getContentPane().setBackground(SystemColor.controlDkShadow);
 		setBounds(100, 100, 450, 300);
@@ -61,6 +56,7 @@ public class Configuracion extends JDialog {
 		JButton btnRegistrar_Empleado = new JButton("Registrar Empleado");
 		btnRegistrar_Empleado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				registroEmpleado();
 			}
 		});
@@ -131,8 +127,8 @@ public class Configuracion extends JDialog {
 	}
 	
 	protected void registroEmpleado() {
-		// TODO Auto-generated method stub
-		Registro registroEmpleado = new Registro (this, true);
+		
+		Registro registroEmpleado = new Registro ();
 		registroEmpleado.setVisible(true);
 	}
 

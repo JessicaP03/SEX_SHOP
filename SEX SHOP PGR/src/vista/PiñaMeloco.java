@@ -18,25 +18,23 @@ import javax.swing.ImageIcon;
 
 public class PiñaMeloco extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			PiñaMeloco dialog = new PiñaMeloco();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	/**
 	 * Create the dialog.
 	 */
-	public PiñaMeloco() {
+	public PiñaMeloco(InicioSesion padre, boolean modal) {
+		super(padre);
+		this.setModal(modal);
 		setBounds(100, 100, 470, 433);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
@@ -130,7 +128,7 @@ public class PiñaMeloco extends JDialog {
 			JButton btnLenceria = new JButton("LENCERIA");
 			btnLenceria.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Lenceria();
+					Lencerias();
 				}
 			});
 			btnLenceria.setForeground(Color.WHITE);
@@ -164,21 +162,21 @@ public class PiñaMeloco extends JDialog {
 	}
 
 	//Este boton te lleva a lenceria
-	private void Lenceria() {
-		// TODO Auto-generated method stub
-		Lenceria lencerias= new Lenceria(this, true);
+	private void Lencerias() {
+	
+		Lencerias lencerias= new Lencerias(this, true);
 		lencerias.setVisible(true);
 	}
 
 	private void Cosmeticos() {
-		Cosmetico cosmeticos = new Cosmetico(this, true);
+		Cosmeticos cosmeticos = new Cosmeticos(this, true);
 		cosmeticos.setVisible(true);
 		
 	}
 
 	//Este boton te lleva a juguetes
 	private void Juguetes() {
-		// TODO Auto-generated method stub
+		
 		Juguetes juguetes = new Juguetes(this, true);
 		juguetes.setVisible(true);
 	}

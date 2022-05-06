@@ -7,7 +7,7 @@ public class Socio extends Cliente {
 	private int puntos;
 	
 	//CONSTRUCTORES
-	public Socio(String codUsuario, String email, String nombre, String apellido, String contraseña, String tipo,
+	public Socio(int codUsuario, String email, String nombre, String apellido, String contraseña, String tipo,
 			String direccion, int oferta, int puntos) {
 		super(codUsuario, email, nombre, apellido, contraseña, tipo, direccion);
 		this.oferta = oferta;

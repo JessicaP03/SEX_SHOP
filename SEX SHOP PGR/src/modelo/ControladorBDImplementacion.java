@@ -6,9 +6,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,14 +42,19 @@ public class ControladorBDImplementacion {
 
 	// Sentencias sql
 	final String INSERTpersona = "INSERT INTO persona (nombre, apellido, email, contraseña, tipo) VALUES ( ?, ?, ?, ?,?)";
-	final String INSERTproducto = "INSERT INTO producto (idProducto, nombreProd, categori, sexo, precio, tipo) VALUES ( ?, ?, ?, ?, ?, ?)";
-	final String INSERTlenceria = "INSERT INTO lenceria (idProducto, talla) VALUES (?, ?)";
-	final String INSERTjuguetes = "INSERT INTO juguete (idProducto, material) VALUES (?, ?)";
-	final String INSERTcosmeticos = "INSERT INTO cosmetico (idProducto, caducidad, ingredientes) VALUES (?, ?, ?)";
-	final String MODIFproductos = "UPDATE producto SET nombreProd = ?, categori = ?, sexo = ?, precio = ?, tipo = ?";
-	final String DELETEProducto = "DELETE FROM producto WHERE idProducto = ?";
-	
-	
+
+	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
+
+	final String ObtenerProducto = "SELECT * FROM producto";
+
+	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
+
+	final String INSERTLenceria = "INSERT INTO lenceria (idproducto, talla) VALUES (?, ?)";
+
+	final String INSERTjuguete = "INSERT INTO juguete (idproducto, material) VALUES (?, ?)";
+
+	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
+
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
 
@@ -143,10 +151,42 @@ public class ControladorBDImplementacion {
 		return mather.find();
 	}
 
-	// INSERTAR PRODUCTO (clase de insertar producto, dentro de la configuracion
-	// siendo admin
+	// METODO PARA LOGEARSE
+	public Persona login(Persona pers) {
 
-	public void insertarProducto(Producto produc) {
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(loguearse);
+			stmt.setString(1, pers.getEmail());
+			stmt.setString(2, pers.getContrasena());
+
+			rs = stmt.executeQuery();
+
+			pers = new Persona();
+			if (rs.next()) {
+				// RECOGEMOS LOS DATOS DE PERSONA
+				pers.setCodUsuario(rs.getInt(1));
+				pers.setNombre(rs.getString(2));
+				pers.setApellido(rs.getString(3));
+				pers.setEmail(rs.getString(4));
+				pers.setContrasena(rs.getString(5));
+				pers.setTipo(rs.getString(6));
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(ControladorBDImplementacion.class.getName()).log(Level.SEVERE, null, e);
+
+		}
+		return pers;
+	}
+
+	// METODO PARA INSERTAR PRODUCTO DEPENDIENDO LA CATEGORIA
+	public void insertarProducto(Producto prod) {
+
+		ResultSet rs = null;
+
 		this.openConnection();
 
 		try {
@@ -154,130 +194,82 @@ public class ControladorBDImplementacion {
 			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
 
 			// Posicionamos cada valor para insertarlo en la base de datos
-			stmt.setString(1, produc.getIdProducto());
-			stmt.setString(2, produc.getNombreProd());
-			stmt.setString(3, produc.getCategoria());
-			stmt.setString(4, produc.getSexo());
-			stmt.setInt(5, produc.getPrecio());
-			stmt.setString(6, produc.getTipo());
-
-			// Si la categoria es igual a lenceria
-			if (produc.getCategoria().equalsIgnoreCase("LENCERIA")) {
-
-				stmt = con.prepareStatement(INSERTlenceria);
-				Lenceria lenc;
-				lenc = new Lenceria();
-				stmt.setString(1, lenc.getIdProducto());
-				stmt.setString(2, lenc.getTalla());
-
-				// Si la categoria es igual a juguete
-			} else if (produc.getCategoria().equalsIgnoreCase("JUGUETE")) {
-				stmt = con.prepareStatement(INSERTjuguetes);
-				Juguete jug;
-				jug = new Juguete();
-				stmt.setString(1, jug.getIdProducto());
-				stmt.setString(2, jug.getMaterial());
-
-				// Si la categoria es igual a cosmético
-			} else if (produc.getCategoria().equalsIgnoreCase("COSMETICO")) {
-				stmt = con.prepareStatement(INSERTcosmeticos);
-				Cosmetico cos;
-				cos = new Cosmetico();
-				stmt.setString(1, cos.getIdProducto());
-				stmt.setString(2, cos.getCaducidad());
-				stmt.setString(3, cos.getIngrediente());
-			}
-
-			stmt.executeUpdate();
-
-			/// idProducto; nombreProd; categoria; sexo; precio; tipo;
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-
-	}
-
-	//Con este metodo cargamos las categorias
-	public Map<String, Producto> cargarCategorias() {
-
-		Producto prod;
-		ResultSet rs = null;
-
-		Map<String, Producto> productos = new TreeMap<>();
-		this.openConnection();
-
-		String cargar = "SELECT * FROM producto";
-
-		try {
-			stmt = con.prepareStatement(cargar);
+			stmt.setString(1, prod.getIdProducto());
+			stmt.setString(2, prod.getNombreProd());
+			stmt.setString(3, prod.getCategoria());
+			stmt.setString(4, prod.getSexo());
+			stmt.setString(5, prod.getTipo());
 
 			rs = stmt.executeQuery();
 
-			while (rs.next()) {
-				prod = new Producto();
-				prod.setIdProducto("id");
-				prod.setNombreProd("nombre");
-				prod.setCategoria("categori");
-				prod.setSexo("sexo");
-				prod.setPrecio(2);
-				prod.setTipo("tipo");
+			if (stmt.executeQuery() != null) {
+				if (prod.getCategoria().equalsIgnoreCase("LENCERIA")) {
+					stmt = con.prepareStatement(INSERTLenceria);
 
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Lenceria) prod).getTalla());
+					stmt.executeQuery();
+
+				} else if (prod.getCategoria().equalsIgnoreCase("JUGUETES")) {
+
+					stmt = con.prepareStatement(INSERTjuguete);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Juguete) prod).getMaterial());
+
+				} else if (prod.getCategoria().equalsIgnoreCase("COSMETICOS")) {
+
+					stmt = con.prepareStatement(INSERTcosmetico);
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+				}
 			}
-			con.close();
-			rs.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception ex) {
-				System.out.println("ERROR EN LA CONSULTA DE PRODUCTOS");
-
-			}
-			try {
-				this.closeConnection();
-			} catch (SQLException e) {
-				System.out.println("ERROR AL CERRAR LA BASE DE DATOS");
-				e.printStackTrace();
-			} catch (Exception ex) {
-				System.out.println("ERROR AL CERRAR");
-
-			}
-		}
-		return productos;
-	}
-
-	
-	//Metodo para modificar los productos
-	public void modificarproducto(Producto prod) {
-		//Abrimos la conexion con la base de datos
-		this.openConnection();
-		
-		//Metemos los valores dentro del stmt
-		try {
-			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
-			stmt = con.prepareStatement(MODIFproductos);
-
-			//EL ID NO SE MODIFICA
-			stmt.setString(1, prod.getNombreProd());
-			stmt.setString(2, prod.getCategoria());
-			stmt.setString(3, prod.getSexo());
-			stmt.setInt(4, prod.getPrecio());
-			stmt.setString(5, prod.getTipo());
 
 			stmt.executeUpdate();
-			
-		} catch (SQLException e1) {
-			System.out.println("Error en la modificación SQL");
-			e1.printStackTrace();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	// Listar los productos
+
+	public ArrayList<Producto> listarProducto() {
+		ResultSet rs = null;
+		Producto prod;
+		ArrayList<Producto> listaProductos = new ArrayList<>();
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerProducto);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombreproducto"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setTipo(rs.getString("tipo"));
+
+				listaProductos.add(prod);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
 		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
@@ -285,34 +277,74 @@ public class ControladorBDImplementacion {
 				e.printStackTrace();
 			}
 		}
+		return listaProductos;
 	}
+
 	
-	//Metodo para dar de baja los productos
-	public void bajaProducto(Producto prod) {
-		// Abrimos la conexión
-		this.openConnection();
+	
+	
+	
+	
+	
+	
+	
+//	// Metodo para modificar los productos
+//	public void modificarproducto(Producto prod) {
+//		// Abrimos la conexion con la base de datos
+//		this.openConnection();
+//
+//		// Metemos los valores dentro del stmt
+//		try {
+//			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+//			stmt = con.prepareStatement(MODIFproductos);
+//
+//			// EL ID NO SE MODIFICA
+//			stmt.setString(1, prod.getNombreProd());
+//			stmt.setString(2, prod.getCategoria());
+//			stmt.setString(3, prod.getSexo());
+//			stmt.setInt(4, prod.getPrecio());
+//			stmt.setString(5, prod.getTipo());
+//
+//			stmt.executeUpdate();
+//
+//		} catch (SQLException e1) {
+//			System.out.println("Error en la modificación SQL");
+//			e1.printStackTrace();
+//		} finally {
+//			try {
+//				this.closeConnection();
+//			} catch (SQLException e) {
+//				System.out.println("Error en el cierre de la BD");
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+//
+//	// Metodo para dar de baja los productos
+//	public void bajaProducto(Producto prod) {
+//		// Abrimos la conexión
+//		this.openConnection();
+//
+//		// Metemos los valores del propietario dentro del stat:
+//		try {
+//
+//			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+//			stmt = con.prepareStatement(DELETEProducto);
+//
+//			stmt.setString(1, prod.getIdProducto());
+//
+//			stmt.executeUpdate();
+//		} catch (SQLException e1) {
+//			System.out.println("Error en la modificación SQL");
+//			e1.printStackTrace();
+//		} finally {
+//			try {
+//				this.closeConnection();
+//			} catch (SQLException e) {
+//				System.out.println("Error en cierre de la BD");
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
-		// Metemos los valores del propietario dentro del stat:
-		try {
-			
-
-			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
-			stmt = con.prepareStatement(DELETEProducto);
-
-			stmt.setString(1, prod.getIdProducto());
-
-			stmt.executeUpdate();
-		} catch (SQLException e1) {
-			System.out.println("Error en la modificación SQL");
-			e1.printStackTrace();
-		} finally {
-			try {
-				this.closeConnection();
-			} catch (SQLException e) {
-				System.out.println("Error en cierre de la BD");
-				e.printStackTrace();
-			}
-		}
-	}
-		
 }

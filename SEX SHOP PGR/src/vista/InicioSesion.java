@@ -5,7 +5,15 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
+
+import clases.Cliente;
+import clases.Persona;
+import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
+
 import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -15,6 +23,15 @@ import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import java.awt.event.ActionEvent;
 import java.awt.Canvas;
 import javax.swing.ImageIcon;
@@ -24,6 +41,7 @@ public class InicioSesion extends JFrame {
 	private JPanel contentPane;
 	private JTextField textEmail;
 	private JTextField textcontrasenia;
+
 
 	/**
 	 * Launch the application.
@@ -57,11 +75,12 @@ public class InicioSesion extends JFrame {
 		separator.setBounds(10, 36, 339, 2);
 		contentPane.add(separator);
 		
-		JLabel lblInicioSesion = new JLabel("INICIO DE SESI\u00D3N");
+		JLabel lblInicioSesion = new JLabel("INICIO DE SESION");
 		lblInicioSesion.setForeground(SystemColor.text);
 		lblInicioSesion.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblInicioSesion.setBounds(10, 11, 149, 14);
 		contentPane.add(lblInicioSesion);
+
 		
 		textEmail = new JTextField();
 		textEmail.setForeground(Color.WHITE);
@@ -69,14 +88,23 @@ public class InicioSesion extends JFrame {
 		textEmail.setBounds(24, 80, 208, 20);
 		contentPane.add(textEmail);
 		textEmail.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("E-MAIL");
-		lblNewLabel.setForeground(SystemColor.text);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel.setBounds(20, 49, 77, 14);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblContraseNIa = new JLabel("CONTRASE\u00D1A");
+
+
+		textEmail = new JTextField();
+		textEmail.setForeground(Color.WHITE);
+		textEmail.setBackground(new Color(255, 0, 102));
+		textEmail.setBounds(24, 80, 208, 20);
+		contentPane.add(textEmail);
+		textEmail.setColumns(10);
+
+		JLabel lblEmail = new JLabel("EMAIL");
+		lblEmail.setForeground(SystemColor.text);
+		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblEmail.setBounds(20, 49, 175, 14);
+		contentPane.add(lblEmail);
+
+
+		JLabel lblContraseNIa = new JLabel("CONTRASEÑA");
 		lblContraseNIa.setForeground(Color.WHITE);
 		lblContraseNIa.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblContraseNIa.setBounds(24, 124, 149, 14);
@@ -109,6 +137,11 @@ public class InicioSesion extends JFrame {
 		contentPane.add(lblFormaParte);
 		
 		JButton btnRegistrate = new JButton("REGISTRATE");
+		btnRegistrate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				registro();
+			}
+		});
 		btnRegistrate.setForeground(Color.BLACK);
 		btnRegistrate.setBackground(new Color(255, 255, 153));
 		btnRegistrate.setBounds(41, 323, 132, 23);
@@ -123,5 +156,59 @@ public class InicioSesion extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\1dam\\Desktop\\DAM\\SEX_SHOP\\teleoperador.png"));
 		lblNewLabel_2.setBounds(391, 305, 33, 59);
 		contentPane.add(lblNewLabel_2);
+
+	
+
+
+		passContrasenia = new JPasswordField();
+		passContrasenia.setBackground(new Color(255, 0, 102));
+		passContrasenia.setBounds(24, 161, 208, 20);
+		contentPane.add(passContrasenia);
+	}
+
+	// BOTON DE REGISTRARSE
+	private void registro() {
+		// Nos lleva a lapantalla de registro
+		Registro abrir = new Registro();
+		abrir.setVisible(true);
+		this.dispose();
+	}
+
+	// Recorremos la informacion
+	private static List<Persona> datos = new ArrayList<Persona>();
+	private JPasswordField passContrasenia;
+
+	// BOTON INICIAR SESION
+	private void iniciarSesion() {
+		Persona pers = new Persona();
+		//RECOGER EMAIL Y CONTRASEÑA
+		pers.setEmail(textEmail.getText());
+		pers.setContrasena(new String(passContrasenia.getPassword()));
+
+		ControladorBDImplementacion datos = new ControladorBDImplementacion();
+		pers = datos.login(pers);
+		
+		//SI FALTA ALGUN CAMPO VACIO
+		if (textEmail.getText().equals("") || passContrasenia.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "FALTA CAMPOS POR RELLENAR!");
+		} else {
+			//SI EL TIPO ES IGUAL A ADMIN
+			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
+				Configuracion conf = new Configuracion(this, true);
+				conf.setVisible(true);
+				this.dispose();
+			//SI EL TIPO ES IGUAL A CLIENTE
+			} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
+				PiñaMeloco pm = new PiñaMeloco(this, true);
+				pm.setVisible(true);
+				this.dispose();
+			
+			//SI EL EMAIL O CONTRASEÑA NO COINCIDEN
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR! Email o Contraseña incorrectos");
+			}
+		}
+
+	
 	}
 }

@@ -23,45 +23,45 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Cosmetico extends JDialog {
+public class Cosmeticos extends JDialog {
 
 	private final JPanel contentPanelCosmeticos = new JPanel();
 
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		try {
-//			Cosmetico dialog = new Cosmetico(null, true);
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	/**
-//	 * Create the dialog.
-//	 * @param b 
-//	 * @param piñaMeloco 
-//	 */
-//	public Cosmetico() {
-//		
-//		
-//	}
+	public static void main(String[] args) {
+		try {
+			Cosmeticos dialog = new Cosmeticos(null, true);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	public Cosmetico(PiñaMeloco padre, boolean modal) {
+	/**
+	 * Create the dialog.
+	 */
+	public Cosmeticos(PiñaMeloco padre, boolean modal) {
 		super(padre);
 		this.setModal(modal);
+		setBounds(100, 100, 652, 789);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanelCosmeticos.setBackground(SystemColor.controlDkShadow);
+		contentPanelCosmeticos.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanelCosmeticos, BorderLayout.CENTER);
+		contentPanelCosmeticos.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("COSMETICOS");
+		JLabel lblNewLabel_1 = new JLabel("JUEGUETES");
 		lblNewLabel_1.setForeground(new Color(255, 20, 147));
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel_1.setBounds(53, 11, 360, 41);
+		contentPanelCosmeticos.add(lblNewLabel_1);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(31, 63, 554, 2);
-		
+		contentPanelCosmeticos.add(separator_1);
 		setBounds(100, 100, 652, 789);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanelCosmeticos.setBackground(SystemColor.controlDkShadow);
@@ -69,12 +69,12 @@ public class Cosmetico extends JDialog {
 		getContentPane().add(contentPanelCosmeticos, BorderLayout.CENTER);
 		contentPanelCosmeticos.setLayout(null);
 		{
-			JLabel lblCosmeticos = new JLabel("Cosmeticos");
-			lblCosmeticos.setBounds(53, 11, 360, 41);
-			lblCosmeticos.setBackground(new Color(255, 105, 180));
-			lblCosmeticos.setForeground(new Color(255, 105, 180));
-			lblCosmeticos.setFont(new Font("Tahoma", Font.BOLD, 18));
-			contentPanelCosmeticos.add(lblCosmeticos);
+			JLabel lblNewLabel = new JLabel("Cosmeticos");
+			lblNewLabel.setBounds(53, 11, 360, 41);
+			lblNewLabel.setBackground(new Color(255, 105, 180));
+			lblNewLabel.setForeground(new Color(255, 105, 180));
+			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+			contentPanelCosmeticos.add(lblNewLabel);
 		}
 		{
 			JSeparator separator = new JSeparator();
@@ -118,36 +118,34 @@ public class Cosmetico extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				cerrar();
 			}
-
-			
 		});
 		btnNewButton.setBounds(489, 693, 107, 46);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setBackground(new Color(255, 255, 153));
 		contentPanelCosmeticos.add(btnNewButton);
 		
-		JLabel lblPrecio3 = new JLabel("PRECIO");
-		lblPrecio3.setBounds(63, 96, 107, 14);
-		lblPrecio3.setForeground(new Color(255, 255, 153));
-		lblPrecio3.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPrecio3.addPropertyChangeListener(new PropertyChangeListener() {
+		JLabel lblNewLabel_2 = new JLabel("PRECIO");
+		lblNewLabel_2.setBounds(63, 96, 107, 14);
+		lblNewLabel_2.setForeground(new Color(255, 255, 153));
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_2.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 			}
 		});
-		contentPanelCosmeticos.add(lblPrecio3);
+		contentPanelCosmeticos.add(lblNewLabel_2);
 		
-		JLabel lblSexo = new JLabel("SEXO");
-		lblSexo.setBounds(218, 96, 107, 14);
-		lblSexo.setForeground(new Color(255, 255, 153));
-		lblSexo.setFont(new Font("Tahoma", Font.BOLD, 14));
-		contentPanelCosmeticos.add(lblSexo);
+		JLabel lblNewLabel_2_1 = new JLabel("SEXO");
+		lblNewLabel_2_1.setBounds(218, 96, 107, 14);
+		lblNewLabel_2_1.setForeground(new Color(255, 255, 153));
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		contentPanelCosmeticos.add(lblNewLabel_2_1);
 		
-		JLabel lblDEC = new JLabel("Desc:");
-		lblDEC.setBounds(299, 185, 107, 14);
-		lblDEC.setBackground(new Color(255, 105, 180));
-		lblDEC.setForeground(new Color(255, 105, 180));
-		lblDEC.setFont(new Font("Tahoma", Font.BOLD, 15));
-		contentPanelCosmeticos.add(lblDEC);
+		JLabel lblNewLabel_3 = new JLabel("Desc:");
+		lblNewLabel_3.setBounds(299, 185, 107, 14);
+		lblNewLabel_3.setBackground(new Color(255, 105, 180));
+		lblNewLabel_3.setForeground(new Color(255, 105, 180));
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 15));
+		contentPanelCosmeticos.add(lblNewLabel_3);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setBackground(SystemColor.controlDkShadow);
@@ -155,18 +153,18 @@ public class Cosmetico extends JDialog {
 		textPane.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204)));
 		contentPanelCosmeticos.add(textPane);
 		
-		JLabel lblPrecio4 = new JLabel("Precio");
-		lblPrecio4.setBounds(309, 323, 132, 22);
-		lblPrecio4.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblPrecio4.setForeground(new Color(255, 255, 153));
-		contentPanelCosmeticos.add(lblPrecio4);
+		JLabel lblNewLabel_4 = new JLabel("Precio");
+		lblNewLabel_4.setBounds(309, 323, 132, 22);
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_4.setForeground(new Color(255, 255, 153));
+		contentPanelCosmeticos.add(lblNewLabel_4);
 		
-		JLabel lblNombre2 = new JLabel("NOMBRE");
-		lblNombre2.setBounds(78, 327, 107, 14);
-		lblNombre2.setForeground(new Color(255, 105, 180));
-		lblNombre2.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNombre2.setBackground(new Color(255, 105, 180));
-		contentPanelCosmeticos.add(lblNombre2);
+		JLabel lblNewLabel_3_1 = new JLabel("NOMBRE");
+		lblNewLabel_3_1.setBounds(78, 327, 107, 14);
+		lblNewLabel_3_1.setForeground(new Color(255, 105, 180));
+		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_3_1.setBackground(new Color(255, 105, 180));
+		contentPanelCosmeticos.add(lblNewLabel_3_1);
 		
 		JTextPane textPane_1 = new JTextPane();
 		textPane_1.setBackground(SystemColor.controlDkShadow);
@@ -174,32 +172,33 @@ public class Cosmetico extends JDialog {
 		textPane_1.setBounds(299, 430, 209, 97);
 		contentPanelCosmeticos.add(textPane_1);
 		
-		JLabel lblFoto2 = new JLabel("");
-		lblFoto2.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
-		lblFoto2.setBounds(53, 187, 148, 120);
-		contentPanelCosmeticos.add(lblFoto2);
+		JLabel lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
+		lblNewLabel_5.setBounds(53, 187, 148, 120);
+		contentPanelCosmeticos.add(lblNewLabel_5);
 		
-		JLabel lblFoto = new JLabel("");
-		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
-		lblFoto.setBounds(53, 408, 148, 120);
-		contentPanelCosmeticos.add(lblFoto);
+		JLabel lblNewLabel_5_1 = new JLabel("");
+		lblNewLabel_5_1.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
+		lblNewLabel_5_1.setBounds(53, 408, 148, 120);
+		contentPanelCosmeticos.add(lblNewLabel_5_1);
 		
-		JLabel lblPrecio = new JLabel("Precio");
-		lblPrecio.setForeground(new Color(255, 255, 153));
-		lblPrecio.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblPrecio.setBounds(309, 538, 132, 22);
-		contentPanelCosmeticos.add(lblPrecio);
+		JLabel lblNewLabel_4_1 = new JLabel("Precio");
+		lblNewLabel_4_1.setForeground(new Color(255, 255, 153));
+		lblNewLabel_4_1.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_4_1.setBounds(309, 538, 132, 22);
+		contentPanelCosmeticos.add(lblNewLabel_4_1);
 		
-		JLabel lblNombre = new JLabel("NOMBRE");
-		lblNombre.setForeground(new Color(255, 105, 180));
-		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNombre.setBackground(new Color(255, 105, 180));
-		lblNombre.setBounds(78, 548, 107, 14);
-		contentPanelCosmeticos.add(lblNombre);
+		JLabel lblNewLabel_3_1_1 = new JLabel("NOMBRE");
+		lblNewLabel_3_1_1.setForeground(new Color(255, 105, 180));
+		lblNewLabel_3_1_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_3_1_1.setBackground(new Color(255, 105, 180));
+		lblNewLabel_3_1_1.setBounds(78, 548, 107, 14);
+		contentPanelCosmeticos.add(lblNewLabel_3_1_1);
 	}
 	
-	private void cerrar() {
-		// TODO Auto-generated method stub
-	this.dispose();	
-	}
+	//MEtodos
+		private void cerrar() {
+			this.dispose();
+			
+		}
 }
