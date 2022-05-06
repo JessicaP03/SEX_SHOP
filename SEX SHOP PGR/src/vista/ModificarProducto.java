@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Producto;
+import modelo.ControladorBDImplementacion;
 
 import java.awt.SystemColor;
 import javax.swing.JLabel;
@@ -38,15 +39,16 @@ public class ModificarProducto extends JDialog {
 	private JTextField textField_Material;
 	private JTextField textField_Caducidad;
 	private JTextField textField_Ingredientes;
+	private JTextField textField;
 
 	
 
 	//Creamos este segundo constructor para saber cual es la ventana padre
-	public ModificarProducto(Configuracion padre, boolean modal) {
+	public ModificarProducto(Configuracion padre, boolean modal, ControladorBDImplementacion datos) {
 		super(padre);
 		this.setModal(modal);
 		setBackground(SystemColor.windowBorder);
-		setBounds(100, 100, 436, 506);
+		setBounds(100, 100, 436, 517);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -89,7 +91,7 @@ public class ModificarProducto extends JDialog {
 			JLabel lblNewLabel_Sexo = new JLabel("Sexo");
 			lblNewLabel_Sexo.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel_Sexo.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Sexo.setBounds(32, 142, 103, 14);
+			lblNewLabel_Sexo.setBounds(32, 179, 103, 14);
 			contentPanel.add(lblNewLabel_Sexo);
 		}
 		{
@@ -103,28 +105,28 @@ public class ModificarProducto extends JDialog {
 			JLabel lblNewLabel_Material = new JLabel("Material");
 			lblNewLabel_Material.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel_Material.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Material.setBounds(32, 334, 56, 14);
+			lblNewLabel_Material.setBounds(32, 270, 56, 14);
 			contentPanel.add(lblNewLabel_Material);
 		}
 		{
 			JLabel lblNewLabel_Caducidad = new JLabel("Caducidad");
 			lblNewLabel_Caducidad.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel_Caducidad.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Caducidad.setBounds(32, 238, 103, 14);
+			lblNewLabel_Caducidad.setBounds(32, 299, 103, 14);
 			contentPanel.add(lblNewLabel_Caducidad);
 		}
 		{
 			JLabel lblNewLabel_Ingredientes = new JLabel("Ingredientes");
 			lblNewLabel_Ingredientes.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel_Ingredientes.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Ingredientes.setBounds(32, 270, 103, 14);
+			lblNewLabel_Ingredientes.setBounds(32, 335, 103, 14);
 			contentPanel.add(lblNewLabel_Ingredientes);
 		}
 		{
 			JLabel lblNewLabel_Talla = new JLabel("Talla");
 			lblNewLabel_Talla.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel_Talla.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Talla.setBounds(32, 302, 78, 14);
+			lblNewLabel_Talla.setBounds(32, 372, 78, 14);
 			contentPanel.add(lblNewLabel_Talla);
 		}
 		{
@@ -139,20 +141,12 @@ public class ModificarProducto extends JDialog {
 			JComboBox comboBox_Talla = new JComboBox();
 			comboBox_Talla.setBackground(new Color(255, 20, 147));
 			comboBox_Talla.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			comboBox_Talla.setBounds(226, 298, 111, 20);
+			comboBox_Talla.setBounds(226, 178, 111, 20);
 			contentPanel.add(comboBox_Talla);
-		}
-		{
-			JLabel lblNewLabel_Categoria = new JLabel("Categoria");
-			lblNewLabel_Categoria.setBackground(Color.MAGENTA);
-			lblNewLabel_Categoria.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblNewLabel_Categoria.setForeground(new Color(255, 255, 153));
-			lblNewLabel_Categoria.setBounds(32, 174, 78, 14);
-			contentPanel.add(lblNewLabel_Categoria);
 		}
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(32, 388, 378, 9);
+		separator.setBounds(32, 414, 378, 9);
 		contentPanel.add(separator);
 		{
 			JButton cancelButton_Cerrar = new JButton("Cerrar");
@@ -164,7 +158,7 @@ public class ModificarProducto extends JDialog {
 			});
 			cancelButton_Cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			cancelButton_Cerrar.setForeground(Color.BLACK);
-			cancelButton_Cerrar.setBounds(298, 423, 86, 23);
+			cancelButton_Cerrar.setBounds(295, 434, 86, 23);
 			contentPanel.add(cancelButton_Cerrar);
 			cancelButton_Cerrar.setBackground(new Color(255, 255, 153));
 			cancelButton_Cerrar.setActionCommand("Cancel");
@@ -183,7 +177,7 @@ public class ModificarProducto extends JDialog {
 			textField_Precio.setColumns(10);
 			textField_Precio.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 			textField_Precio.setBackground(new Color(255, 20, 147));
-			textField_Precio.setBounds(226, 333, 111, 20);
+			textField_Precio.setBounds(226, 334, 111, 20);
 			contentPanel.add(textField_Precio);
 		}
 		{
@@ -211,32 +205,37 @@ public class ModificarProducto extends JDialog {
 			contentPanel.add(textField_Ingredientes);
 		}
 		{
-			JComboBox comboBox_Sexo = new JComboBox();
-			comboBox_Sexo.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			comboBox_Sexo.setBackground(new Color(255, 20, 147));
-			comboBox_Sexo.setBounds(226, 140, 111, 20);
-			contentPanel.add(comboBox_Sexo);
-		}
-		{
-			JComboBox comboBox_Categoria = new JComboBox();
-			comboBox_Categoria.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			comboBox_Categoria.setBackground(new Color(255, 20, 147));
-			comboBox_Categoria.setBounds(226, 173, 111, 20);
-			contentPanel.add(comboBox_Categoria);
-		}
-		{
 			JButton btnModificar = new JButton("Modificar");
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					modificar();
+					modificar(datos);
 				}
 			});
 			btnModificar.setBackground(new Color(255, 255, 102));
 			btnModificar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			btnModificar.setForeground(new Color(0, 0, 0));
-			btnModificar.setBounds(21, 425, 133, 23);
+			btnModificar.setBounds(32, 434, 133, 23);
 			contentPanel.add(btnModificar);
 		}
+		
+		JLabel lblNewLabel_Material = new JLabel("Tipo");
+		lblNewLabel_Material.setForeground(new Color(255, 255, 153));
+		lblNewLabel_Material.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_Material.setBounds(32, 240, 56, 14);
+		contentPanel.add(lblNewLabel_Material);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+		textField.setBackground(new Color(255, 20, 147));
+		textField.setBounds(226, 299, 111, 20);
+		contentPanel.add(textField);
+		
+		JComboBox comboBox_Talla = new JComboBox();
+		comboBox_Talla.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+		comboBox_Talla.setBackground(new Color(255, 20, 147));
+		comboBox_Talla.setBounds(226, 371, 111, 20);
+		contentPanel.add(comboBox_Talla);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBackground(SystemColor.controlDkShadow);
@@ -246,11 +245,11 @@ public class ModificarProducto extends JDialog {
 	}
 	
 	//Metodo para modificar los productos
-	protected void modificar() {
+	protected void modificar(ControladorBDImplementacion datos) {
 		Producto prod = leerDatosPantalla(textField_IDProducto.getText());
 		
 		//el id del producto no cambia en la modificación
-		//datos.modificarProducto(prod);
+		datos.modificarProducto(prod);
 
 		//
 		JOptionPane.showMessageDialog(this, "El Producto ha sido modificado con exito");
@@ -269,6 +268,4 @@ public class ModificarProducto extends JDialog {
 	private void cerrar() {
 		this.dispose();
 	}
-	
-	
 }

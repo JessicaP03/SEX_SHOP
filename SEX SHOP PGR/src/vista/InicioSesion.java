@@ -45,24 +45,13 @@ public class InicioSesion extends JFrame {
 
 	/**
 	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InicioSesion frame = new InicioSesion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
+	 * @param datos2 
 	 */
 	public InicioSesion() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 407);
 		contentPane = new JPanel();
@@ -194,12 +183,12 @@ public class InicioSesion extends JFrame {
 		} else {
 			//SI EL TIPO ES IGUAL A ADMIN
 			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
-				Configuracion conf = new Configuracion(this, true);
+				Configuracion conf = new Configuracion(this, true, datos);
 				conf.setVisible(true);
 				this.dispose();
 			//SI EL TIPO ES IGUAL A CLIENTE
 			} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
-				PiñaMeloco pm = new PiñaMeloco(this, true);
+				PiñaMeloco pm = new PiñaMeloco(this, true, datos);
 				pm.setVisible(true);
 				this.dispose();
 			

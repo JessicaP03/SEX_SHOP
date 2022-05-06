@@ -70,10 +70,10 @@ public class DarBajaProducto extends JDialog {
 			contentPanel.add(separator);
 		}
 		{
-			JLabel lblNewLabel = new JLabel("Seleccione el producto que quiera dar de baja.");
+			JLabel lblNewLabel = new JLabel("Seleccione el ID del producto que quiera dar de baja.");
 			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNewLabel.setForeground(Color.WHITE);
-			lblNewLabel.setBounds(30, 58, 325, 14);
+			lblNewLabel.setBounds(30, 58, 394, 14);
 			contentPanel.add(lblNewLabel);
 		}
 		{

@@ -24,7 +24,7 @@ import clases.Lenceria;
 import clases.Persona;
 import clases.Producto;
 
-public class ControladorBDImplementacion {
+public class ControladorBDImplementacion implements ControladorDatos{
 
 	// Atributos
 	private Connection con;
@@ -42,18 +42,18 @@ public class ControladorBDImplementacion {
 
 	// Sentencias sql
 	final String INSERTpersona = "INSERT INTO persona (nombre, apellido, email, contraseña, tipo) VALUES ( ?, ?, ?, ?,?)";
-
 	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
-
 	final String ObtenerProducto = "SELECT * FROM producto";
-
 	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
-
 	final String INSERTLenceria = "INSERT INTO lenceria (idproducto, talla) VALUES (?, ?)";
-
 	final String INSERTjuguete = "INSERT INTO juguete (idproducto, material) VALUES (?, ?)";
-
 	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
+	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, sexo = ?, precio = ?, tipo = ? where idproducto= ?";
+	final String UPDATELenceria = "UPDATE lenceria SET talla = ? where idproducto = ?";
+	final String UPDATEJugute = "UPDATE juguete SET material = ? where idproducto = ?";
+	final String UPDATECosmetico = "UPDATE cosmetico SET caducidad = ?, ingredientes = ? where idproducto = ?";
+	final String DELETEProducto = "DELETE FROM producto where idproducto =?;";
+	final String SELECTProducto = "SELECT * FROM producto where idproducto=?";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -288,37 +288,37 @@ public class ControladorBDImplementacion {
 	
 	
 	
-//	// Metodo para modificar los productos
-//	public void modificarproducto(Producto prod) {
-//		// Abrimos la conexion con la base de datos
-//		this.openConnection();
-//
-//		// Metemos los valores dentro del stmt
-//		try {
-//			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
-//			stmt = con.prepareStatement(MODIFproductos);
-//
-//			// EL ID NO SE MODIFICA
-//			stmt.setString(1, prod.getNombreProd());
-//			stmt.setString(2, prod.getCategoria());
-//			stmt.setString(3, prod.getSexo());
-//			stmt.setInt(4, prod.getPrecio());
-//			stmt.setString(5, prod.getTipo());
-//
-//			stmt.executeUpdate();
-//
-//		} catch (SQLException e1) {
-//			System.out.println("Error en la modificación SQL");
-//			e1.printStackTrace();
-//		} finally {
-//			try {
-//				this.closeConnection();
-//			} catch (SQLException e) {
-//				System.out.println("Error en el cierre de la BD");
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	// Metodo para modificar los productos
+	public void modificarproducto(Producto prod) {
+		// Abrimos la conexion con la base de datos
+		this.openConnection();
+
+		// Metemos los valores dentro del stmt
+		try {
+			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+			stmt = con.prepareStatement(UPDATEproducto);
+
+			// EL ID NO SE MODIFICA
+			stmt.setString(1, prod.getNombreProd());
+			stmt.setString(2, prod.getCategoria());
+			stmt.setString(3, prod.getSexo());
+			stmt.setInt(4, prod.getPrecio());
+			stmt.setString(5, prod.getTipo());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			System.out.println("Error en la modificación SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la Base de Datos");
+				e.printStackTrace();
+			}
+		}
+	}
 //
 //	// Metodo para dar de baja los productos
 //	public void bajaProducto(Producto prod) {
@@ -346,5 +346,20 @@ public class ControladorBDImplementacion {
 //			}
 //		}
 //	}
+
+		
+	
+
+	@Override
+	public Producto obtenerProducto(String idproducto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void bajaproducto(String codigo) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

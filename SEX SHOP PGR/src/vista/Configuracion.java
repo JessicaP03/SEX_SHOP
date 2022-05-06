@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import modelo.ControladorBDImplementacion;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -30,8 +31,9 @@ public class Configuracion extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param datos 
 	 */
-	public Configuracion(InicioSesion padre, boolean modal) {
+	public Configuracion(InicioSesion padre, boolean modal, ControladorBDImplementacion datos) {
 		super(padre);
 		this.setModal(modal);
 		

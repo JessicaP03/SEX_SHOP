@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorBDImplementacion;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -31,8 +34,9 @@ public class PiñaMeloco extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param datos 
 	 */
-	public PiñaMeloco(InicioSesion padre, boolean modal) {
+	public PiñaMeloco(InicioSesion padre, boolean modal, ControladorBDImplementacion datos) {
 		super(padre);
 		this.setModal(modal);
 		setBounds(100, 100, 470, 433);
