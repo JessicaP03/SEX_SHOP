@@ -7,7 +7,13 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import clases.Persona;
+import modelo.ControladorBDImplementacion;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.SystemColor;
@@ -16,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JFormattedTextField;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Registro extends JDialog {
 
@@ -23,7 +31,8 @@ public class Registro extends JDialog {
 	private JTextField textNombre;
 	private JTextField textApellido;
 	private JTextField textEmail;
-	private JPasswordField passwordConstraseña;
+	private JPasswordField passwordConstrasena;
+	private JTextField textContrasena;
 
 	/**
 	 * Launch the application.
@@ -110,19 +119,24 @@ public class Registro extends JDialog {
 			contentPanel.add(textEmail);
 		}
 		{
-			JLabel lblContrasea = new JLabel("CONTRASE\u00D1A");
-			lblContrasea.setForeground(Color.WHITE);
-			lblContrasea.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblContrasea.setBounds(30, 239, 128, 14);
-			contentPanel.add(lblContrasea);
+			JLabel lblContrasena = new JLabel("CONTRASE\u00D1A");
+			lblContrasena.setForeground(Color.WHITE);
+			lblContrasena.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblContrasena.setBounds(30, 239, 128, 14);
+			contentPanel.add(lblContrasena);
 		}
 		
-		passwordConstraseña = new JPasswordField();
-		passwordConstraseña.setBackground(new Color(255, 20, 147));
-		passwordConstraseña.setBounds(25, 264, 208, 20);
-		contentPanel.add(passwordConstraseña);
+		passwordConstrasena = new JPasswordField();
+		passwordConstrasena.setBackground(new Color(255, 20, 147));
+		passwordConstrasena.setBounds(25, 264, 208, 20);
+		contentPanel.add(passwordConstrasena);
 		
 		JButton btnCrearCuenta = new JButton("CREAR CUENTA");
+		btnCrearCuenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nuevaCuenta();
+			}
+		});
 		btnCrearCuenta.setForeground(Color.BLACK);
 		btnCrearCuenta.setBackground(new Color(255, 255, 153));
 		btnCrearCuenta.setBounds(37, 310, 132, 23);
@@ -137,6 +151,13 @@ public class Registro extends JDialog {
 			lblNewLabel_2.setBounds(391, 285, 33, 59);
 			contentPanel.add(lblNewLabel_2);
 		}
+		
+		textContrasena = new JTextField();
+		textContrasena.setForeground(Color.WHITE);
+		textContrasena.setColumns(10);
+		textContrasena.setBackground(new Color(255, 20, 147));
+		textContrasena.setBounds(30, 264, 208, 20);
+		contentPanel.add(textContrasena);
 	}
 	
 	// Metodo para crear nueva cuenta

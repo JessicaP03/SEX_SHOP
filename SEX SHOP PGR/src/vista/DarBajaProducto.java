@@ -3,14 +3,20 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import clases.Producto;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,27 +31,11 @@ public class DarBajaProducto extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			DarBajaProducto dialog = new DarBajaProducto();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	/**
-//	 * Create the dialog.
-//	 */
-//	//Con el segundo constructor no hace falta este
-//	public DarBajaProducto() {
-//	
-//	}
-
+	private JTextField textIdProducto;
+	
+	
+	
+	
 	public DarBajaProducto(Configuracion padre, boolean modal) {
 		super(padre);
 		this.setModal(modal);
@@ -124,23 +114,51 @@ public class DarBajaProducto extends JDialog {
 			lblNewLabel_Nombreproduc.setBounds(45, 165, 366, 25);
 			contentPanel.add(lblNewLabel_Nombreproduc);
 		}
-		{
-			JButton btnNewButton = new JButton("Aceptar");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					cerrar();
-				}
-			});
-			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-			btnNewButton.setBackground(new Color(255, 255, 102));
-			btnNewButton.setBounds(22, 379, 101, 23);
-			contentPanel.add(btnNewButton);
-		}
+		
+		JButton btnBaja = new JButton("Baja Producto");
+		btnBaja.setBackground(new Color(255, 255, 153));
+		btnBaja.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnBaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				baja();
+			}
+		});
+		btnBaja.setBounds(29, 378, 149, 23);
+		contentPanel.add(btnBaja);
 	}
 	
+	
+	protected void baja() {
+		
+		Producto prod = leerDatosPantalla(textIdProducto.getText());
+
+		//datos.bajaProducto(prod);
+
+		//Mensaje de confirmación
+		JOptionPane.showMessageDialog(this, "El producto ha sido borrado con exito");
+		
+		limpiarPantalla();
+		
+	}
+
+	
+
+
+	private Producto leerDatosPantalla(String text) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	//Metodo para limpiar pantalla
+	private void limpiarPantalla() {
+		textIdProducto.setText("");
+		
+	}
+
+
 	//Metodos
 	private void cerrar() {
 		this.dispose();
-		
 	}
 }
