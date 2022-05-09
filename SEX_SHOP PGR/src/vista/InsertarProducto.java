@@ -25,6 +25,8 @@ import clases.Producto;
 import modelo.ControladorBDImplementacion;
 
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.awt.event.ActionEvent;
@@ -54,7 +56,9 @@ public class InsertarProducto extends JDialog implements ActionListener {
 	private JTextField textTipo;
 	private ControladorBDImplementacion datos;
 	private JComboBox comboTalla;
-
+	private int anio;
+    private int dia;
+    private int mes;
 	/**
 	 * Launch the application.
 	 */
@@ -129,7 +133,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			contentPanel.add(lblNewLabel_Precio);
 		}
 		{
-			 lblMaterial = new JLabel("Material");
+			lblMaterial = new JLabel("Material");
 			lblMaterial.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblMaterial.setForeground(new Color(255, 255, 153));
 			lblMaterial.setBounds(32, 270, 56, 14);
@@ -350,30 +354,31 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			// COSMETICOS
 			lblCaducidad.setVisible(false);
 			lblIngredientes.setVisible(false);
-			
+
 			textInredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
-			
+			lblTalla.setVisible(true);
 			comboTalla.setVisible(true);
 
 			// SI LA CATEGORIA ELEGIDA ES JUGUETE
-		
+
 		} else if (rdbtnJuguete.isSelected()) {
 
 			// JUGUETES
 			textMaterial.setVisible(true);
+			lblMaterial.setVisible(true);
 
 			// COSMETICOS
 			lblCaducidad.setVisible(false);
 			lblIngredientes.setVisible(false);
-			
+
 			textInredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
-			
+			lblTalla.setVisible(false);
 			comboTalla.setVisible(false);
 
 			// SI LA CATEGORIA ELEGIDA ES
@@ -381,14 +386,16 @@ public class InsertarProducto extends JDialog implements ActionListener {
 
 			// JUGUETES
 			textMaterial.setVisible(false);
+			lblMaterial.setVisible(false);
 
 			// COSMETICOS
-
+			lblCaducidad.setVisible(true);
+			lblIngredientes.setVisible(true);
 			textInredientes.setVisible(true);
 			textCaducidad.setVisible(true);
 
 			// LENCERIA
-
+			lblTalla.setVisible(false);
 			comboTalla.setVisible(false);
 		} else {
 
@@ -397,59 +404,94 @@ public class InsertarProducto extends JDialog implements ActionListener {
 
 	protected void agregarProducto() {
 		Producto prod;
-
+		ControladorBDImplementacion bd = new ControladorBDImplementacion();
 		// SI FALTA ALGUN CAMPO POR RELLENAR
-		 
-		// SI LA CATEGORIA ELEGIDA ES LENCERIA
-		if (rdbtnLenceria.isSelected()) {
+		if (textID.getText().equals("") || textPrecio.getText().equals("") || textNombreProd.getText().equals("")
+				|| textTipo.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR!");
+		} else {
+			if (bd.existeProducto(textID.getText()) == 0) {
+				// SI LA CATEGORIA ELEGIDA ES LENCERIA
+				if (rdbtnLenceria.isSelected()) {
 
-			prod = new Lenceria();
-			prod.setIdProducto(textID.getText());
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("LENCERIA");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setTipo(textTipo.getText());
-			((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
+					prod = new Lenceria();
+					prod.setIdProducto(textID.getText());
+					prod.setNombreProd(textNombreProd.getText());
+					prod.setCategoria("LENCERIA");
+					prod.setSexo(comboSexo.getSelectedItem().toString());
+					prod.setTipo(textTipo.getText());
+					((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
 
-			datos = new ControladorBDImplementacion();
-			datos.insertarProducto(prod);
+					datos = new ControladorBDImplementacion();
+					datos.insertarProducto(prod);
 
-			// SI LA CATEGORIA ELEGIDA ES JUGUETE
-		} else if (rdbtnJuguete.isSelected()) {
-			prod = new Juguete();
-			prod.setIdProducto(textID.getText());
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("JUGUETE");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setTipo(textTipo.getText());
-			((Juguete) prod).setMaterial(textMaterial.getText());
+					JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
 
-			datos = new ControladorBDImplementacion();
-			datos.insertarProducto(prod);
-			
-			// SI LA CATEGORIA ELEGIDA ES COSMETICO
-		} else if (rdbtnCosmetico.isSelected()) {
-			prod = new Cosmetico();
-			prod.setIdProducto(textID.getText());
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("COSMETICO");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setTipo(textTipo.getText());
-			((Cosmetico) prod).setCaducidad(textCaducidad.getText());
-			((Cosmetico) prod).setIngrediente(textInredientes.getText());
-			
-			datos = new ControladorBDImplementacion();
-			datos.insertarProducto(prod);
+					// SI LA CATEGORIA ELEGIDA ES JUGUETE
+				} else if (rdbtnJuguete.isSelected()) {
+					if (textMaterial.getText().equals("")) {
+						JOptionPane.showMessageDialog(this, "FALTA RELLENAR EL CAMPO MATERIAL");
+					} else {
+						prod = new Juguete();
+						prod.setIdProducto(textID.getText());
+						prod.setNombreProd(textNombreProd.getText());
+						prod.setCategoria("JUGUETE");
+						prod.setSexo(comboSexo.getSelectedItem().toString());
+						prod.setTipo(textTipo.getText());
+						((Juguete) prod).setMaterial(textMaterial.getText());
+
+						datos = new ControladorBDImplementacion();
+						datos.insertarProducto(prod);
+						JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
+					}
+
+					// SI LA CATEGORIA ELEGIDA ES COSMETICO
+				} else if (rdbtnCosmetico.isSelected()) {
+					if (textInredientes.getText().equals("") || textCaducidad.getText().equals("")) {
+						JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
+					} else {
+						prod = new Cosmetico();
+						prod.setIdProducto(textID.getText());
+						prod.setNombreProd(textNombreProd.getText());
+						prod.setCategoria("COSMETICO");
+						prod.setSexo(comboSexo.getSelectedItem().toString());
+						prod.setTipo(textTipo.getText());
+						((Cosmetico) prod).setCaducidad(textCaducidad.getText());
+						((Cosmetico) prod).setIngrediente(textInredientes.getText());
+						JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
+						datos = new ControladorBDImplementacion();
+						datos.insertarProducto(prod);
+					}
+				}
+			}else {
+				JOptionPane.showMessageDialog(this, "EL CODIGO ESTA REPETIDO");
+			}
+
 		}
-		
 
-		JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMEMTE");
+	}
+	public boolean validarFecha() {
+	    boolean correcto = false;
+
+	    try {
+	        //Formato de fecha (día/mes/año)
+	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+	        formatoFecha.setLenient(false);
+	        //Comprobación de la fecha
+	        formatoFecha.parse(this.dia + "/" + this.mes + "/" + this.anio);
+	        correcto = true;
+	    } catch (ParseException e) {
+	        //Si la fecha no es correcta, pasará por aquí
+	        correcto = false;
+	    }
+
+	    return correcto;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -173,7 +173,7 @@ public class InicioSesion extends JFrame {
 
 		// SI FALTA ALGUN CAMPO VACIO
 		if (textEmail.getText().equals("") || passContrasenia.getText().equals("")) {
-			JOptionPane.showMessageDialog(null, "FALTA CAMPOS POR RELLENAR!");
+			JOptionPane.showMessageDialog(this, "FALTA CAMPOS POR RELLENAR!");
 		} else {
 			// SI EL TIPO ES IGUAL A ADMIN
 			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
@@ -188,7 +188,7 @@ public class InicioSesion extends JFrame {
 
 				// SI EL EMAIL O CONTRASEÑA NO COINCIDEN
 			} else {
-				JOptionPane.showMessageDialog(null, "ERROR! Email o Contraseña incorrectos");
+				JOptionPane.showMessageDialog(this, "ERROR! EMAIL O CONTRASEÑA INCORRECTOS");
 			}
 		}
 

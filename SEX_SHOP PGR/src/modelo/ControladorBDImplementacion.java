@@ -1,13 +1,15 @@
 package modelo;
 
 import java.sql.Connection;
-
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -146,6 +148,30 @@ public class ControladorBDImplementacion {
 
 	}
 
+	public int existeProducto(String producto) {
+		ResultSet rs = null;
+		String existeProducto = "SELECT COUNT(IDPRODUCTO)FROM PRODUCTO WHERE IDPRODUCTO=?";
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(existeProducto);
+			stmt.setString(1, producto);
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+			return 1;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			return 1;
+
+		}
+
+	}
+
 	// METODO PARA VERIFICAR LOS PATRONES DE UN EMAIL
 	public boolean esEmail(String email) {
 		// Patrón para validar el email
@@ -158,6 +184,8 @@ public class ControladorBDImplementacion {
 
 		return mather.find();
 	}
+
+	
 
 	// METODO PARA LOGEARSE
 	public Persona login(Persona pers) {
@@ -231,80 +259,6 @@ public class ControladorBDImplementacion {
 				}
 			}
 
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			try {
-				this.closeConnection();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void insertarJuguete(Producto prod) {
-
-		ResultSet rs = null;
-
-		this.openConnection();
-
-		try {
-
-			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
-
-			// Posicionamos cada valor para insertarlo en la base de datos
-			stmt.setString(1, prod.getIdProducto());
-			stmt.setString(2, prod.getNombreProd());
-			stmt.setString(3, prod.getCategoria());
-			stmt.setString(4, prod.getSexo());
-			stmt.setString(5, prod.getTipo());
-
-			if (stmt.executeUpdate() == 1) {
-				stmt = con.prepareStatement(INSERTjuguete);
-
-				stmt.setString(1, prod.getIdProducto());
-				stmt.setString(2, ((Juguete) prod).getMaterial());
-				stmt.executeUpdate();
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			try {
-				this.closeConnection();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void insertarCosmetico(Producto prod) {
-
-		ResultSet rs = null;
-
-		this.openConnection();
-
-		try {
-			stmt = con.prepareStatement(INSERTproducto); // Cargamos el insert de persona con el stmt
-
-			// Posicionamos cada valor para insertarlo en la base de datos
-			stmt.setString(1, prod.getIdProducto());
-			stmt.setString(2, prod.getNombreProd());
-			stmt.setString(3, prod.getCategoria());
-			stmt.setString(4, prod.getSexo());
-			stmt.setString(5, prod.getTipo());
-
-			if (stmt.executeUpdate() == 1) {
-
-				stmt = con.prepareStatement(INSERTcosmetico);
-				stmt.setString(1, prod.getIdProducto());
-				stmt.setString(2, ((Cosmetico) prod).getCaducidad());
-				stmt.setString(3, ((Cosmetico) prod).getIngrediente());
-			}
 		} catch (SQLException e) {
 
 			e.printStackTrace();
