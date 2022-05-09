@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 import clases.Cliente;
 import clases.Persona;
-import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 import modelo.ControladorDatos;
 
 import javax.swing.JFormattedTextField;
@@ -48,9 +48,11 @@ public class InicioSesion extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @param datos2 
+	 * @param datos 
 	 */
-	public InicioSesion() {
+
+	
+	public InicioSesion(ControladorDatos datos) {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 407);
@@ -128,7 +130,7 @@ public class InicioSesion extends JFrame {
 		JButton btnRegistrate = new JButton("REGISTRATE");
 		btnRegistrate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				registro();
+				registro(datos);
 			}
 		});
 		btnRegistrate.setForeground(Color.BLACK);
@@ -156,25 +158,25 @@ public class InicioSesion extends JFrame {
 	}
 
 	// BOTON DE REGISTRARSE
-	private void registro() {
+	private void registro(ControladorDatos datos) {
 		// Nos lleva a lapantalla de registro
-		Registro abrir = new Registro();
+		Registro abrir = new Registro(datos);
 		abrir.setVisible(true);
 		this.dispose();
 	}
 
 	// Recorremos la informacion
-	private static List<Persona> datos = new ArrayList<Persona>();
+	private static List<Persona> personas = new ArrayList<Persona>();
 	private JPasswordField passContrasenia;
 
 	// BOTON INICIAR SESION
-	private void iniciarSesion() {
+	private void iniciarSesion(ControladorDatos datos) {
 		Persona pers = new Persona();
 		//RECOGER EMAIL Y CONTRASEÑA
 		pers.setEmail(textEmail.getText());
 		pers.setContrasena(new String(passContrasenia.getPassword()));
 
-		ControladorBDImplementacion datos = new ControladorBDImplementacion();
+		
 		pers = datos.login(pers);
 		
 		//SI FALTA ALGUN CAMPO VACIO

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Persona;
-import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,7 +44,7 @@ public class Registro extends JDialog {
 	 */
 
 
-	public Registro() {
+	public Registro(ControladorDatos datos) {
 		// TODO Auto-generated constructor stub
 		
 		setBounds(100, 100, 450, 439);
@@ -155,7 +155,7 @@ public class Registro extends JDialog {
 		JButton btnVolver = new JButton("VOLVER");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				volverInicio();
+				volverInicio(datos);
 			}
 
 			
@@ -169,7 +169,7 @@ public class Registro extends JDialog {
 	// Metodo para crear nueva cuenta
 	private void nuevaCuenta() {
 
-		ControladorBDImplementacion bd = new ControladorBDImplementacion();
+		ControladorDatos bd = new ControladorDatos();
 
 		// VALIDAR QUE NO FALTA CAMPOS POR RELLENAR
 		if (textNombre.getText().equals("") || textApellido.getText().equals("") || textEmail.getText().equals("")
@@ -192,10 +192,10 @@ public class Registro extends JDialog {
 					//Pasar contraseña a String
 					pers.setContrasena(new String(passwordConstrasena.getPassword()));
 
-					ControladorBDImplementacion datos = new ControladorBDImplementacion();
+					ControladorDatos datos = new ControladorDatos();
 					datos.insertarPersona(pers);
 					
-					InicioSesion is= new InicioSesion();
+					InicioSesion is= new InicioSesion(datos);
 					is.setVisible(true);
 					this.dispose();
 
@@ -211,8 +211,8 @@ public class Registro extends JDialog {
 	}
 	
 	//Boton de volver al inicio
-	private void volverInicio() {
-		InicioSesion is= new InicioSesion();
+	private void volverInicio(ControladorDatos datos) {
+		InicioSesion is= new InicioSesion(datos);
 		is.setVisible(true);
 		this.dispose();
 		

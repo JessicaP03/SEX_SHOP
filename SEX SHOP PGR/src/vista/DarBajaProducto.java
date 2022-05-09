@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Producto;
+import modelo.ControladorDatos;
 
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
@@ -36,7 +37,7 @@ public class DarBajaProducto extends JDialog {
 	
 	
 	
-	public DarBajaProducto(Configuracion padre, boolean modal) {
+	public DarBajaProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
 		super(padre);
 		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
@@ -120,7 +121,7 @@ public class DarBajaProducto extends JDialog {
 		btnBaja.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				baja();
+//				baja(datos);
 			}
 		});
 		btnBaja.setBounds(29, 378, 149, 23);
@@ -128,18 +129,18 @@ public class DarBajaProducto extends JDialog {
 	}
 	
 	
-	protected void baja() {
-		
-		Producto prod = leerDatosPantalla(textIdProducto.getText());
-
-		//datos.bajaProducto(prod);
-
-		//Mensaje de confirmación
-		JOptionPane.showMessageDialog(this, "El producto ha sido borrado con exito");
-		
-		limpiarPantalla();
-		
-	}
+//	protected void baja(ControladorDatos datos) {
+//		
+//		Producto prod = leerDatosPantalla(textIdProducto.getText());
+//
+//		datos.bajaProducto(prod);
+//
+//		//Mensaje de confirmación
+//		JOptionPane.showMessageDialog(this, "El producto ha sido borrado con exito");
+//		
+//		limpiarPantalla();
+//		
+//	}
 
 	
 

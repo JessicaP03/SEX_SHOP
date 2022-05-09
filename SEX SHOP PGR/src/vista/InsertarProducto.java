@@ -25,7 +25,7 @@ import clases.Lenceria;
 import clases.Cosmetico;
 import clases.Juguete;
 import clases.Producto;
-import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class InsertarProducto extends JDialog {
 	 * Launch the application.
 	 */
 	
-	public InsertarProducto(Configuracion configuracion, boolean modal) {
+	public InsertarProducto(Configuracion configuracion, boolean modal, ControladorDatos datos) {
 		setForeground(new Color(0, 0, 0));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setBackground(new Color(0, 0, 0));
@@ -503,7 +503,7 @@ public class InsertarProducto extends JDialog {
 //		}
 //	}
 
-//	private void cargarProductos(ControladorBDImplementacion datos) {
+//	private void cargarProductos(ControladorDatos datos) {
 //
 //		ArrayList<Producto> listaProductos = datos.listarProducto();
 //		comboBox_Sexo.removeAllItems();

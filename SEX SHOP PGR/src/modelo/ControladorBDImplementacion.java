@@ -24,7 +24,7 @@ import clases.Lenceria;
 import clases.Persona;
 import clases.Producto;
 
-public class ControladorBDImplementacion implements ControladorDatos{
+public class ControladorBDImplementacion implements ControladorDatos {
 
 	// Atributos
 	private Connection con;
@@ -44,14 +44,17 @@ public class ControladorBDImplementacion implements ControladorDatos{
 	final String INSERTpersona = "INSERT INTO persona (nombre, apellido, email, contraseña, tipo) VALUES ( ?, ?, ?, ?,?)";
 	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
 	final String ObtenerProducto = "SELECT * FROM producto";
+
 	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
 	final String INSERTLenceria = "INSERT INTO lenceria (idproducto, talla) VALUES (?, ?)";
 	final String INSERTjuguete = "INSERT INTO juguete (idproducto, material) VALUES (?, ?)";
 	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
+
 	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, sexo = ?, precio = ?, tipo = ? where idproducto= ?";
 	final String UPDATELenceria = "UPDATE lenceria SET talla = ? where idproducto = ?";
-	final String UPDATEJugute = "UPDATE juguete SET material = ? where idproducto = ?";
+	final String UPDATEJuguete = "UPDATE juguete SET material = ? where idproducto = ?";
 	final String UPDATECosmetico = "UPDATE cosmetico SET caducidad = ?, ingredientes = ? where idproducto = ?";
+
 	final String DELETEProducto = "DELETE FROM producto where idproducto =?;";
 	final String SELECTProducto = "SELECT * FROM producto where idproducto=?";
 
@@ -202,28 +205,27 @@ public class ControladorBDImplementacion implements ControladorDatos{
 
 			rs = stmt.executeQuery();
 
-			if (stmt.executeQuery() != null) {
-				if (prod.getCategoria().equalsIgnoreCase("LENCERIA")) {
+			if (stmt.executeUpdate() == 1) {
+				if (prod instanceof Lenceria) {
 					stmt = con.prepareStatement(INSERTLenceria);
 
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Lenceria) prod).getTalla());
-					stmt.executeQuery();
-
-				} else if (prod.getCategoria().equalsIgnoreCase("JUGUETES")) {
-
+					stmt.executeUpdate();
+				} else if (prod instanceof Juguete) {
 					stmt = con.prepareStatement(INSERTjuguete);
 
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Juguete) prod).getMaterial());
-
-				} else if (prod.getCategoria().equalsIgnoreCase("COSMETICOS")) {
-
+					stmt.executeUpdate();
+				} else if (prod instanceof Cosmetico) {
 					stmt = con.prepareStatement(INSERTcosmetico);
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
 					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+					stmt.executeUpdate();
 				}
+
 			}
 
 			stmt.executeUpdate();
@@ -280,16 +282,48 @@ public class ControladorBDImplementacion implements ControladorDatos{
 		return listaProductos;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public Producto obtenerProducto(String idproducto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// Metodo para dar de baja un producto
+	@Override
+	public void bajaProducto(String codigo) {
+		
+		Producto prod = null;
+		// Abrimos la conexión
+		this.openConnection();
+
+		// Metemos los valores del propietario dentro del stat:
+		try {
+
+			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+			stmt = con.prepareStatement(DELETEProducto);
+
+			stmt.setString(1,prod.getIdProducto());
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en la modificación SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en cierre de la BD");
+				e.printStackTrace();
+			}
+	}
+	}
+
 	// Metodo para modificar los productos
-	public void modificarproducto(Producto prod) {
+	@Override
+	public void modificarProducto(Producto prod) {
+
+		ResultSet rs = null;
+
 		// Abrimos la conexion con la base de datos
 		this.openConnection();
 
@@ -307,6 +341,29 @@ public class ControladorBDImplementacion implements ControladorDatos{
 
 			stmt.executeUpdate();
 
+			rs = stmt.executeQuery();
+			if (stmt.executeUpdate() == 1) {
+				if (prod instanceof Lenceria) {
+					stmt = con.prepareStatement(UPDATELenceria);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Lenceria) prod).getTalla());
+					stmt.executeUpdate();
+				} else if (prod instanceof Juguete) {
+					stmt = con.prepareStatement(UPDATEJuguete);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Juguete) prod).getMaterial());
+					stmt.executeUpdate();
+				} else if (prod instanceof Cosmetico) {
+					stmt = con.prepareStatement(UPDATECosmetico);
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+					stmt.executeUpdate();
+				}
+
+			}
 		} catch (SQLException e1) {
 			System.out.println("Error en la modificación SQL");
 			e1.printStackTrace();
@@ -319,47 +376,4 @@ public class ControladorBDImplementacion implements ControladorDatos{
 			}
 		}
 	}
-//
-//	// Metodo para dar de baja los productos
-//	public void bajaProducto(Producto prod) {
-//		// Abrimos la conexión
-//		this.openConnection();
-//
-//		// Metemos los valores del propietario dentro del stat:
-//		try {
-//
-//			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
-//			stmt = con.prepareStatement(DELETEProducto);
-//
-//			stmt.setString(1, prod.getIdProducto());
-//
-//			stmt.executeUpdate();
-//		} catch (SQLException e1) {
-//			System.out.println("Error en la modificación SQL");
-//			e1.printStackTrace();
-//		} finally {
-//			try {
-//				this.closeConnection();
-//			} catch (SQLException e) {
-//				System.out.println("Error en cierre de la BD");
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
-		
-	
-
-	@Override
-	public Producto obtenerProducto(String idproducto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void bajaproducto(String codigo) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -1,5 +1,6 @@
 package modelo;
 
+import clases.Persona;
 import clases.Producto;
 
 public interface ControladorDatos {
@@ -11,7 +12,9 @@ public interface ControladorDatos {
 	
 	public Producto obtenerProducto (String idproducto); 
 	
-	public void bajaproducto (String codigo);
+	public void bajaProducto (String codigo);
+
+	public Persona login(Persona pers);
 	
 	
 	

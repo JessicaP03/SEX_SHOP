@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -33,7 +33,7 @@ public class Configuracion extends JDialog {
 	 * Create the dialog.
 	 * @param datos 
 	 */
-	public Configuracion(InicioSesion padre, boolean modal, ControladorBDImplementacion datos) {
+	public Configuracion(InicioSesion padre, boolean modal, ControladorDatos datos) {
 		super(padre);
 		this.setModal(modal);
 		
@@ -50,6 +50,7 @@ public class Configuracion extends JDialog {
 		btnCerrar.setBackground(new Color(255, 255, 153));
 		btnCerrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				cerrar();
 			}
 		});
 		btnCerrar.setBounds(350, 227, 74, 23);
@@ -59,7 +60,7 @@ public class Configuracion extends JDialog {
 		btnRegistrar_Empleado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				registroEmpleado();
+				registroEmpleado(datos);
 			}
 		});
 		btnRegistrar_Empleado.setBackground(new Color(255, 255, 153));
@@ -83,7 +84,7 @@ public class Configuracion extends JDialog {
 		btnInsertar.addActionListener(new ActionListener() {
 			//LLamamos al metodo insertar
 			public void actionPerformed(ActionEvent e) {
-				insertar();
+				insertar(datos);
 			}
 
 			
@@ -95,7 +96,7 @@ public class Configuracion extends JDialog {
 		btnModificar.addActionListener(new ActionListener() {
 			//Llamar al metodo modificar para ir a esa ventana
 			public void actionPerformed(ActionEvent e) {
-				modificar();
+				modificar(datos);
 			}
 
 			
@@ -113,7 +114,7 @@ public class Configuracion extends JDialog {
 		btnBaja.addActionListener(new ActionListener() {
 			//Llamar al metodo de baja
 			public void actionPerformed(ActionEvent e) {
-				baja();
+				baja(datos);
 			}
 
 		
@@ -128,28 +129,32 @@ public class Configuracion extends JDialog {
 		getContentPane().add(lblNewLabel_1);
 	}
 	
-	protected void registroEmpleado() {
+	protected void cerrar() {
+		this.dispose();
+	}
+
+	protected void registroEmpleado(ControladorDatos datos) {
 		
-		Registro registroEmpleado = new Registro ();
+		Registro registroEmpleado = new Registro (datos);
 		registroEmpleado.setVisible(true);
 	}
 
 	//Metodo para que al pulsar la pantalla de insertar nos diriga a tal pantalla
-	private void insertar() {
+	private void insertar(ControladorDatos datos) {
 		// TODO Auto-generated method stub
-		InsertarProducto insertar = new InsertarProducto (this, true);
+		InsertarProducto insertar = new InsertarProducto (this, true, datos);
 		insertar.setVisible(true);
 	}
 	
-	private void modificar() {
+	private void modificar(ControladorDatos datos) {
 		// TODO Auto-generated method stub
-		ModificarProducto modificar = new ModificarProducto(this, true);
+		ModificarProducto modificar = new ModificarProducto(this, true, datos);
 		modificar.setVisible(true);
 	}
 
-	private void baja() {
+	private void baja(ControladorDatos datos) {
 		// TODO Auto-generated method stub
-		DarBajaProducto baja = new DarBajaProducto (this, true);
+		DarBajaProducto baja = new DarBajaProducto (this, true, datos);
 		baja.setVisible(true);
 	}
 	

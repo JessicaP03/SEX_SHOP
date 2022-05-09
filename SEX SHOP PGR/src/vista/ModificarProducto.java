@@ -3,13 +3,17 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Cosmetico;
+import clases.Juguete;
+import clases.Lenceria;
 import clases.Producto;
-import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
 import java.awt.SystemColor;
 import javax.swing.JLabel;
@@ -35,16 +39,20 @@ public class ModificarProducto extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField_IDProducto;
 	private JTextField textField_NombreProd;
+	private JTextField textField_Ingredientes;
 	private JTextField textField_Precio;
+	private JTextField textField_Tipo;
 	private JTextField textField_Material;
 	private JTextField textField_Caducidad;
-	private JTextField textField_Ingredientes;
-	private JTextField textField;
+	private JComboBox comboBox_Sexo;
+	private JComboBox comboBox_Talla;
+	private ButtonGroup categoria;
+	
 
 	
 
 	//Creamos este segundo constructor para saber cual es la ventana padre
-	public ModificarProducto(Configuracion padre, boolean modal, ControladorBDImplementacion datos) {
+	public ModificarProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
 		super(padre);
 		this.setModal(modal);
 		setBackground(SystemColor.windowBorder);
@@ -138,11 +146,15 @@ public class ModificarProducto extends JDialog {
 			contentPanel.add(textField_IDProducto);
 		}
 		{
-			JComboBox comboBox_Talla = new JComboBox();
-			comboBox_Talla.setBackground(new Color(255, 20, 147));
-			comboBox_Talla.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			comboBox_Talla.setBounds(226, 178, 111, 20);
-			contentPanel.add(comboBox_Talla);
+			JComboBox comboBox_Sexo = new JComboBox();
+			comboBox_Sexo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			comboBox_Sexo.setBackground(new Color(255, 20, 147));
+			comboBox_Sexo.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+			comboBox_Sexo.setBounds(226, 178, 111, 20);
+			contentPanel.add(comboBox_Sexo);
 		}
 		
 		JSeparator separator = new JSeparator();
@@ -173,36 +185,40 @@ public class ModificarProducto extends JDialog {
 			contentPanel.add(textField_NombreProd);
 		}
 		{
+			textField_Ingredientes = new JTextField();
+			textField_Ingredientes.setColumns(10);
+			textField_Ingredientes.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+			textField_Ingredientes.setBackground(new Color(255, 20, 147));
+			textField_Ingredientes.setBounds(226, 334, 111, 20);
+			contentPanel.add(textField_Ingredientes);
+		}
+		{
 			textField_Precio = new JTextField();
 			textField_Precio.setColumns(10);
 			textField_Precio.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 			textField_Precio.setBackground(new Color(255, 20, 147));
-			textField_Precio.setBounds(226, 334, 111, 20);
+			textField_Precio.setBounds(226, 205, 111, 20);
 			contentPanel.add(textField_Precio);
+		}
+		{
+			textField_Tipo = new JTextField();
+			textField_Tipo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			textField_Tipo.setColumns(10);
+			textField_Tipo.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+			textField_Tipo.setBackground(new Color(255, 20, 147));
+			textField_Tipo.setBounds(226, 237, 111, 20);
+			contentPanel.add(textField_Tipo);
 		}
 		{
 			textField_Material = new JTextField();
 			textField_Material.setColumns(10);
 			textField_Material.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 			textField_Material.setBackground(new Color(255, 20, 147));
-			textField_Material.setBounds(226, 205, 111, 20);
+			textField_Material.setBounds(226, 269, 111, 20);
 			contentPanel.add(textField_Material);
-		}
-		{
-			textField_Caducidad = new JTextField();
-			textField_Caducidad.setColumns(10);
-			textField_Caducidad.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			textField_Caducidad.setBackground(new Color(255, 20, 147));
-			textField_Caducidad.setBounds(226, 237, 111, 20);
-			contentPanel.add(textField_Caducidad);
-		}
-		{
-			textField_Ingredientes = new JTextField();
-			textField_Ingredientes.setColumns(10);
-			textField_Ingredientes.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			textField_Ingredientes.setBackground(new Color(255, 20, 147));
-			textField_Ingredientes.setBounds(226, 269, 111, 20);
-			contentPanel.add(textField_Ingredientes);
 		}
 		{
 			JButton btnModificar = new JButton("Modificar");
@@ -224,28 +240,56 @@ public class ModificarProducto extends JDialog {
 		lblNewLabel_Material.setBounds(32, 240, 56, 14);
 		contentPanel.add(lblNewLabel_Material);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-		textField.setBackground(new Color(255, 20, 147));
-		textField.setBounds(226, 299, 111, 20);
-		contentPanel.add(textField);
+		textField_Caducidad = new JTextField();
+		textField_Caducidad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		textField_Caducidad.setColumns(10);
+		textField_Caducidad.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+		textField_Caducidad.setBackground(new Color(255, 20, 147));
+		textField_Caducidad.setBounds(226, 299, 111, 20);
+		contentPanel.add(textField_Caducidad);
 		
 		JComboBox comboBox_Talla = new JComboBox();
 		comboBox_Talla.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 		comboBox_Talla.setBackground(new Color(255, 20, 147));
 		comboBox_Talla.setBounds(226, 371, 111, 20);
 		contentPanel.add(comboBox_Talla);
+		
+		JLabel lblNewLabel_Categoria = new JLabel("Categoria");
+		lblNewLabel_Categoria.setForeground(new Color(255, 255, 153));
+		lblNewLabel_Categoria.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_Categoria.setBounds(32, 147, 103, 14);
+		contentPanel.add(lblNewLabel_Categoria);
+		
+		JRadioButton rdbtnLenceria = new JRadioButton("Lenceria");
+		rdbtnLenceria.setBounds(135, 145, 78, 23);
+		contentPanel.add(rdbtnLenceria);
+		
+		JRadioButton rdbtnJuguete = new JRadioButton("Juguete");
+		rdbtnJuguete.setBounds(226, 145, 78, 23);
+		contentPanel.add(rdbtnJuguete);
+		
+		JRadioButton rdbtnCosmetico = new JRadioButton("Cosmetico");
+		rdbtnCosmetico.setBounds(316, 145, 78, 23);
+		contentPanel.add(rdbtnCosmetico);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBackground(SystemColor.controlDkShadow);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
+		
+		// GRUPO DE BOTONES DE CATEGORIA
+				categoria = new ButtonGroup();
+				categoria.add(rdbtnLenceria);
+				categoria.add(rdbtnJuguete);
+				categoria.add(rdbtnCosmetico);
 	}
 	
 	//Metodo para modificar los productos
-	protected void modificar(ControladorBDImplementacion datos) {
+	protected void modificar(ControladorDatos datos) {
 		Producto prod = leerDatosPantalla(textField_IDProducto.getText());
 		
 		//el id del producto no cambia en la modificación
@@ -256,14 +300,59 @@ public class ModificarProducto extends JDialog {
 		
 	}
 
+	
+		private Producto leerDatosPantalla(String text) {
+			Producto prod = new Producto();
+			
+			prod.setIdProducto(textField_IDProducto.getText());
+			
+			//SI LA CATEGORIA ELEGIDA ES LENCERIA
+			if (categoria.equals("LENCERIA")) {
 
-
-	private Producto leerDatosPantalla(String text) {
-		return null;
+				textField_Material.setVisible(false);
+				textField_Caducidad.setEnabled(false);
+				prod = new Lenceria();
+				prod.setIdProducto(textField_IDProducto.getText());
+				prod.setNombreProd(textField_NombreProd.getText());
 				
+				prod.setSexo(comboBox_Sexo.getSelectedItem().toString());
+				prod.setTipo(textField_Tipo.getText());
+				((Lenceria) prod).setTalla(comboBox_Talla.getSelectedItem().toString());
+				
+			//SI LA CATEGORIA ELEGIDA ES JUGUETE
+			} else if (categoria.equals("JUGUETES")) {
+				prod = new Juguete();
+				prod.setIdProducto(textField_IDProducto.getText());
+				prod.setNombreProd(textField_NombreProd.getText());
+				
+				prod.setSexo(comboBox_Sexo.getSelectedItem().toString());
+				prod.setTipo(textField_Tipo.getText());
+				((Juguete) prod).setMaterial(textField_Material.getText());
+
+				//SI LA CATEGORIA ELEGIDA ES COSMETICO
+			} else if (categoria.equals("COSMETICOS")) {
+				prod = new Cosmetico();
+				prod.setIdProducto(textField_IDProducto.getText());
+				prod.setNombreProd(textField_NombreProd.getText());
+				
+				prod.setSexo(comboBox_Sexo.getSelectedItem().toString());
+				prod.setTipo(textField_Tipo.getText());
+				((Cosmetico) prod).setCaducidad(textField_Caducidad.getText());
+				((Cosmetico) prod).setIngrediente(textField_Ingredientes.getText());
+			
+			
+			JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMEMTE");
+			} else{
+
+			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");		
+		}
+			
+			return prod;
 	}
-	
-	
+		
+			
+		
+
 	
 	private void cerrar() {
 		this.dispose();
