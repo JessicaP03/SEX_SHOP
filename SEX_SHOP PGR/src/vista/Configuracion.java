@@ -36,8 +36,10 @@ public class Configuracion extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param object 
 	 */
 	public Configuracion() {
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		getContentPane().setBackground(SystemColor.controlDkShadow);
 		setBounds(100, 100, 450, 300);
@@ -81,6 +83,7 @@ public class Configuracion extends JDialog {
 		btnInsertar.setBackground(new Color(135, 206, 235));
 		btnInsertar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnInsertar();
 			}
 		});
 		btnInsertar.setBounds(46, 75, 99, 23);
@@ -109,5 +112,10 @@ public class Configuracion extends JDialog {
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setBounds(20, 43, 203, 14);
 		getContentPane().add(lblNewLabel_1);
+	}
+
+	protected void btnInsertar() {
+		InsertarProducto insertar = new InsertarProducto();
+		insertar.setVisible(true);
 	}
 }
