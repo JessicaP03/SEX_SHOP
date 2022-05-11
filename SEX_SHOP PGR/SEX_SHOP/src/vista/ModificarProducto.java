@@ -1,21 +1,13 @@
 package vista;
 
 import java.awt.BorderLayout;
-
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.SystemColor;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import clases.Cosmetico;
@@ -23,48 +15,50 @@ import clases.Juguete;
 import clases.Lenceria;
 import clases.Producto;
 import modelo.ControladorBDImplementacion;
+import modelo.ControladorDatos;
 
+import java.awt.SystemColor;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JProgressBar;
+import javax.swing.border.BevelBorder;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Map;
 import java.awt.event.ActionEvent;
 
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JRadioButton;
-import java.awt.Cursor;
-import java.awt.Dialog.ModalityType;
+public class ModificarProducto extends JDialog {
 
-public class InsertarProducto extends JDialog implements ActionListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	/**
 	 * Launch the application.
 	 */
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textID, textCaducidad, textMaterial, textPrecio, textInredientes, textNombreProd;
+	private JTextField textField_IDProducto;
+	private JTextField textField_NombreProd;
+	private JTextField textField_Ingredientes;
+	private JTextField textField_Precio;
+	private JTextField textField_Tipo;
+	private JTextField textField_Material;
+	private JTextField textField_Caducidad;
+
+	private ButtonGroup categoria;
 	private JRadioButton rdbtnLenceria, rdbtnJuguete, rdbtnCosmetico;
-	private ButtonGroup categoria, sexo, talla;
 	private JLabel lblIngredientes, lblTalla, lblCaducidad, lblMaterial;
-	private JComboBox comboSexo;
-	private ArrayList<Producto> productos;
-	private JTextField textTipo;
-	private ControladorBDImplementacion datos;
+	private JTextField textID, textCaducidad, textMaterial, textPrecio, textIngredientes, textNombreProd, textTipo;
 	private JComboBox comboTalla;
-	private int anio;
-    private int dia;
-    private int mes;
-	/**
-	 * Launch the application.
-	 */
+	private JComboBox comboSexo;
+	private ControladorDatos datos;
+
 	public static void main(String[] args) {
 		try {
-			InsertarProducto dialog = new InsertarProducto();
+			ModificarProducto dialog = new ModificarProducto(null, true, null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -72,10 +66,10 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public InsertarProducto() {
+	// Creamos este segundo constructor para saber cual es la ventana padre
+	public ModificarProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
+		super(padre);
+		this.setModal(modal);
 		setForeground(new Color(0, 0, 0));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setBackground(new Color(0, 0, 0));
@@ -86,7 +80,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Insertar producto");
+		JLabel lblNewLabel = new JLabel("Modificar producto");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBounds(32, 11, 133, 17);
@@ -97,7 +91,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			contentPanel.add(separator);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("Insertar los datos del producto que desea introducir");
+			JLabel lblNewLabel_1 = new JLabel("Introduce  el ID del producto que deseas modificar");
 			lblNewLabel_1.setForeground(Color.WHITE);
 			lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblNewLabel_1.setBounds(32, 39, 338, 28);
@@ -176,7 +170,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			JButton cancelButton_Cerrar = new JButton("Cerrar");
 			cancelButton_Cerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cerrarVentana();
+					cerrar();
 				}
 			});
 			cancelButton_Cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -222,13 +216,13 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			contentPanel.add(textPrecio);
 		}
 		{
-			textInredientes = new JTextField();
-			textInredientes.setColumns(10);
-			textInredientes.setBorder(
+			textIngredientes = new JTextField();
+			textIngredientes.setColumns(10);
+			textIngredientes.setBorder(
 					new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			textInredientes.setBackground(new Color(255, 20, 147));
-			textInredientes.setBounds(226, 334, 111, 20);
-			contentPanel.add(textInredientes);
+			textIngredientes.setBackground(new Color(255, 20, 147));
+			textIngredientes.setBounds(226, 334, 111, 20);
+			contentPanel.add(textIngredientes);
 		}
 		{
 			textNombreProd = new JTextField();
@@ -245,14 +239,14 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			contentPanel.add(textNombreProd);
 		}
 
-		JButton btnAgregar = new JButton("Agregar");
+		JButton btnAgregar = new JButton("Modificar");
 		btnAgregar.setBackground(new Color(255, 255, 153));
 		btnAgregar.setForeground(Color.BLACK);
 		btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				agregarProducto();
+				modificar(datos);
 
 			}
 		});
@@ -316,12 +310,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		categoria.add(rdbtnLenceria);
 		categoria.add(rdbtnJuguete);
 		categoria.add(rdbtnCosmetico);
-
-		// GRUPO DE BOTONES DE SEXO
-		sexo = new ButtonGroup();
-
-		// GRUPO DE BOTONES DE TALLA
-		talla = new ButtonGroup();
+		
 
 		comboSexo = new JComboBox();
 		comboSexo.setForeground(new Color(255, 255, 255));
@@ -339,11 +328,6 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		}
 	}
 
-	protected void cerrarVentana() {
-		this.dispose();
-
-	}
-
 	protected void categoriaElegida() {
 
 		// SI ELIGES LA CATEGORIA LENCERIA
@@ -355,7 +339,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			lblCaducidad.setVisible(false);
 			lblIngredientes.setVisible(false);
 
-			textInredientes.setVisible(false);
+			textIngredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
@@ -374,7 +358,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			lblCaducidad.setVisible(false);
 			lblIngredientes.setVisible(false);
 
-			textInredientes.setVisible(false);
+			textIngredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
@@ -391,107 +375,80 @@ public class InsertarProducto extends JDialog implements ActionListener {
 			// COSMETICOS
 			lblCaducidad.setVisible(true);
 			lblIngredientes.setVisible(true);
-			textInredientes.setVisible(true);
+			textIngredientes.setVisible(true);
 			textCaducidad.setVisible(true);
 
 			// LENCERIA
 			lblTalla.setVisible(false);
 			comboTalla.setVisible(false);
-		} else {
 
 		}
 	}
 
-	protected void agregarProducto() {
-		Producto prod;
-		ControladorBDImplementacion bd = new ControladorBDImplementacion();
-		// SI FALTA ALGUN CAMPO POR RELLENAR
-		if (textID.getText().equals("") || textPrecio.getText().equals("") || textNombreProd.getText().equals("")
-				|| textTipo.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR!");
+	// Metodo para modificar los productos
+	protected void modificar(ControladorDatos datos) {
+		Producto prod = leerDatosPantalla(textID.getText());
+		// el id del producto no cambia en la modificación
+		datos.modificarProducto(prod);
+		//
+		JOptionPane.showMessageDialog(this, "EL PRODUCTO SE HA MODIFICADO CORRECTAMENTE");
+
+	}
+
+	private Producto leerDatosPantalla(String idProducto) {
+		Producto prod = new Producto();
+
+
+		// SI LA CATEGORIA ELEGIDA ES LENCERIA
+		if (rdbtnLenceria.isSelected()) {
+			prod = new Lenceria();
+			prod.setIdProducto(idProducto);
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("LENCERIA");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+			prod.setTipo(textTipo.getText());
+			((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
+			
+			
+			// SI LA CATEGORIA ELEGIDA ES JUGUETE
+		} else if (rdbtnJuguete.isSelected()) {
+			prod = new Juguete();
+			prod.setIdProducto(idProducto);
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("JUGUETE");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+			prod.setTipo(textTipo.getText());
+			((Juguete) prod).setMaterial(textMaterial.getText());
+
+			
+			
+			// SI LA CATEGORIA ELEGIDA ES COSMETICO
+		} else if (rdbtnCosmetico.isSelected()) {
+			prod = new Cosmetico();
+			prod.setIdProducto(idProducto);
+			prod.setNombreProd(textNombreProd.getText());
+			prod.setCategoria("COSMETICO");
+			prod.setSexo(comboSexo.getSelectedItem().toString());
+			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+			prod.setTipo(textTipo.getText());
+			((Cosmetico) prod).setCaducidad(textCaducidad.getText());
+			((Cosmetico) prod).setIngrediente(textIngredientes.getText());
+			
+		
+
+			JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMEMTE");
 		} else {
-			if (bd.existeProducto(textID.getText()) == 0) {
-				// SI LA CATEGORIA ELEGIDA ES LENCERIA
-				if (rdbtnLenceria.isSelected()) {
 
-					prod = new Lenceria();
-					prod.setIdProducto(textID.getText());
-					prod.setNombreProd(textNombreProd.getText());
-					prod.setCategoria("LENCERIA");
-					prod.setSexo(comboSexo.getSelectedItem().toString());
-					prod.setTipo(textTipo.getText());
-					((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
-
-					datos = new ControladorBDImplementacion();
-					datos.insertarProducto(prod);
-
-					JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
-
-					// SI LA CATEGORIA ELEGIDA ES JUGUETE
-				} else if (rdbtnJuguete.isSelected()) {
-					if (textMaterial.getText().equals("")) {
-						JOptionPane.showMessageDialog(this, "FALTA RELLENAR EL CAMPO MATERIAL");
-					} else {
-						prod = new Juguete();
-						prod.setIdProducto(textID.getText());
-						prod.setNombreProd(textNombreProd.getText());
-						prod.setCategoria("JUGUETE");
-						prod.setSexo(comboSexo.getSelectedItem().toString());
-						prod.setTipo(textTipo.getText());
-						((Juguete) prod).setMaterial(textMaterial.getText());
-
-						datos = new ControladorBDImplementacion();
-						datos.insertarProducto(prod);
-						JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
-					}
-
-					// SI LA CATEGORIA ELEGIDA ES COSMETICO
-				} else if (rdbtnCosmetico.isSelected()) {
-					if (textInredientes.getText().equals("") || textCaducidad.getText().equals("")) {
-						JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
-					} else {
-						prod = new Cosmetico();
-						prod.setIdProducto(textID.getText());
-						prod.setNombreProd(textNombreProd.getText());
-						prod.setCategoria("COSMETICO");
-						prod.setSexo(comboSexo.getSelectedItem().toString());
-						prod.setTipo(textTipo.getText());
-						((Cosmetico) prod).setCaducidad(textCaducidad.getText());
-						((Cosmetico) prod).setIngrediente(textInredientes.getText());
-						JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
-						datos = new ControladorBDImplementacion();
-						datos.insertarProducto(prod);
-					}
-				}
-			}else {
-				JOptionPane.showMessageDialog(this, "EL CODIGO ESTA REPETIDO");
-			}
-
+			JOptionPane.showMessageDialog(this, "ERROR AL INSERTAR PRODUCTO");
 		}
 
+		return prod;
 	}
-	public boolean validarFecha() {
-	    boolean correcto = false;
-
-	    try {
-	        //Formato de fecha (día/mes/año)
-	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-	        formatoFecha.setLenient(false);
-	        //Comprobación de la fecha
-	        formatoFecha.parse(this.dia + "/" + this.mes + "/" + this.anio);
-	        correcto = true;
-	    } catch (ParseException e) {
-	        //Si la fecha no es correcta, pasará por aquí
-	        correcto = false;
-	    }
-
-	    return correcto;
+	// ESCONDER CAMPOS DE TEXTOS SEGUN CATEGORIA
+	
+	private void cerrar() {
+		this.dispose();
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

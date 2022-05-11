@@ -177,7 +177,7 @@ public class InicioSesion extends JFrame {
 		} else {
 			// SI EL TIPO ES IGUAL A ADMIN
 			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
-				Configuracion conf = new Configuracion();
+				Configuracion conf = new Configuracion(datos);
 				conf.setVisible(true);
 				this.dispose();
 				// SI EL TIPO ES IGUAL A CLIENTE

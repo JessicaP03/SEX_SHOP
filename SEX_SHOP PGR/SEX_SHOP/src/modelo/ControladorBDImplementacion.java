@@ -1,6 +1,7 @@
 package modelo;
 
 import java.sql.Connection;
+
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,15 +21,13 @@ import java.util.regex.Pattern;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JOptionPane;
 
-import com.mysql.cj.x.protobuf.MysqlxSql.StmtExecute;
-
 import clases.Cosmetico;
 import clases.Juguete;
 import clases.Lenceria;
 import clases.Persona;
 import clases.Producto;
 
-public class ControladorBDImplementacion {
+public class ControladorBDImplementacion implements ControladorDatos{
 
 	// Atributos
 	private Connection con;
@@ -59,6 +58,15 @@ public class ControladorBDImplementacion {
 
 	final String INSERTcosmetico = "INSERT INTO cosmetico (idproducto, caducidad, ingredientes) VALUES (?, ?, ?)";
 
+	final String UPDATEJuguete = "UPDATE juguete SET material = ? where idproducto = ?";
+
+	final String UPDATECosmetico = "UPDATE cosmetico SET caducidad = ?, ingredientes = ? where idproducto = ?";
+
+	final String UPDATELenceria = "UPDATE lenceria SET talla = ? where idproducto = ?";
+
+	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, categori = ?, sexo = ?, precio = ?, tipo = ? WHERE idproducto= ?";
+
+	final String DELETEProducto = "DELETE FROM producto where idproducto=?";
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
 
@@ -185,8 +193,6 @@ public class ControladorBDImplementacion {
 		return mather.find();
 	}
 
-	
-
 	// METODO PARA LOGEARSE
 	public Persona login(Persona pers) {
 
@@ -272,8 +278,96 @@ public class ControladorBDImplementacion {
 		}
 	}
 
-	// Listar los productos
+	public void modificarProducto(Producto prod) {
 
+		ResultSet rs = null;
+
+		// Abrimos la conexion con la base de datos
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(UPDATEproducto);
+
+			
+			stmt.setString(1, prod.getNombreProd());
+			stmt.setString(2, prod.getCategoria());
+			stmt.setString(3, prod.getSexo());
+			stmt.setInt(4, prod.getPrecio());
+			stmt.setString(5, prod.getTipo());
+			
+			stmt.setString(6, prod.getIdProducto());
+
+			
+			
+			if (stmt.executeUpdate() == 1) {
+				if (prod instanceof Lenceria) {
+					stmt = con.prepareStatement(UPDATELenceria);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Lenceria) prod).getTalla());
+					
+					stmt.executeUpdate();
+				} else if (prod instanceof Juguete) {
+					stmt = con.prepareStatement(UPDATEJuguete);
+
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Juguete) prod).getMaterial());
+					
+					stmt.executeUpdate();
+				} else if (prod instanceof Cosmetico) {
+					stmt = con.prepareStatement(UPDATECosmetico);
+					stmt.setString(1, prod.getIdProducto());
+					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
+					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
+					
+					stmt.executeUpdate();
+				}
+
+			}
+		} catch (SQLException e1) {
+			System.out.println("Error en la modificación SQL");
+			e1.printStackTrace();
+
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+		// Metodo para dar de baja los productos
+		public void bajaProducto(Producto prod) {
+			// Abrimos la conexión
+			this.openConnection();
+	
+			// Metemos los valores del propietario dentro del stat:
+			try {
+	
+				// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+				stmt = con.prepareStatement(DELETEProducto);
+	
+				stmt.setString(1, prod.getIdProducto());
+	
+				stmt.executeUpdate();
+			} catch (SQLException e1) {
+				System.out.println("Error en la modificación SQL");
+				e1.printStackTrace();
+			} finally {
+				try {
+					this.closeConnection();
+				} catch (SQLException e) {
+					System.out.println("Error en cierre de la BD");
+					e.printStackTrace();
+				}
+			}
+		}
+
+	// Listar los productos
+	
 	public ArrayList<Producto> listarProducto() {
 		ResultSet rs = null;
 		Producto prod;

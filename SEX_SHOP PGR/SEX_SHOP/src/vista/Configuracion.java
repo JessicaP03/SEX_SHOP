@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorDatos;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -24,22 +27,14 @@ public class Configuracion extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Configuracion dialog = new Configuracion();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
 	 * @param object 
 	 */
-	public Configuracion() {
-		
+	public Configuracion( ControladorDatos datos) {
+//		super(padre);
+//		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		getContentPane().setBackground(SystemColor.controlDkShadow);
 		setBounds(100, 100, 450, 300);
@@ -83,13 +78,18 @@ public class Configuracion extends JDialog {
 		btnInsertar.setBackground(new Color(135, 206, 235));
 		btnInsertar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnInsertar();
+				btnInsertar(datos);
 			}
 		});
 		btnInsertar.setBounds(46, 75, 99, 23);
 		getContentPane().add(btnInsertar);
 		
 		JButton btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificar(datos);
+			}
+		});
 		btnModificar.setBackground(new Color(135, 206, 235));
 		btnModificar.setForeground(Color.WHITE);
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -102,6 +102,7 @@ public class Configuracion extends JDialog {
 		btnBaja.setBackground(new Color(135, 206, 235));
 		btnBaja.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
+			baja(datos);
 			}
 		});
 		btnBaja.setBounds(46, 165, 99, 23);
@@ -114,8 +115,18 @@ public class Configuracion extends JDialog {
 		getContentPane().add(lblNewLabel_1);
 	}
 
-	protected void btnInsertar() {
-		InsertarProducto insertar = new InsertarProducto();
+	protected void baja(ControladorDatos datos) {
+		DarBajaProducto baja = new DarBajaProducto(this, true, datos);
+		baja.setVisible(true);
+	}
+
+	protected void modificar(ControladorDatos datos) {
+		ModificarProducto modificar = new ModificarProducto(this, true, datos);
+		modificar.setVisible(true);
+	}
+
+	protected void btnInsertar(ControladorDatos datos) {
+		InsertarProducto insertar = new InsertarProducto(this, true, datos);
 		insertar.setVisible(true);
 	}
 }

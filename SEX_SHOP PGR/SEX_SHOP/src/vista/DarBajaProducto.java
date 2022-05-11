@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorDatos;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import java.awt.Color;
@@ -28,20 +31,15 @@ public class DarBajaProducto extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			DarBajaProducto dialog = new DarBajaProducto();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	/**
 	 * Create the dialog.
 	 */
-	public DarBajaProducto() {
+	public DarBajaProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
+		
+		super(padre);
+		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		setBounds(100, 100, 503, 455);
 		getContentPane().setLayout(new BorderLayout());
@@ -115,6 +113,12 @@ public class DarBajaProducto extends JDialog {
 			lblNewLabel_2.setBounds(45, 165, 366, 25);
 			contentPanel.add(lblNewLabel_2);
 		}
+		
+		JButton btnBaja = new JButton("BAJA");
+		btnBaja.setForeground(Color.BLACK);
+		btnBaja.setBackground(new Color(255, 255, 153));
+		btnBaja.setBounds(58, 378, 95, 25);
+		contentPanel.add(btnBaja);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBackground(SystemColor.controlDkShadow);
@@ -122,4 +126,8 @@ public class DarBajaProducto extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
 	}
+	
+	public 
+	
+	
 }

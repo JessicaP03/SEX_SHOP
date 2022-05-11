@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="clases.Lenceria"/>
+    <fullyQualifiedTypeName name="javax.swing.ButtonGroup"/>
+    <fullyQualifiedTypeName name="clases.Producto"/>
+    <fullyQualifiedTypeName name="vista.ModificarProducto"/>
+    <fullyQualifiedTypeName name="modelo.ControladorDatos"/>
+</qualifiedTypeNameHistroy>
