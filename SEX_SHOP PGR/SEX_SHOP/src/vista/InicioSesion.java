@@ -40,6 +40,7 @@ public class InicioSesion extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textEmail;
+	
 
 	/**
 	 * Launch the application.

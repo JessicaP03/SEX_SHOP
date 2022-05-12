@@ -460,6 +460,7 @@ public class InsertarProducto extends JDialog implements ActionListener {
 		}
 
 	}
+	
 
 	public boolean validarFecha() {
 		boolean correcto = false;

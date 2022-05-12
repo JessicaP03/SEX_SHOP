@@ -20,6 +20,9 @@ import java.util.regex.Pattern;
 
 import javax.swing.ComboBoxEditor;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.xdevapi.Result;
 
 import clases.Cosmetico;
 import clases.Juguete;
@@ -27,7 +30,7 @@ import clases.Lenceria;
 import clases.Persona;
 import clases.Producto;
 
-public class ControladorBDImplementacion implements ControladorDatos{
+public class ControladorBDImplementacion implements ControladorDatos {
 
 	// Atributos
 	private Connection con;
@@ -67,6 +70,7 @@ public class ControladorBDImplementacion implements ControladorDatos{
 	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, categori = ?, sexo = ?, precio = ?, tipo = ? WHERE idproducto= ?";
 
 	final String DELETEProducto = "DELETE FROM producto where idproducto=?";
+
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
 
@@ -289,38 +293,35 @@ public class ControladorBDImplementacion implements ControladorDatos{
 
 			stmt = con.prepareStatement(UPDATEproducto);
 
-			
 			stmt.setString(1, prod.getNombreProd());
 			stmt.setString(2, prod.getCategoria());
 			stmt.setString(3, prod.getSexo());
 			stmt.setInt(4, prod.getPrecio());
 			stmt.setString(5, prod.getTipo());
-			
+
 			stmt.setString(6, prod.getIdProducto());
 
-			
-			
 			if (stmt.executeUpdate() == 1) {
 				if (prod instanceof Lenceria) {
 					stmt = con.prepareStatement(UPDATELenceria);
 
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Lenceria) prod).getTalla());
-					
+
 					stmt.executeUpdate();
 				} else if (prod instanceof Juguete) {
 					stmt = con.prepareStatement(UPDATEJuguete);
 
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Juguete) prod).getMaterial());
-					
+
 					stmt.executeUpdate();
 				} else if (prod instanceof Cosmetico) {
 					stmt = con.prepareStatement(UPDATECosmetico);
 					stmt.setString(1, prod.getIdProducto());
 					stmt.setString(2, ((Cosmetico) prod).getCaducidad());
 					stmt.setString(3, ((Cosmetico) prod).getIngrediente());
-					
+
 					stmt.executeUpdate();
 				}
 
@@ -338,55 +339,58 @@ public class ControladorBDImplementacion implements ControladorDatos{
 			}
 		}
 	}
-	
-		// Metodo para dar de baja los productos
-		public void bajaProducto(Producto prod) {
-			// Abrimos la conexión
-			this.openConnection();
-	
-			// Metemos los valores del propietario dentro del stat:
+
+	// Metodo para dar de baja los productos
+	public void bajaProducto(Producto prod) {
+		// Abrimos la conexión
+		this.openConnection();
+
+		// Metemos los valores del propietario dentro del stat:
+		try {
+
+			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+			stmt = con.prepareStatement(DELETEProducto);
+
+			stmt.setString(1, prod.getIdProducto());
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en la modificación SQL");
+			e1.printStackTrace();
+		} finally {
 			try {
-	
-				// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
-				stmt = con.prepareStatement(DELETEProducto);
-	
-				stmt.setString(1, prod.getIdProducto());
-	
-				stmt.executeUpdate();
-			} catch (SQLException e1) {
-				System.out.println("Error en la modificación SQL");
-				e1.printStackTrace();
-			} finally {
-				try {
-					this.closeConnection();
-				} catch (SQLException e) {
-					System.out.println("Error en cierre de la BD");
-					e.printStackTrace();
-				}
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en cierre de la BD");
+				e.printStackTrace();
 			}
 		}
+	}
 
 	// Listar los productos
-	
-	public ArrayList<Producto> listarProducto() {
+
+	public Map<String, Producto> listarProducto(Producto prod) {
 		ResultSet rs = null;
-		Producto prod;
-		ArrayList<Producto> listaProductos = new ArrayList<>();
+		Map<String, Producto> listaProductos = new TreeMap<>();
+		
 		this.openConnection();
 
 		try {
 			stmt = con.prepareStatement(ObtenerProducto);
+			
+			
+			stmt.setString(1, prod.getIdProducto());
+			
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				prod = new Producto();
 				prod.setIdProducto(rs.getString("idproducto"));
-				prod.setNombreProd(rs.getString("nombreproducto"));
+				prod.setNombreProd(rs.getString("nombre_prod"));
 				prod.setCategoria(rs.getString("categori"));
 				prod.setSexo(rs.getString("sexo"));
 				prod.setPrecio(rs.getInt("precio"));
 				prod.setTipo(rs.getString("tipo"));
-
-				listaProductos.add(prod);
+				
 
 			}
 
@@ -410,6 +414,48 @@ public class ControladorBDImplementacion implements ControladorDatos{
 			}
 		}
 		return listaProductos;
+	}
+
+	public DefaultTableModel mostrarProductos() {
+
+		String[] nombreColumnas = { "IDPRODUCTO, NOMBRE_PRODUC, CATEGORI, SEXO, PRECIO, TIPO" };
+		String[] registros = new String[200];
+
+		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
+
+		this.openConnection();
+
+		ResultSet rs = null;
+
+		try {
+			stmt = con.prepareStatement(ObtenerProducto);
+			stmt.executeQuery();
+
+			while (rs.next()) {
+				registros[0] = rs.getString("IDPRODUCTO");
+				registros[1] = rs.getString("NOMBRE_PROD");
+				registros[2] = rs.getString("CATEGORI");
+				registros[3] = rs.getString("SEXO");
+				registros[4] = rs.getString("PRECIO");
+				registros[5] = rs.getString("TIPO");
+				
+				modelo.addRow(registros);
+			}
+			
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return modelo;
+
 	}
 
 }
