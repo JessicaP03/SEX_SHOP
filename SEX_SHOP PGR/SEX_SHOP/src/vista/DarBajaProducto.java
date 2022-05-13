@@ -22,6 +22,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -37,6 +40,7 @@ public class DarBajaProducto extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable tablaProducto;
 	private Map<String, Producto> productos;
+	private JTextField textID;
 	
 
 	/**
@@ -95,13 +99,6 @@ public class DarBajaProducto extends JDialog {
 			contentPanel.add(lblNewLabel_1);
 		}
 
-		JComboBox comboBox_Seleccion = new JComboBox();
-		comboBox_Seleccion.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 20, 147), null, null, null));
-		comboBox_Seleccion.setForeground(Color.WHITE);
-		comboBox_Seleccion.setBackground(new Color(255, 20, 147));
-		comboBox_Seleccion.setBounds(40, 83, 182, 22);
-		contentPanel.add(comboBox_Seleccion);
-
 		JLabel lblNewLabel_1 = new JLabel("Datos del producto seleccionado:");
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -120,6 +117,12 @@ public class DarBajaProducto extends JDialog {
 		}
 
 		JButton btnBaja = new JButton("BAJA");
+		btnBaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				eliminarProducto(datos);
+			}
+		});
 		btnBaja.setForeground(Color.BLACK);
 		btnBaja.setBackground(new Color(255, 255, 153));
 		btnBaja.setBounds(55, 436, 87, 25);
@@ -138,6 +141,22 @@ public class DarBajaProducto extends JDialog {
 		
 
 	}
+	
+	
+	protected void leerPantallaProducto(ControladorDatos datos) {
+		
+	}
+	
+	
+
+	protected void eliminarProducto(ControladorDatos datos) {
+		
+//		Producto prod = leerDatosProducto(textID.getText());
+//				
+//		datos.eliminarProducto(prod);
+//		
+//		JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
+	}
 
 	private void presentarTabla(Producto producto, ControladorDatos datos) {
 		
@@ -145,21 +164,30 @@ public class DarBajaProducto extends JDialog {
 		tablaProducto= this.cargarTabla(producto, datos);
 		scroll.setViewportView(tablaProducto);
 		
+
+		
 		
 		contentPanel.add(scroll);
 		scroll.setBounds(55,201,414,191);
+		
+		textID = new JTextField();
+		textID.setBounds(48, 99, 133, 20);
+		contentPanel.add(textID);
+		textID.setColumns(10);
 	
 
 	}
 	
 	private JTable cargarTabla(Producto producto, ControladorDatos datos) {
 		
-		String[] nombreColumnas = { "IDPRODUCTO, NOMBRE_PROD, CATEGORI, SEXO, PRECIO, TIPO" };
+		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
 		String[] registros = new String[6];
+		
 
 		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
+		modelo.setRowCount(0);
 		
-		productos= datos.listarProducto(producto);
+		productos= datos.listarProducto();
 		
 		for(Producto prod: productos.values()) {
 			registros[0] = prod.getIdProducto();
@@ -175,5 +203,11 @@ public class DarBajaProducto extends JDialog {
 		return new JTable(modelo);
 		
 	}
-
+	
+	
+	
+//	protected void baja(ControladorDatos Datos, ModificarProducto modificar) {
+//		Producto prod= modificar.leerDatosPantalla();
+//	}
+	
 }

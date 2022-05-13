@@ -310,7 +310,6 @@ public class ModificarProducto extends JDialog {
 		categoria.add(rdbtnLenceria);
 		categoria.add(rdbtnJuguete);
 		categoria.add(rdbtnCosmetico);
-		
 
 		comboSexo = new JComboBox();
 		comboSexo.setForeground(new Color(255, 255, 255));
@@ -395,59 +394,79 @@ public class ModificarProducto extends JDialog {
 
 	}
 
-	private Producto leerDatosPantalla(String idProducto) {
+	public Producto leerDatosPantalla(String idProducto) {
 		Producto prod = new Producto();
 
-
-		// SI LA CATEGORIA ELEGIDA ES LENCERIA
-		if (rdbtnLenceria.isSelected()) {
-			prod = new Lenceria();
-			prod.setIdProducto(idProducto);
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("LENCERIA");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
-			prod.setTipo(textTipo.getText());
-			((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
-			
-			
-			// SI LA CATEGORIA ELEGIDA ES JUGUETE
-		} else if (rdbtnJuguete.isSelected()) {
-			prod = new Juguete();
-			prod.setIdProducto(idProducto);
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("JUGUETE");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
-			prod.setTipo(textTipo.getText());
-			((Juguete) prod).setMaterial(textMaterial.getText());
-
-			
-			
-			// SI LA CATEGORIA ELEGIDA ES COSMETICO
-		} else if (rdbtnCosmetico.isSelected()) {
-			prod = new Cosmetico();
-			prod.setIdProducto(idProducto);
-			prod.setNombreProd(textNombreProd.getText());
-			prod.setCategoria("COSMETICO");
-			prod.setSexo(comboSexo.getSelectedItem().toString());
-			prod.setPrecio(Integer.parseInt(textPrecio.getText()));
-			prod.setTipo(textTipo.getText());
-			((Cosmetico) prod).setCaducidad(textCaducidad.getText());
-			((Cosmetico) prod).setIngrediente(textIngredientes.getText());
-			
+		ControladorBDImplementacion bd = new ControladorBDImplementacion();
 		
+		//CUANDO LA VALIDACION ES IGUAL A TRUE
+		boolean v = bd.validarInteger(textPrecio.getText());
 
-			JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMEMTE");
+		if (textID.getText().equals("") || textPrecio.getText().equals("") || textNombreProd.getText().equals("")
+				|| textTipo.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR!");
 		} else {
+			//VALIDA QUE NO SE PUEDAN INTRODUCIR STRINGS
+			if (v != false) {
+				// SI LA CATEGORIA ELEGIDA ES LENCERIA
+				if (rdbtnLenceria.isSelected()) {
+					prod = new Lenceria();
+					prod.setIdProducto(idProducto);
+					prod.setNombreProd(textNombreProd.getText());
+					prod.setCategoria("LENCERIA");
+					prod.setSexo(comboSexo.getSelectedItem().toString());
+					prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+					prod.setTipo(textTipo.getText());
+					((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
+					JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMENTE");
 
-			JOptionPane.showMessageDialog(this, "ERROR AL INSERTAR PRODUCTO");
+					// SI LA CATEGORIA ELEGIDA ES JUGUETE
+				} else if (rdbtnJuguete.isSelected()) {
+					if (textMaterial.getText().equals("")) {
+						JOptionPane.showMessageDialog(this, "FALTA RELLENAR EL CAMPO MATERIAL");
+					} else {
+					prod = new Juguete();
+					prod.setIdProducto(idProducto);
+					prod.setNombreProd(textNombreProd.getText());
+					prod.setCategoria("JUGUETE");
+					prod.setSexo(comboSexo.getSelectedItem().toString());
+					prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+					prod.setTipo(textTipo.getText());
+					((Juguete) prod).setMaterial(textMaterial.getText());
+					JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMENTE");
+					}
+					// SI LA CATEGORIA ELEGIDA ES COSMETICO
+				} else if (rdbtnCosmetico.isSelected()) {
+					if (textIngredientes.getText().equals("") || textCaducidad.getText().equals("")) {
+						JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR!");
+					} else {
+
+						prod = new Cosmetico();
+						prod.setIdProducto(idProducto);
+						prod.setNombreProd(textNombreProd.getText());
+						prod.setCategoria("COSMETICO");
+						prod.setSexo(comboSexo.getSelectedItem().toString());
+						prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+						prod.setTipo(textTipo.getText());
+						((Cosmetico) prod).setCaducidad(textCaducidad.getText());
+						((Cosmetico) prod).setIngrediente(textIngredientes.getText());
+						JOptionPane.showMessageDialog(this, "PRODUCTO MODIFICADO CORRECTAMENTE");
+					}
+					
+				} else {
+
+					JOptionPane.showMessageDialog(this, "ERROR AL INSERTAR PRODUCTO");
+				}
+
+			} else {
+				JOptionPane.showMessageDialog(this, "EL PRECIO DEBE SER UN NÚMERO");
+			}
+
 		}
-
 		return prod;
 	}
 	// ESCONDER CAMPOS DE TEXTOS SEGUN CATEGORIA
-	
+
 	private void cerrar() {
 		this.dispose();
 	}

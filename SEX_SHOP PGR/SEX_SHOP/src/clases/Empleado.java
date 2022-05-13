@@ -7,18 +7,22 @@ public class Empleado extends Persona {
 
 	//ATRIBUTOS
 	private String puesto;
-	private Date horario;
-	private boolean administrador;
+	private String horario;
+	private String administrador;
+	private int codJefe;
 	
 	//CONSTRUCTORES
+	
 	public Empleado(int codUsuario, String email, String nombre, String apellido, String contraseña, String tipo,
-			String puesto, Date horario, boolean administrador) {
+			String puesto, String horario, String administrador, int codJefe) {
 		super(codUsuario, email, nombre, apellido, contraseña, tipo);
 		this.puesto = puesto;
 		this.horario = horario;
 		this.administrador = administrador;
+		this.codJefe = codJefe;
 	}
-	
+
+
 	public Empleado() {
 		super();
 	}
@@ -32,20 +36,28 @@ public class Empleado extends Persona {
 		this.puesto = puesto;
 	}
 
-	public Date getHorario() {
+	public String getHorario() {
 		return horario;
 	}
 
-	public void setHorario(Date horario) {
-		this.horario = horario;
+	public void setHorario(String string) {
+		this.horario = string;
 	}
 
-	public boolean isAdministrador() {
+	public String getAdministrador() {
 		return administrador;
 	}
 
-	public void setAdministrador(boolean administrador) {
-		this.administrador = administrador;
+	public void setAdministrador(String string) {
+		this.administrador = string;
+	}
+
+	public int getCodJefe() {
+		return codJefe;
+	}
+
+	public void setCodJefe(int codJefe) {
+		this.codJefe = codJefe;
 	}
 	
 	

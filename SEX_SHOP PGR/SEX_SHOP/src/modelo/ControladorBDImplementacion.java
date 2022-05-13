@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -25,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.cj.xdevapi.Result;
 
 import clases.Cosmetico;
+import clases.Empleado;
 import clases.Juguete;
 import clases.Lenceria;
 import clases.Persona;
@@ -70,6 +72,12 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, categori = ?, sexo = ?, precio = ?, tipo = ? WHERE idproducto= ?";
 
 	final String DELETEProducto = "DELETE FROM producto where idproducto=?";
+
+	final String INSERTempleado = "INSERT INTO empleado (puesto, horario, administrador, codjefe) VALUES (?,?,?,?)";
+
+	final String UPDATEmpleado = "UPDATE empleado SET puesto=?, horario=?, administrador=?, codjefe=? WHERE codusuario=?";
+
+	final String DELETEempleado = "DELETE FROM empleado WHERE codusuario=?";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -369,19 +377,18 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	// Listar los productos
 
-	public Map<String, Producto> listarProducto(Producto prod) {
+	public Map<String, Producto> listarProducto() {
 		ResultSet rs = null;
-		Map<String, Producto> listaProductos = new TreeMap<>();
-		
+		Producto prod;
+		Map<String, Producto> listaProductos = new HashMap<>();
+
 		this.openConnection();
 
 		try {
 			stmt = con.prepareStatement(ObtenerProducto);
-			
-			
-			stmt.setString(1, prod.getIdProducto());
-			
+
 			rs = stmt.executeQuery();
+
 			while (rs.next()) {
 				prod = new Producto();
 				prod.setIdProducto(rs.getString("idproducto"));
@@ -390,8 +397,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 				prod.setSexo(rs.getString("sexo"));
 				prod.setPrecio(rs.getInt("precio"));
 				prod.setTipo(rs.getString("tipo"));
-				
-
+				listaProductos.put(prod.getIdProducto(), prod);
 			}
 
 		} catch (SQLException e) {
@@ -438,10 +444,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 				registros[3] = rs.getString("SEXO");
 				registros[4] = rs.getString("PRECIO");
 				registros[5] = rs.getString("TIPO");
-				
+
 				modelo.addRow(registros);
 			}
-			
+
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
@@ -457,5 +463,161 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		return modelo;
 
 	}
+
+	public void eliminarProducto(Producto prod) {
+
+		ResultSet rs = null;
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(DELETEProducto);
+			stmt.setString(1, prod.getIdProducto());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void eliminarEmpleado(Empleado emp) {
+
+		ResultSet rs = null;
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(DELETEempleado);
+			stmt.setInt(1, emp.getCodUsuario());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void insertarEmpleado(Empleado emp) {
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(INSERTempleado); // Cargamos el insert de persona con el stmt
+
+			// Posicionamos cada valor para insertarlo en la base de datos
+			stmt.setString(1, emp.getPuesto());
+			stmt.setString(2, emp.getHorario());
+			stmt.setString(3, emp.getAdministrador());
+			stmt.setInt(4, emp.getCodJefe());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			this.closeConnection();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	// VALIDAR QUE NO SE PUEDAN INTRODUCIR STRINGS
+	public boolean validarInteger(String cadena) {
+		int num;
+		try {
+			// SI ES UN INT
+			num = Integer.parseInt(cadena);
+			return true;
+
+		} catch (Exception e) {
+			// SI ES UN STRING
+			return false;
+		}
+	}
+
+	public void modificarEmpleado(Empleado emp) {
+
+		ResultSet rs = null;
+
+		// Abrimos la conexion con la base de datos
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(UPDATEmpleado);
+
+			stmt.setString(1, emp.getPuesto());
+			stmt.setString(2, emp.getHorario());
+			stmt.setString(3, emp.getAdministrador());
+			stmt.setInt(4, emp.getCodJefe());
+
+			stmt.setInt(5, emp.getCodUsuario());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			System.out.println("Error en la modificación SQL");
+			e1.printStackTrace();
+
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
+	public Producto leerDatosPantalla(String idProducto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Empleado leerDatosEmpleado(String codusuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

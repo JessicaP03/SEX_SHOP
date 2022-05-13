@@ -24,15 +24,8 @@ import java.awt.Toolkit;
 
 public class Configuracion extends JDialog {
 
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
-	 * @param object 
-	 */
-	public Configuracion( ControladorDatos datos) {
+	
+	public Configuracion(ControladorDatos datos) {
 //		super(padre);
 //		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
@@ -56,6 +49,7 @@ public class Configuracion extends JDialog {
 		JButton btnRegistrar_Empleado = new JButton("Registrar Empleado");
 		btnRegistrar_Empleado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				registrarEmpleado(datos);
 			}
 		});
 		btnRegistrar_Empleado.setBackground(new Color(255, 255, 153));
@@ -115,8 +109,14 @@ public class Configuracion extends JDialog {
 		getContentPane().add(lblNewLabel_1);
 	}
 
+	protected void registrarEmpleado(ControladorDatos datos) {
+		GestionaEmpleados registrar = new GestionaEmpleados(this, true, datos);
+		registrar.setVisible(true);
+		
+	}
+
 	protected void baja(ControladorDatos datos) {
-		DarBajaProducto baja = new DarBajaProducto(this, true, datos);
+		DarBajaProducto baja = new DarBajaProducto(this, true, datos, null);
 		baja.setVisible(true);
 	}
 
