@@ -53,7 +53,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	final String loguearse = "SELECT * FROM persona WHERE email=? and contraseña=?";
 
-	final String ObtenerProducto = "SELECT * FROM producto";
+	final String ObtenerProductos = "SELECT * FROM producto";
+
+	final String ObtenerProducto = "SELECT * FROM producto where idproducto = ?";
 
 	final String INSERTproducto = "INSERT INTO producto (idproducto, nombre_prod, categori, sexo, precio, tipo) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -71,6 +73,8 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	final String UPDATEproducto = "UPDATE producto SET nombre_prod = ?, categori = ?, sexo = ?, precio = ?, tipo = ? WHERE idproducto= ?";
 
+	final String UPDATEusuario = "UPDATE usuario SET nombre = ?, email = ? WHERE codusuario= ?";
+
 	final String DELETEProducto = "DELETE FROM producto where idproducto=?";
 
 	final String INSERTempleado = "INSERT INTO empleado (puesto, horario, administrador, codjefe) VALUES (?,?,?,?)";
@@ -78,6 +82,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	final String UPDATEmpleado = "UPDATE empleado SET puesto=?, horario=?, administrador=?, codjefe=? WHERE codusuario=?";
 
 	final String DELETEempleado = "DELETE FROM empleado WHERE codusuario=?";
+
+	final String ObtenerEmpleado = "SELECT*FROM empleado";
+	
+	final String ObtenerUsuario = "SELECT codusuario, nombre, persona FROM persona";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -362,6 +370,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 			stmt.setString(1, prod.getIdProducto());
 
 			stmt.executeUpdate();
+
 		} catch (SQLException e1) {
 			System.out.println("Error en la modificación SQL");
 			e1.printStackTrace();
@@ -385,7 +394,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		this.openConnection();
 
 		try {
-			stmt = con.prepareStatement(ObtenerProducto);
+			stmt = con.prepareStatement(ObtenerProductos);
 
 			rs = stmt.executeQuery();
 
@@ -420,6 +429,97 @@ public class ControladorBDImplementacion implements ControladorDatos {
 			}
 		}
 		return listaProductos;
+	}
+
+	public Producto obtenerProducto(String idproducto) {
+		ResultSet rs = null;
+		Producto prod = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerProducto);
+
+			stmt.setString(0, idproducto);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombre_prod"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setTipo(rs.getString("tipo"));
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return prod;
+	}
+
+	public Map<String, Empleado> listarEmpleados() {
+		ResultSet rs = null;
+		Empleado emp;
+		Map<String, Empleado> listaEmpleados = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerEmpleado);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				emp = new Empleado();
+				emp.setCodUsuario(rs.getInt("codusuario"));
+				emp.setPuesto(rs.getString("puesto"));
+				emp.setHorario(rs.getString("horario"));
+				emp.setAdministrador(rs.getString("administrador"));
+				emp.setCodJefe(rs.getInt("codjefe"));
+				listaEmpleados.put(String.valueOf(emp.getCodUsuario()), emp);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listaEmpleados;
 	}
 
 	public DefaultTableModel mostrarProductos() {
@@ -464,37 +564,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	}
 
-	public void eliminarProducto(Producto prod) {
-
-		ResultSet rs = null;
-		this.openConnection();
-
-		try {
-			stmt = con.prepareStatement(DELETEProducto);
-			stmt.setString(1, prod.getIdProducto());
-
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			// Cerramos ResultSet
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException ex) {
-					System.out.println("Error en cierre del ResultSet");
-				}
-			}
-			try {
-				this.closeConnection();
-			} catch (SQLException e) {
-				System.out.println("Error en el cierre de la BD");
-				e.printStackTrace();
-			}
-		}
-	}
+	
 
 	public void eliminarEmpleado(Empleado emp) {
 
@@ -527,6 +597,32 @@ public class ControladorBDImplementacion implements ControladorDatos {
 			}
 		}
 
+	}
+	
+	public void eliminarProducto(Producto prod) {
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(DELETEProducto);
+			stmt.setString(1, prod.getIdProducto());
+			
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+
+		}
+	
 	}
 
 	public void insertarEmpleado(Empleado emp) {
@@ -606,6 +702,123 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	}
 
+	public void modificarUsuario(Persona pers) {
+
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(UPDATEusuario); // Cargamos el insert de persona con el stmt
+
+			// Posicionamos cada valor para insertarlo en la base de datos
+			stmt.setString(1, pers.getNombre());
+			stmt.setString(2, pers.getEmail());
+
+			stmt.setInt(3, pers.getCodUsuario());
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			this.closeConnection();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public Map<String, Persona> listarUsuario() {
+		ResultSet rs = null;
+		Persona pers;
+		Map<String, Persona> listaUsuarios = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerUsuario);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				pers = new Persona();
+				pers.setCodUsuario(rs.getInt("codusuario"));
+				pers.setNombre(rs.getString("nombre"));
+				pers.setEmail(rs.getString("email"));
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listaUsuarios;
+	}
+
+	public Map<String, Empleado> listarEmpleado() {
+		ResultSet rs = null;
+		Empleado emp;
+		Map<String, Empleado> listarEmpleado = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerEmpleado);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				emp = new Empleado();
+				emp.setCodUsuario(rs.getInt("codusuario"));
+				emp.setPuesto(rs.getString("puesto"));
+				emp.setHorario(rs.getString("horario"));
+				emp.setAdministrador(rs.getString("administrador"));
+				emp.setCodJefe(rs.getInt("codjefe"));
+				listarEmpleado.put(String.valueOf(emp.getCodUsuario()), emp);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listarEmpleado;
+	}
+
 	@Override
 	public Producto leerDatosPantalla(String idProducto) {
 		// TODO Auto-generated method stub
@@ -617,7 +830,5 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }

@@ -25,7 +25,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 import java.awt.event.ActionListener;
-
+import java.util.Map;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -62,12 +62,13 @@ public class GestionaEmpleados extends JDialog {
 	private JComboBox comboJefe;
 	private JTextField textID;
 	private ControladorDatos datos;
+	private Map<String, Empleado> empleados;
+	private JTable tablaEmpleado;
 
-	
-	public GestionaEmpleados(Configuracion padre, boolean modal, ControladorDatos datos) {
+	public GestionaEmpleados(Configuracion padre, boolean modal, ControladorDatos datos, Empleado empleado) {
 		super(padre);
 		this.setModal(modal);
-		setBounds(100, 100, 616, 335);
+		setBounds(100, 100, 766, 359);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(128, 128, 128));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -134,18 +135,18 @@ public class GestionaEmpleados extends JDialog {
 				insertar();
 			}
 		});
-		btnInsertar.setBounds(26, 252, 89, 23);
+		btnInsertar.setBounds(26, 270, 89, 23);
 		contentPanel.add(btnInsertar);
 
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				modificar(datos);
 			}
 		});
 		btnModificar.setBackground(new Color(255, 255, 153));
-		btnModificar.setBounds(170, 252, 89, 23);
+		btnModificar.setBounds(160, 270, 89, 23);
 		contentPanel.add(btnModificar);
 
 		JButton btnBorrar = new JButton("Borrar");
@@ -155,7 +156,7 @@ public class GestionaEmpleados extends JDialog {
 			}
 		});
 		btnBorrar.setBackground(new Color(255, 255, 153));
-		btnBorrar.setBounds(321, 252, 89, 23);
+		btnBorrar.setBounds(310, 270, 89, 23);
 		contentPanel.add(btnBorrar);
 		{
 			JPanel buttonPane = new JPanel();
@@ -168,114 +169,106 @@ public class GestionaEmpleados extends JDialog {
 		ButtonGroup admin = new ButtonGroup();
 		admin.add(rdbtnAdminSi);
 		admin.add(rdbtnAdminNo);
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBackground(new Color(255, 255, 153));
-		separator.setBounds(21, 234, 551, 2);
+		separator.setBounds(26, 257, 680, 2);
 		contentPanel.add(separator);
-		
+
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBackground(new Color(255, 255, 153));
-		separator_1.setBounds(21, 57, 551, 2);
+		separator_1.setBounds(21, 57, 685, 2);
 		contentPanel.add(separator_1);
-		
-		comboJefe= new JComboBox();
-		comboJefe.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
+
+		comboJefe = new JComboBox();
+		comboJefe.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5" }));
 		comboJefe.setForeground(new Color(255, 255, 255));
 		comboJefe.setBackground(new Color(255, 51, 153));
 		comboJefe.setBounds(160, 201, 118, 22);
 		contentPanel.add(comboJefe);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Jefe");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setBounds(26, 200, 46, 14);
 		contentPanel.add(lblNewLabel_1);
-		
+
 		textID = new JTextField();
 		textID.setColumns(10);
 		textID.setBackground(new Color(204, 255, 255));
 		textID.setBounds(445, 70, 98, 20);
 		contentPanel.add(textID);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("COD_USUARIO:");
 		lblNewLabel_2.setFont(new Font("Verdana", Font.BOLD, 14));
 		lblNewLabel_2.setForeground(new Color(255, 255, 153));
 		lblNewLabel_2.setBounds(310, 71, 138, 14);
 		contentPanel.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Necesario en caso de modificar");
+
+		JLabel lblNewLabel_3 = new JLabel("Necesario en caso de modificar \r\no dar de baja");
 		lblNewLabel_3.setForeground(new Color(255, 255, 153));
-		lblNewLabel_3.setBounds(310, 78, 188, 54);
+		lblNewLabel_3.setBounds(310, 78, 228, 47);
 		contentPanel.add(lblNewLabel_3);
+		
+		this.presentarTabla(empleado, datos);
 	}
-	
-	
+
 	protected void eliminarEmpleado(ControladorDatos datos) {
 		Empleado emp = leerDatosEmpleado(textID.getText());
 
 		datos.eliminarEmpleado(emp);
 
-		//Mensaje de confirmación
+		// Mensaje de confirmación
 		JOptionPane.showMessageDialog(this, "EMPLEADO ELIMINADO");
-		
-		
-		
+
 	}
 
-
 	protected void modificar(ControladorDatos datos) {
-		
-		Empleado emp= leerDatosEmpleado(textID.getText());
-		if (textID.equals("1")||textID.equals("2")||textID.equals("3")||textID.equals("4")||textID.equals("5")) {
+
+		Empleado emp = leerDatosEmpleado(textID.getText());
+		if (textID.equals("1") || textID.equals("2") || textID.equals("3") || textID.equals("4")
+				|| textID.equals("5")) {
 			JOptionPane.showMessageDialog(this, "LOS JEFES NO SE PUEDE ACTUALIZAR");
-		}else {
+		} else {
 			datos.modificarEmpleado(emp);
 			JOptionPane.showMessageDialog(this, "EL EMPLEADO SE HA MODIFICADO CORRECTAMENTE");
 
 		}
 
 	}
-	
-	
 
-	
-
-	//INSERTAR EMPLEADO NUEVO
+	// INSERTAR EMPLEADO NUEVO
 	public Empleado leerDatosEmpleado(String codusuario) {
 		Empleado emp;
 		emp = new Empleado();
-		
+
 		if (textPuesto.equals("") || textHorario.equals("")) {
 			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
 		} else {
-			//INTROODUCIR ATRIBUTOS DE EMPLEADO
+			// INTROODUCIR ATRIBUTOS DE EMPLEADO
 			emp.setCodUsuario(Integer.parseInt(codusuario));
 			emp.setPuesto(textPuesto.getText());
 			emp.setHorario(textHorario.getText());
-			
-			//SI EL BOTON ADMIN ESTA SELECIONADO
+
+			// SI EL BOTON ADMIN ESTA SELECIONADO
 			if (rdbtnAdminSi.isSelected()) {
-			emp.setAdministrador("SI");
-			
-			//SI EL BOTON ADMIN NO ESTA SELECIONADO
-			}else if (rdbtnAdminNo.isSelected()) {
-			emp.setAdministrador("NO");
-			}else {
-				//SI FALTA ALGUN BOTON POR ELEGIR
+				emp.setAdministrador("SI");
+
+				// SI EL BOTON ADMIN NO ESTA SELECIONADO
+			} else if (rdbtnAdminNo.isSelected()) {
+				emp.setAdministrador("NO");
+			} else {
+				// SI FALTA ALGUN BOTON POR ELEGIR
 				JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
 			}
 			emp.setCodJefe(Integer.parseInt((String) comboJefe.getSelectedItem()));
 			ControladorBDImplementacion datos = new ControladorBDImplementacion();
 			datos.modificarEmpleado(emp);
-			
 
 		}
-		
+
 		return emp;
 	}
-		
-	
 
 	protected void insertar() {
 		Empleado emp;
@@ -284,78 +277,66 @@ public class GestionaEmpleados extends JDialog {
 		if (textPuesto.equals("") || textHorario.equals("")) {
 			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
 		} else {
-			//INTROODUCIR ATRIBUTOS DE EMPLEADO
+			// INTROODUCIR ATRIBUTOS DE EMPLEADO
 			emp.setPuesto(textPuesto.getText());
 			emp.setHorario(textHorario.getText());
-			
-			
-			//SI EL BOTON ADMIN ESTA SELECIONADO
+
+			// SI EL BOTON ADMIN ESTA SELECIONADO
 			if (rdbtnAdminSi.isSelected()) {
-			emp.setAdministrador("SI");
-			
-			//SI EL BOTON ADMIN NO ESTA SELECIONADO
-			}else if (rdbtnAdminNo.isSelected()) {
-			emp.setAdministrador("NO");
-			
-			}else {
-				//SI FALTA ALGUN BOTON POR ELEGIR
+				emp.setAdministrador("SI");
+
+				// SI EL BOTON ADMIN NO ESTA SELECIONADO
+			} else if (rdbtnAdminNo.isSelected()) {
+				emp.setAdministrador("NO");
+
+			} else {
+				// SI FALTA ALGUN BOTON POR ELEGIR
 				JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
 			}
 			emp.setCodJefe(Integer.parseInt((String) comboJefe.getSelectedItem()));
-			
+
 			JOptionPane.showMessageDialog(this, "EMPLEADO AÑADIDO CORRECTAMENTE");
 			ControladorBDImplementacion datos = new ControladorBDImplementacion();
 			datos.insertarEmpleado(emp);
-			
+
 		}
-		
+
 	}
-	
-	
-private void presentarTabla(Empleado empleado, ControladorDatos datos) {
-		
+
+	private void presentarTabla(Empleado empleado, ControladorDatos datos) {
+
 		JScrollPane scroll = new JScrollPane();
-		tablaEmpleado= this.cargarTabla(empleado, datos);
+		tablaEmpleado = this.cargarTabla(empleado, datos);
 		scroll.setViewportView(tablaEmpleado);
-		
 
-		
-		
 		contentPanel.add(scroll);
-		scroll.setBounds(55,201,414,191);
-		
-		textID = new JTextField();
-		textID.setBounds(48, 99, 133, 20);
-		contentPanel.add(textID);
-		textID.setColumns(10);
-	
+		scroll.setBounds(310, 112, 366, 132);
 
 	}
-	
+
 	private JTable cargarTabla(Empleado empleado, ControladorDatos datos) {
-		
-		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
-		String[] registros = new String[6];
-		
+
+		String[] nombreColumnas = { "CODUSUARIO", "PUESTO", "HORARIO", "ADMIN", "CODJEFE" };
+		String[] registros = new String[5];
 
 		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
 		modelo.setRowCount(0);
-		
-		empleado = datos.listarEmpleado();
-		
-		for(Producto prod: empleados.values()) {
-			registros[0] = prod.getIdProducto();
-			registros[1] = prod.getNombreProd();
-			registros[2] = prod.getCategoria();
-			registros[3] = prod.getSexo();
-			registros[4] = String.valueOf(prod.getPrecio());
-			registros[5] = prod.getTipo();
-			
+
+		empleados = datos.listarEmpleado();
+
+		for (Empleado emp : empleados.values()) {
+			registros[0] = String.valueOf(emp.getCodUsuario());
+			registros[1] = emp.getPuesto();
+			registros[2] = emp.getHorario();
+			registros[3] = emp.getAdministrador();
+			registros[4] = String.valueOf(emp.getCodJefe());
+
 			modelo.addRow(registros);
-		}	
-		
+		}
+
 		return new JTable(modelo);
-		
+
 	}
+	
 	
 }

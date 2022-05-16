@@ -40,7 +40,6 @@ public class InicioSesion extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textEmail;
-	
 
 	/**
 	 * Launch the application.
@@ -176,20 +175,25 @@ public class InicioSesion extends JFrame {
 		if (textEmail.getText().equals("") || passContrasenia.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "FALTA CAMPOS POR RELLENAR!");
 		} else {
-			// SI EL TIPO ES IGUAL A ADMIN
-			if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
-				Configuracion conf = new Configuracion(datos);
-				conf.setVisible(true);
-				this.dispose();
-				// SI EL TIPO ES IGUAL A CLIENTE
-			} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
-				PiñaMeloco pm = new PiñaMeloco();
-				pm.setVisible(true);
-				this.dispose();
+			//COMPROBAR QUE EL USUARIO ES CORRECTO
+			if (textEmail.getText().equals(pers.getEmail())||passContrasenia.getText().equals(pers.getContrasena())) {
+				// SI EL TIPO ES IGUAL A ADMIN
+				if (pers.getTipo().equalsIgnoreCase("ADMIN")) {
+					Configuracion conf = new Configuracion(datos);
+					conf.setVisible(true);
+					this.dispose();
+					// SI EL TIPO ES IGUAL A CLIENTE
+				} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
+					PiñaMeloco pm = new PiñaMeloco();
+					pm.setVisible(true);
+					this.dispose();
 
-				// SI EL EMAIL O CONTRASEÑA NO COINCIDEN
-			} else {
-				JOptionPane.showMessageDialog(this, "ERROR! EMAIL O CONTRASEÑA INCORRECTOS");
+					// SI EL EMAIL O CONTRASEÑA NO COINCIDEN
+				} else {
+					JOptionPane.showMessageDialog(this, "ERROR! EMAIL O CONTRASEÑA INCORRECTOS");
+				}
+			}else {
+				JOptionPane.showMessageDialog(this, "USUARIO O CONTRASEÑA INCORRECTOS!");
 			}
 		}
 

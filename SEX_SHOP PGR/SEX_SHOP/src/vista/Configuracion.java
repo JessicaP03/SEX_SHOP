@@ -30,11 +30,11 @@ public class Configuracion extends JDialog {
 //		this.setModal(modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		getContentPane().setBackground(SystemColor.controlDkShadow);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 532, 300);
 		getContentPane().setLayout(null);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 213, 414, 2);
+		separator.setBounds(10, 213, 474, 2);
 		getContentPane().add(separator);
 		
 		JButton btnCerrar = new JButton("Cerrar");
@@ -43,21 +43,21 @@ public class Configuracion extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnCerrar.setBounds(350, 227, 74, 23);
+		btnCerrar.setBounds(432, 226, 74, 23);
 		getContentPane().add(btnCerrar);
 		
-		JButton btnRegistrar_Empleado = new JButton("Registrar Empleado");
+		JButton btnRegistrar_Empleado = new JButton("Configurar Empleado");
 		btnRegistrar_Empleado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				registrarEmpleado(datos);
 			}
 		});
-		btnRegistrar_Empleado.setBackground(new Color(255, 255, 153));
-		btnRegistrar_Empleado.setBounds(10, 226, 150, 23);
+		btnRegistrar_Empleado.setBackground(Color.PINK);
+		btnRegistrar_Empleado.setBounds(10, 226, 171, 23);
 		getContentPane().add(btnRegistrar_Empleado);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(10, 30, 399, 2);
+		separator_1.setBounds(10, 30, 474, 2);
 		getContentPane().add(separator_1);
 		
 		JLabel lblNewLabel = new JLabel("Configuracion");
@@ -107,10 +107,20 @@ public class Configuracion extends JDialog {
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setBounds(20, 43, 203, 14);
 		getContentPane().add(lblNewLabel_1);
+		
+		JButton btnRegistrar_Empleado_1 = new JButton("Gestionar Usuarios");
+		btnRegistrar_Empleado_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gestionarUsuario(datos);
+			}
+		});
+		btnRegistrar_Empleado_1.setBackground(Color.PINK);
+		btnRegistrar_Empleado_1.setBounds(212, 226, 150, 23);
+		getContentPane().add(btnRegistrar_Empleado_1);
 	}
 
 	protected void registrarEmpleado(ControladorDatos datos) {
-		GestionaEmpleados registrar = new GestionaEmpleados(this, true, datos);
+		GestionaEmpleados registrar = new GestionaEmpleados(this, true, datos, null);
 		registrar.setVisible(true);
 		
 	}
@@ -121,12 +131,17 @@ public class Configuracion extends JDialog {
 	}
 
 	protected void modificar(ControladorDatos datos) {
-		ModificarProducto modificar = new ModificarProducto(this, true, datos);
+		ModificarProducto modificar = new ModificarProducto(this, true, datos, null);
 		modificar.setVisible(true);
 	}
 
 	protected void btnInsertar(ControladorDatos datos) {
 		InsertarProducto insertar = new InsertarProducto(this, true, datos);
 		insertar.setVisible(true);
+	}
+	
+	protected void gestionarUsuario(ControladorDatos datos) {
+		GestionarUsuarios usuario = new GestionarUsuarios(this, true, datos, null);
+		usuario.setVisible(true);
 	}
 }

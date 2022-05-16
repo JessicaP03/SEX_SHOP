@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import clases.Empleado;
 import clases.Producto;
 import modelo.ControladorBDImplementacion;
 import modelo.ControladorDatos;
@@ -143,19 +144,18 @@ public class DarBajaProducto extends JDialog {
 	}
 	
 	
-	protected void leerPantallaProducto(ControladorDatos datos) {
-		
-	}
+	
 	
 	
 
 	protected void eliminarProducto(ControladorDatos datos) {
+		Producto prod;
+		prod = new Producto();
 		
-//		Producto prod = leerDatosProducto(textID.getText());
-//				
-//		datos.eliminarProducto(prod);
-//		
-//		JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
+			prod.setIdProducto(textID.getText());
+			datos.eliminarProducto(prod);
+		
+		
 	}
 
 	private void presentarTabla(Producto producto, ControladorDatos datos) {

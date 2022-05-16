@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import clases.Cosmetico;
 import clases.Juguete;
@@ -30,9 +31,14 @@ import javax.swing.JComboBox;
 import javax.swing.JProgressBar;
 import javax.swing.border.BevelBorder;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class ModificarProducto extends JDialog {
 
@@ -55,10 +61,12 @@ public class ModificarProducto extends JDialog {
 	private JComboBox comboTalla;
 	private JComboBox comboSexo;
 	private ControladorDatos datos;
+	private JTable tablaProducto;
+	private Map<String, Producto> productos;
 
 	public static void main(String[] args) {
 		try {
-			ModificarProducto dialog = new ModificarProducto(null, true, null);
+			ModificarProducto dialog = new ModificarProducto(null, true, null, null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -67,13 +75,13 @@ public class ModificarProducto extends JDialog {
 	}
 
 	// Creamos este segundo constructor para saber cual es la ventana padre
-	public ModificarProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
+	public ModificarProducto(Configuracion padre, boolean modal, ControladorDatos datos, Producto producto) {
 		super(padre);
 		this.setModal(modal);
 		setForeground(new Color(0, 0, 0));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setBackground(new Color(0, 0, 0));
-		setBounds(100, 100, 512, 520);
+		setBounds(100, 100, 971, 520);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -87,7 +95,7 @@ public class ModificarProducto extends JDialog {
 		contentPanel.add(lblNewLabel);
 		{
 			JSeparator separator = new JSeparator();
-			separator.setBounds(32, 36, 378, 9);
+			separator.setBounds(32, 36, 894, 9);
 			contentPanel.add(separator);
 		}
 		{
@@ -164,7 +172,7 @@ public class ModificarProducto extends JDialog {
 		}
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(32, 418, 378, 9);
+		separator.setBounds(32, 418, 894, 9);
 		contentPanel.add(separator);
 		{
 			JButton cancelButton_Cerrar = new JButton("Cerrar");
@@ -175,13 +183,19 @@ public class ModificarProducto extends JDialog {
 			});
 			cancelButton_Cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			cancelButton_Cerrar.setForeground(Color.BLACK);
-			cancelButton_Cerrar.setBounds(312, 438, 133, 23);
+			cancelButton_Cerrar.setBounds(793, 438, 133, 23);
 			contentPanel.add(cancelButton_Cerrar);
 			cancelButton_Cerrar.setBackground(new Color(255, 255, 153));
 			cancelButton_Cerrar.setActionCommand("Cancel");
 		}
 		{
 			textID = new JTextField();
+			textID.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					comprobarId(datos);
+				}
+			});
 			textID.setColumns(10);
 			textID.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 			textID.setBackground(new Color(255, 20, 147));
@@ -325,7 +339,45 @@ public class ModificarProducto extends JDialog {
 			comboTalla.setBounds(226, 364, 111, 22);
 			contentPanel.add(comboTalla);
 		}
+		
+		JButton btnBaja = new JButton("Baja");
+		btnBaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				eliminarProducto(datos);
+			}
+		});
+		btnBaja.setForeground(Color.BLACK);
+		btnBaja.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnBaja.setBackground(new Color(255, 255, 153));
+		btnBaja.setBounds(218, 440, 133, 23);
+		contentPanel.add(btnBaja);
+	
+		this.presentarTabla(producto, datos);
 	}
+	
+	
+	
+
+
+	protected void comprobarId(ControladorDatos datos) {
+		Producto prod=null;
+		prod = datos.obtenerProducto(textID.getText());;
+		
+	}
+
+	protected void eliminarProducto(ControladorDatos datos) {
+		Producto prod;
+		prod = new Producto();
+		
+			prod.setIdProducto(textID.getText());
+
+			JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
+		}
+
+	
+		
+	
 
 	protected void categoriaElegida() {
 
@@ -382,6 +434,7 @@ public class ModificarProducto extends JDialog {
 			comboTalla.setVisible(false);
 
 		}
+		
 	}
 
 	// Metodo para modificar los productos
@@ -469,5 +522,48 @@ public class ModificarProducto extends JDialog {
 
 	private void cerrar() {
 		this.dispose();
+	}
+	
+	
+	
+private void presentarTabla(Producto producto, ControladorDatos datos) {
+		
+		JScrollPane scroll = new JScrollPane();
+		tablaProducto = this.cargarTabla(producto, datos);
+		scroll.setViewportView(tablaProducto);
+		
+
+		
+		
+		contentPanel.add(scroll);
+		scroll.setBounds(482,56,420,330);
+	
+
+	}
+	
+	private JTable cargarTabla(Producto producto, ControladorDatos datos) {
+		
+		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
+		String[] registros = new String[6];
+		
+
+		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
+		modelo.setRowCount(0);
+		
+		productos= datos.listarProducto();
+		
+		for(Producto prod: productos.values()) {
+			registros[0] = prod.getIdProducto();
+			registros[1] = prod.getNombreProd();
+			registros[2] = prod.getCategoria();
+			registros[3] = prod.getSexo();
+			registros[4] = String.valueOf(prod.getPrecio());
+			registros[5] = prod.getTipo();
+			
+			modelo.addRow(registros);
+		}	
+		
+		return new JTable(modelo);
+		
 	}
 }
