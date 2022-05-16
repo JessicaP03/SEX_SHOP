@@ -289,7 +289,7 @@ public class ModificarProducto extends JDialog {
 	}
 	
 	//Metodo para modificar los productos
-	protected void modificar(ControladorDatos datos) {
+	protected void modificar(   datos) {
 		Producto prod = leerDatosPantalla(textField_IDProducto.getText());
 		
 		//el id del producto no cambia en la modificación

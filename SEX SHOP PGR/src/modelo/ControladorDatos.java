@@ -15,6 +15,10 @@ public interface ControladorDatos {
 	public void bajaProducto (String codigo);
 
 	public Persona login(Persona pers);
+
+	public void insertarPersona(Persona pers);
+
+	public int existePersona(String text);
 	
 	
 	
