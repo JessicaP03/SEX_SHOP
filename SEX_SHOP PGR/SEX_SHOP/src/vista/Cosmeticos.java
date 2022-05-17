@@ -28,20 +28,8 @@ public class Cosmeticos extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Cosmeticos dialog = new Cosmeticos();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public Cosmeticos() {
+	
+	public Cosmeticos(PiñaMeloco piñaMeloco, boolean b) {
 		AbstractButton contentPanel_1 = null;
 		contentPanel_1.setLayout(null);
 		contentPanel_1.setBorder(new EmptyBorder(5, 5, 5, 5));

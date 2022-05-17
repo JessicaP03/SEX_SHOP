@@ -224,7 +224,7 @@ public class GestionaEmpleados extends JDialog {
 	}
 
 	protected void modificar(ControladorDatos datos) {
-
+		
 		Empleado emp = leerDatosEmpleado(textID.getText());
 		if (textID.equals("1") || textID.equals("2") || textID.equals("3") || textID.equals("4")
 				|| textID.equals("5")) {
@@ -311,7 +311,11 @@ public class GestionaEmpleados extends JDialog {
 
 		contentPanel.add(scroll);
 		scroll.setBounds(310, 112, 366, 132);
-
+		
+		textID = new JTextField();
+		textID.setBounds(48, 99, 133, 20);
+		contentPanel.add(textID);
+		textID.setColumns(10);
 	}
 
 	private JTable cargarTabla(Empleado empleado, ControladorDatos datos) {

@@ -28,20 +28,11 @@ public class Lencerias extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Lencerias dialog = new Lencerias();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public Lencerias() {
+	public Lencerias(PiñaMeloco piñaMeloco, boolean modal) {
+		super(piñaMeloco);
+		this.setModal(modal);
+
 		AbstractButton contentPanel_1 = null;
 		contentPanel_1.setLayout(null);
 		contentPanel_1.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -81,7 +72,7 @@ public class Lencerias extends JDialog {
 		contentPanel.add(separator);
 		
 		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(568, 86, 17, 550);
+		scrollBar.setBounds(568, 90, 17, 550);
 		contentPanel.add(scrollBar);
 		
 		JComboBox comboBox_Precio = new JComboBox();

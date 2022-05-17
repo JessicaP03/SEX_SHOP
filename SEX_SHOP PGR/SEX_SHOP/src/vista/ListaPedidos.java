@@ -22,20 +22,8 @@ public class ListaPedidos extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			ListaPedidos dialog = new ListaPedidos();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public ListaPedidos() {
+	public ListaPedidos(PiñaMeloco piñaMeloco, boolean b) {
 		setBounds(100, 100, 450, 537);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);

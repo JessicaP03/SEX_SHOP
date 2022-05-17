@@ -7,12 +7,18 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import clases.Producto;
+import modelo.ControladorDatos;
+
 import java.awt.SystemColor;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 import javax.swing.JSlider;
@@ -20,49 +26,23 @@ import javax.swing.JTree;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.nio.file.AccessMode;
+import java.util.Map;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JTextPane;
 import javax.swing.border.BevelBorder;
+import javax.swing.JTable;
 
 public class Juguetes extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	/**
-	 * @wbp.nonvisual location=891,279
-	 */
-	private final JPanel contentPanel_1 = new JPanel();
+	private Map<String, Producto> productos;
+	private JTable tablaProducto;
+	
+	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Juguetes dialog = new Juguetes();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public Juguetes() {
-		contentPanel_1.setLayout(null);
-		contentPanel_1.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPanel_1.setBackground(SystemColor.controlDkShadow);
-		
-		JLabel lblNewLabel_1 = new JLabel("JUEGUETES");
-		lblNewLabel_1.setForeground(new Color(255, 20, 147));
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(53, 11, 360, 41);
-		contentPanel_1.add(lblNewLabel_1);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(31, 63, 554, 2);
-		contentPanel_1.add(separator_1);
+	public Juguetes(PiñaMeloco piñaMeloco, boolean b, ControladorDatos datos, Producto producto) {
 		setBounds(100, 100, 652, 789);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
@@ -86,10 +66,6 @@ public class Juguetes extends JDialog {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(31, 680, 554, 2);
 		contentPanel.add(separator);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(568, 86, 17, 550);
-		contentPanel.add(scrollBar);
 		
 		JComboBox comboBox_Precio = new JComboBox();
 		comboBox_Precio.setBounds(63, 121, 107, 22);
@@ -130,60 +106,51 @@ public class Juguetes extends JDialog {
 		lblNewLabel_2_1.setForeground(new Color(255, 255, 153));
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		contentPanel.add(lblNewLabel_2_1);
+	
+	
+	this.presentarTabla(producto, datos);
+	}
+	
+	
+	
+	
+	private void presentarTabla(Producto producto, ControladorDatos datos) {
 		
-		JLabel lblNewLabel_3 = new JLabel("Desc:");
-		lblNewLabel_3.setBounds(299, 185, 107, 14);
-		lblNewLabel_3.setBackground(new Color(255, 105, 180));
-		lblNewLabel_3.setForeground(new Color(255, 105, 180));
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 15));
-		contentPanel.add(lblNewLabel_3);
+		JScrollPane scroll = new JScrollPane();
+		scroll.setForeground(Color.BLACK);
+		scroll.setBackground(Color.GRAY);
+		tablaProducto = this.cargarTabla(producto, datos);
+		scroll.setViewportView(tablaProducto);
+
+		contentPanel.add(scroll);
+		scroll.setBounds(53,170,532,499);
+	
+
+	}
+	
+	private JTable cargarTabla(Producto producto, ControladorDatos datos) {
 		
-		JTextPane textPanel_Desc = new JTextPane();
-		textPanel_Desc.setBackground(SystemColor.controlDkShadow);
-		textPanel_Desc.setBounds(299, 210, 209, 97);
-		textPanel_Desc.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204)));
-		contentPanel.add(textPanel_Desc);
+		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
+		String[] registros = new String[6];
 		
-		JLabel lblNewLabel_Precio1 = new JLabel("Precio");
-		lblNewLabel_Precio1.setBounds(309, 323, 132, 22);
-		lblNewLabel_Precio1.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_Precio1.setForeground(new Color(255, 255, 153));
-		contentPanel.add(lblNewLabel_Precio1);
+
+		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
+		modelo.setRowCount(0);
 		
-		JLabel lblNewLabel_Nombre = new JLabel("NOMBRE");
-		lblNewLabel_Nombre.setBounds(78, 327, 107, 14);
-		lblNewLabel_Nombre.setForeground(new Color(255, 105, 180));
-		lblNewLabel_Nombre.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel_Nombre.setBackground(new Color(255, 105, 180));
-		contentPanel.add(lblNewLabel_Nombre);
+		productos= datos.listarProducto();
 		
-		JTextPane textPane_Desc = new JTextPane();
-		textPane_Desc.setBackground(SystemColor.controlDkShadow);
-		textPane_Desc.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204), new Color(255, 153, 204)));
-		textPane_Desc.setBounds(299, 430, 209, 97);
-		contentPanel.add(textPane_Desc);
+		for(Producto prod: productos.values()) {
+			registros[0] = prod.getIdProducto();
+			registros[1] = prod.getNombreProd();
+			registros[2] = prod.getCategoria();
+			registros[3] = prod.getSexo();
+			registros[4] = String.valueOf(prod.getPrecio());
+			registros[5] = prod.getTipo();
+			
+			modelo.addRow(registros);
+		}	
 		
-		JLabel lblNewLabel_Imagen = new JLabel("");
-		lblNewLabel_Imagen.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
-		lblNewLabel_Imagen.setBounds(53, 187, 148, 120);
-		contentPanel.add(lblNewLabel_Imagen);
+		return new JTable(modelo);
 		
-		JLabel lblNewLabel_Imagen2 = new JLabel("");
-		lblNewLabel_Imagen2.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 255, 204), new Color(0, 255, 255), new Color(255, 153, 102), new Color(255, 153, 204)));
-		lblNewLabel_Imagen2.setBounds(53, 408, 148, 120);
-		contentPanel.add(lblNewLabel_Imagen2);
-		
-		JLabel lblNewLabel_Precio2 = new JLabel("Precio");
-		lblNewLabel_Precio2.setForeground(new Color(255, 255, 153));
-		lblNewLabel_Precio2.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_Precio2.setBounds(309, 538, 132, 22);
-		contentPanel.add(lblNewLabel_Precio2);
-		
-		JLabel lblNewLabel_Nombre2 = new JLabel("NOMBRE");
-		lblNewLabel_Nombre2.setForeground(new Color(255, 105, 180));
-		lblNewLabel_Nombre2.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel_Nombre2.setBackground(new Color(255, 105, 180));
-		lblNewLabel_Nombre2.setBounds(78, 548, 107, 14);
-		contentPanel.add(lblNewLabel_Nombre2);
 	}
 }

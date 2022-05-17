@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorDatos;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -18,25 +21,24 @@ import javax.swing.ImageIcon;
 
 public class PiñaMeloco extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			PiñaMeloco dialog = new PiñaMeloco();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	/**
 	 * Create the dialog.
+	 * @param datos 
 	 */
-	public PiñaMeloco() {
+	public PiñaMeloco(InicioSesion padre, boolean modal, ControladorDatos datos) {
+		super(padre);
+		this.setModal(modal);
 		setBounds(100, 100, 470, 433);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
@@ -60,22 +62,33 @@ public class PiñaMeloco extends JDialog {
 			btnOferta.setBackground(new Color(153, 204, 255));
 			btnOferta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Oferta();
 				}
+
+				
 			});
 			btnOferta.setBounds(261, 59, 89, 23);
 			contentPanel.add(btnOferta);
 		}
 		{
-			JButton btnNewButton = new JButton("CERRAR");
-			btnNewButton.setBackground(new Color(255, 255, 153));
-			btnNewButton.setBounds(360, 361, 89, 23);
-			contentPanel.add(btnNewButton);
+			JButton btnCerrar = new JButton("CERRAR");
+			btnCerrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cerrar();
+				}
+			});
+			btnCerrar.setBackground(new Color(255, 255, 153));
+			btnCerrar.setBounds(360, 361, 89, 23);
+			contentPanel.add(btnCerrar);
 		}
 		{
 			JButton btnVerListaCompra = new JButton("VER LISTA COMPRA");
 			btnVerListaCompra.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					listaPedido();
 				}
+
+				
 			});
 			btnVerListaCompra.setBackground(new Color(255, 255, 153));
 			btnVerListaCompra.setBounds(10, 362, 147, 23);
@@ -90,29 +103,42 @@ public class PiñaMeloco extends JDialog {
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
-			JButton btnNewButton_1 = new JButton("JUGUETES");
-			btnNewButton_1.setBackground(new Color(255, 20, 147));
-			btnNewButton_1.addActionListener(new ActionListener() {
+			JButton btnJuguetes = new JButton("JUGUETES");
+			btnJuguetes.setBackground(new Color(255, 20, 147));
+			btnJuguetes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Juguetes();
 				}
 			});
-			btnNewButton_1.setForeground(Color.WHITE);
-			btnNewButton_1.setBounds(26, 129, 118, 23);
-			contentPanel.add(btnNewButton_1);
+			btnJuguetes.setForeground(Color.WHITE);
+			btnJuguetes.setBounds(26, 129, 118, 23);
+			contentPanel.add(btnJuguetes);
 		}
 		{
-			JButton btnNewButton_2 = new JButton("COSMETICOS");
-			btnNewButton_2.setForeground(Color.WHITE);
-			btnNewButton_2.setBackground(new Color(255, 20, 147));
-			btnNewButton_2.setBounds(25, 186, 119, 23);
-			contentPanel.add(btnNewButton_2);
+			JButton btnCosmeticos = new JButton("COSMETICOS");
+			btnCosmeticos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Cosmeticos();
+				}
+
+			
+			});
+			btnCosmeticos.setForeground(Color.WHITE);
+			btnCosmeticos.setBackground(new Color(255, 20, 147));
+			btnCosmeticos.setBounds(25, 186, 119, 23);
+			contentPanel.add(btnCosmeticos);
 		}
 		{
-			JButton btnNewButton_3 = new JButton("LENCERIA");
-			btnNewButton_3.setForeground(Color.WHITE);
-			btnNewButton_3.setBackground(new Color(255, 20, 147));
-			btnNewButton_3.setBounds(26, 250, 118, 23);
-			contentPanel.add(btnNewButton_3);
+			JButton btnLenceria = new JButton("LENCERIA");
+			btnLenceria.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Lencerias();
+				}
+			});
+			btnLenceria.setForeground(Color.WHITE);
+			btnLenceria.setBackground(new Color(255, 20, 147));
+			btnLenceria.setBounds(26, 250, 118, 23);
+			contentPanel.add(btnLenceria);
 		}
 		{
 			JSeparator separator = new JSeparator();
@@ -137,6 +163,44 @@ public class PiñaMeloco extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
+	}
+
+	//Este boton te lleva a lenceria
+	private void Lencerias() {
+	
+		Lencerias lencerias= new Lencerias(this, true);
+		lencerias.setVisible(true);
+	}
+
+	private void Cosmeticos() {
+		Cosmeticos cosmeticos = new Cosmeticos(this, true);
+		cosmeticos.setVisible(true);
+		
+	}
+
+	//Este boton te lleva a juguetes
+	private void Juguetes() {
+		
+		Juguetes juguetes = new Juguetes(this, true, null, null);
+		juguetes.setVisible(true);
+	}
+	
+	//Este boton te lleva a ofertas
+	private void Oferta() {
+		// TODO Auto-generated method stub
+		Oferta ofertas = new Oferta(this, true);
+		ofertas.setVisible(true);
+	}
+	
+	private void listaPedido() {
+		// TODO Auto-generated method stub
+		ListaPedidos listaPedidos = new ListaPedidos(this, true);
+		listaPedidos.setVisible(true);
+	}
+	
+	private void cerrar() {
+		// TODO Auto-generated method stub
+		this.dispose();
 	}
 
 }

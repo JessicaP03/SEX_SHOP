@@ -447,9 +447,12 @@ public class InsertarProducto extends JDialog implements ActionListener {
 							prod.setSexo(comboSexo.getSelectedItem().toString());
 							prod.setPrecio(Integer.parseInt(textPrecio.getText()));
 							prod.setTipo(textTipo.getText());
+
 							DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 							LocalDate fecha = LocalDate.parse(textCaducidad.getText(), formateador);
-
+							
+							
+							((Cosmetico) prod).setCaducidad(fecha.toString());
 							((Cosmetico) prod).setIngrediente(textIngredientes.getText());
 
 							JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");

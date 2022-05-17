@@ -83,9 +83,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	final String DELETEempleado = "DELETE FROM empleado WHERE codusuario=?";
 
-	final String ObtenerEmpleado = "SELECT*FROM empleado";
+	final String ObtenerEmpleado = "SELECT * FROM empleado";
 	
-	final String ObtenerUsuario = "SELECT codusuario, nombre, persona FROM persona";
+	final String ObtenerUsuario = "SELECT codusuario, nombre, email	 FROM persona";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -212,6 +212,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 		return mather.find();
 	}
+	
+	
+
 
 	// METODO PARA LOGEARSE
 	public Persona login(Persona pers) {

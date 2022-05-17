@@ -184,7 +184,7 @@ public class InicioSesion extends JFrame {
 					this.dispose();
 					// SI EL TIPO ES IGUAL A CLIENTE
 				} else if (pers.getTipo().equalsIgnoreCase("CLIENTE")) {
-					PiñaMeloco pm = new PiñaMeloco();
+					PiñaMeloco pm = new PiñaMeloco(null, rootPaneCheckingEnabled, datos);
 					pm.setVisible(true);
 					this.dispose();
 

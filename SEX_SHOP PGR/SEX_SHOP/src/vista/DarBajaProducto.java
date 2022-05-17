@@ -42,7 +42,6 @@ public class DarBajaProducto extends JDialog {
 	private JTable tablaProducto;
 	private Map<String, Producto> productos;
 	private JTextField textID;
-	
 
 	/**
 	 * Launch the application.
@@ -55,8 +54,7 @@ public class DarBajaProducto extends JDialog {
 
 		super(padre);
 		this.setModal(modal);
-		
-		
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
 		setBounds(100, 100, 539, 523);
 		getContentPane().setLayout(new BorderLayout());
@@ -73,6 +71,7 @@ public class DarBajaProducto extends JDialog {
 			JButton btnCerrar = new JButton("Cerrar");
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					cerrar();
 				}
 			});
 			btnCerrar.setForeground(Color.BLACK);
@@ -120,7 +119,7 @@ public class DarBajaProducto extends JDialog {
 		JButton btnBaja = new JButton("BAJA");
 		btnBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				eliminarProducto(datos);
 			}
 		});
@@ -134,80 +133,68 @@ public class DarBajaProducto extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
-		
-		
+
 		this.presentarTabla(producto, datos);
-	
-		
-		
 
 	}
-	
-	
-	
-	
-	
+
+	protected void cerrar() {
+		this.dispose();
+	}
 
 	protected void eliminarProducto(ControladorDatos datos) {
 		Producto prod;
 		prod = new Producto();
-		
-			prod.setIdProducto(textID.getText());
-			datos.eliminarProducto(prod);
-		
-		
+
+		prod.setIdProducto(textID.getText());
+		datos.eliminarProducto(prod);
+
 	}
 
 	private void presentarTabla(Producto producto, ControladorDatos datos) {
-		
-		JScrollPane scroll = new JScrollPane();
-		tablaProducto= this.cargarTabla(producto, datos);
-		scroll.setViewportView(tablaProducto);
-		
 
-		
-		
+		JScrollPane scroll = new JScrollPane();
+		scroll.setBackground(Color.PINK);
+		tablaProducto = this.cargarTabla(producto, datos);
+		scroll.setViewportView(tablaProducto);
+
 		contentPanel.add(scroll);
-		scroll.setBounds(55,201,414,191);
-		
+		scroll.setBounds(55, 201, 414, 191);
+
 		textID = new JTextField();
 		textID.setBounds(48, 99, 133, 20);
 		contentPanel.add(textID);
 		textID.setColumns(10);
-	
 
 	}
-	
+
 	private JTable cargarTabla(Producto producto, ControladorDatos datos) {
-		
+
 		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
 		String[] registros = new String[6];
-		
 
 		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
 		modelo.setRowCount(0);
-		
-		productos= datos.listarProducto();
-		
-		for(Producto prod: productos.values()) {
+
+		productos = datos.listarProducto();
+
+		for (Producto prod : productos.values()) {
 			registros[0] = prod.getIdProducto();
 			registros[1] = prod.getNombreProd();
 			registros[2] = prod.getCategoria();
 			registros[3] = prod.getSexo();
 			registros[4] = String.valueOf(prod.getPrecio());
 			registros[5] = prod.getTipo();
-			
+
 			modelo.addRow(registros);
-		}	
-		
+		}
+
 		return new JTable(modelo);
-		
+
 	}
-	
-	
-	
+
 //	protected void baja(ControladorDatos Datos, ModificarProducto modificar) {
 //		Producto prod= modificar.leerDatosPantalla();
 //	}
-	
+
 }
