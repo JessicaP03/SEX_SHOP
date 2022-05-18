@@ -8,10 +8,10 @@ public class Principal {
 
 	public static void main(String[] args) {
 	ControladorDatos datos = new ControladorBDImplementacion();
-	
+
 	//Pantallas
-	InicioSesion ventanaPrincipal = new InicioSesion(datos);
+	InicioSesion ventanaPrincipal = new InicioSesion();
 	ventanaPrincipal.setVisible(true);
-	
+
 	}
 }

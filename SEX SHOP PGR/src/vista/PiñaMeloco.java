@@ -62,7 +62,7 @@ public class PiñaMeloco extends JDialog {
 			btnOferta.setBackground(new Color(153, 204, 255));
 			btnOferta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Oferta();
+					Oferta(datos);
 				}
 
 				
@@ -85,7 +85,7 @@ public class PiñaMeloco extends JDialog {
 			JButton btnVerListaCompra = new JButton("VER LISTA COMPRA");
 			btnVerListaCompra.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					listaPedido();
+					listaPedido(datos);
 				}
 
 				
@@ -107,7 +107,7 @@ public class PiñaMeloco extends JDialog {
 			btnJuguetes.setBackground(new Color(255, 20, 147));
 			btnJuguetes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Juguetes();
+					juguetes(datos);
 				}
 			});
 			btnJuguetes.setForeground(Color.WHITE);
@@ -118,7 +118,7 @@ public class PiñaMeloco extends JDialog {
 			JButton btnCosmeticos = new JButton("COSMETICOS");
 			btnCosmeticos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Cosmeticos();
+					cosmeticos(datos);
 				}
 
 			
@@ -132,7 +132,7 @@ public class PiñaMeloco extends JDialog {
 			JButton btnLenceria = new JButton("LENCERIA");
 			btnLenceria.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Lencerias();
+					lencerias(datos);
 				}
 			});
 			btnLenceria.setForeground(Color.WHITE);
@@ -147,15 +147,9 @@ public class PiñaMeloco extends JDialog {
 		}
 		{
 			JLabel lblNewLabel_2 = new JLabel("New label");
-			lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\7305821 (1).png"));
+			lblNewLabel_2.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\oferta.png"));
 			lblNewLabel_2.setBounds(376, 45, 46, 50);
 			contentPanel.add(lblNewLabel_2);
-		}
-		{
-			JLabel lblNewLabel_3 = new JLabel("New label");
-			lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\descarga (3) (3) (1).png"));
-			lblNewLabel_3.setBounds(282, 129, 124, 180);
-			contentPanel.add(lblNewLabel_3);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -166,35 +160,36 @@ public class PiñaMeloco extends JDialog {
 	}
 
 	//Este boton te lleva a lenceria
-	private void Lencerias() {
+	private void lencerias(ControladorDatos datos) {
 	
-		Lencerias lencerias= new Lencerias(this, true);
+		Lencerias lencerias= new Lencerias(this, true, datos, null);
 		lencerias.setVisible(true);
 	}
 
-	private void Cosmeticos() {
-		Cosmeticos cosmeticos = new Cosmeticos(this, true);
+	//ESTE BOTON TE LLEVA A COSMETICO
+	private void cosmeticos(ControladorDatos datos) {
+		Cosmeticos cosmeticos = new Cosmeticos(this, true, datos, null);
 		cosmeticos.setVisible(true);
 		
 	}
 
 	//Este boton te lleva a juguetes
-	private void Juguetes() {
+	private void juguetes(ControladorDatos datos) {
 		
-		Juguetes juguetes = new Juguetes(this, true);
+		Juguetes juguetes = new Juguetes(null, true, datos, null);
 		juguetes.setVisible(true);
 	}
 	
 	//Este boton te lleva a ofertas
-	private void Oferta() {
-		// TODO Auto-generated method stub
+	private void Oferta(ControladorDatos datos) {
+		
 		Oferta ofertas = new Oferta(this, true);
 		ofertas.setVisible(true);
 	}
 	
-	private void listaPedido() {
-		// TODO Auto-generated method stub
-		ListaPedido listaPedidos = new ListaPedido(this, true);
+	private void listaPedido(ControladorDatos datos) {
+		
+		ListaPedidos listaPedidos = new ListaPedidos(this, true);
 		listaPedidos.setVisible(true);
 	}
 	
@@ -202,5 +197,4 @@ public class PiñaMeloco extends JDialog {
 		// TODO Auto-generated method stub
 		this.dispose();
 	}
-
 }

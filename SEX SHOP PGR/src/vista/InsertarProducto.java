@@ -3,36 +3,46 @@ package vista;
 import java.awt.BorderLayout;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.SystemColor;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-import clases.Lenceria;
 import clases.Cosmetico;
 import clases.Juguete;
+import clases.Lenceria;
 import clases.Producto;
+import modelo.ControladorBDImplementacion;
 import modelo.ControladorDatos;
 
 import java.awt.event.ActionListener;
+import java.io.ObjectInputFilter.Config;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 
-public class InsertarProducto extends JDialog {
-	
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JRadioButton;
+import java.awt.Cursor;
+import java.awt.Dialog.ModalityType;
+
+public class InsertarProducto extends JDialog implements ActionListener {
+
 	/**
 	 * 
 	 */
@@ -41,24 +51,26 @@ public class InsertarProducto extends JDialog {
 	 * Launch the application.
 	 */
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textID, textCaducidad, textMaterial, textPrecio, textInredientes, textNombreProd;
-	private JRadioButton rdbtnLenceria, rdbtnJuguete, rdbtnCosmetico, rdbtnHombre, rdbtnMujer, rdbtnUnisex, rdbtnXs,
-			rdbtnS, rdbtnM, rdbtnXL, rdbtnL;
+	private JTextField textID, textCaducidad, textMaterial, textPrecio, textIngredientes, textNombreProd;
+	private JRadioButton rdbtnLenceria, rdbtnJuguete, rdbtnCosmetico;
 	private ButtonGroup categoria, sexo, talla;
 	private JLabel lblIngredientes, lblTalla, lblCaducidad, lblMaterial;
-
+	private JComboBox comboSexo;
 	private ArrayList<Producto> productos;
 	private JTextField textTipo;
+	private ControladorBDImplementacion datos;
+	private JComboBox comboTalla;
+	private int anio;
+	private int dia;
+	private int mes;
 
-	/**
-	 * Launch the application.
-	 */
-	
-	public InsertarProducto(Configuracion configuracion, boolean modal, ControladorDatos datos) {
+	public InsertarProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
+		super(padre);
+		this.setModal(modal);
 		setForeground(new Color(0, 0, 0));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setBackground(new Color(0, 0, 0));
-		setBounds(100, 100, 493, 520);
+		setBounds(100, 100, 512, 520);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -112,21 +124,21 @@ public class InsertarProducto extends JDialog {
 			contentPanel.add(lblNewLabel_Precio);
 		}
 		{
-			JLabel lblMaterial = new JLabel("Material");
+			lblMaterial = new JLabel("Material");
 			lblMaterial.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblMaterial.setForeground(new Color(255, 255, 153));
 			lblMaterial.setBounds(32, 270, 56, 14);
 			contentPanel.add(lblMaterial);
 		}
 		{
-			JLabel lblCaducidad = new JLabel("Caducidad");
+			lblCaducidad = new JLabel("Caducidad");
 			lblCaducidad.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCaducidad.setForeground(new Color(255, 255, 153));
 			lblCaducidad.setBounds(32, 302, 103, 14);
 			contentPanel.add(lblCaducidad);
 		}
 		{
-			JLabel lblIngredientes = new JLabel("Ingredientes");
+			lblIngredientes = new JLabel("Ingredientes");
 			lblIngredientes.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblIngredientes.setForeground(new Color(255, 255, 153));
 			lblIngredientes.setBounds(32, 334, 103, 14);
@@ -160,7 +172,7 @@ public class InsertarProducto extends JDialog {
 			});
 			cancelButton_Cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			cancelButton_Cerrar.setForeground(Color.BLACK);
-			cancelButton_Cerrar.setBounds(326, 441, 119, 20);
+			cancelButton_Cerrar.setBounds(312, 438, 133, 23);
 			contentPanel.add(cancelButton_Cerrar);
 			cancelButton_Cerrar.setBackground(new Color(255, 255, 153));
 			cancelButton_Cerrar.setActionCommand("Cancel");
@@ -201,13 +213,13 @@ public class InsertarProducto extends JDialog {
 			contentPanel.add(textPrecio);
 		}
 		{
-			textInredientes = new JTextField();
-			textInredientes.setColumns(10);
-			textInredientes.setBorder(
+			textIngredientes = new JTextField();
+			textIngredientes.setColumns(10);
+			textIngredientes.setBorder(
 					new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
-			textInredientes.setBackground(new Color(255, 20, 147));
-			textInredientes.setBounds(226, 334, 111, 20);
-			contentPanel.add(textInredientes);
+			textIngredientes.setBackground(new Color(255, 20, 147));
+			textIngredientes.setBounds(226, 334, 111, 20);
+			contentPanel.add(textIngredientes);
 		}
 		{
 			textNombreProd = new JTextField();
@@ -287,64 +299,8 @@ public class InsertarProducto extends JDialog {
 		});
 		rdbtnCosmetico.setForeground(new Color(255, 255, 255));
 		rdbtnCosmetico.setBackground(new Color(255, 20, 147));
-		rdbtnCosmetico.setBounds(359, 140, 86, 23);
+		rdbtnCosmetico.setBounds(359, 140, 103, 23);
 		contentPanel.add(rdbtnCosmetico);
-		{
-			rdbtnHombre = new JRadioButton("HOMBRE");
-			rdbtnHombre.setBackground(new Color(255, 20, 147));
-			rdbtnHombre.setForeground(new Color(255, 255, 255));
-			rdbtnHombre.setBounds(141, 172, 86, 23);
-			contentPanel.add(rdbtnHombre);
-		}
-		{
-			rdbtnMujer = new JRadioButton("MUJER");
-			rdbtnMujer.setForeground(new Color(255, 255, 255));
-			rdbtnMujer.setBackground(new Color(255, 20, 147));
-			rdbtnMujer.setBounds(251, 172, 86, 23);
-			contentPanel.add(rdbtnMujer);
-		}
-		{
-			rdbtnUnisex = new JRadioButton("UNISEX");
-			rdbtnUnisex.setBackground(new Color(255, 20, 147));
-			rdbtnUnisex.setForeground(new Color(255, 255, 255));
-			rdbtnUnisex.setBounds(359, 172, 86, 23);
-			contentPanel.add(rdbtnUnisex);
-		}
-		{
-			rdbtnXs = new JRadioButton("XS");
-			rdbtnXs.setForeground(Color.WHITE);
-			rdbtnXs.setBackground(new Color(255, 20, 147));
-			rdbtnXs.setBounds(127, 364, 46, 23);
-			contentPanel.add(rdbtnXs);
-		}
-		{
-			rdbtnS = new JRadioButton("S");
-			rdbtnS.setForeground(Color.WHITE);
-			rdbtnS.setBackground(new Color(255, 20, 147));
-			rdbtnS.setBounds(198, 364, 46, 23);
-			contentPanel.add(rdbtnS);
-		}
-		{
-			rdbtnM = new JRadioButton("M");
-			rdbtnM.setForeground(Color.WHITE);
-			rdbtnM.setBackground(new Color(255, 20, 147));
-			rdbtnM.setBounds(269, 364, 46, 23);
-			contentPanel.add(rdbtnM);
-		}
-		{
-			rdbtnL = new JRadioButton("L");
-			rdbtnL.setForeground(Color.WHITE);
-			rdbtnL.setBackground(new Color(255, 20, 147));
-			rdbtnL.setBounds(340, 364, 46, 23);
-			contentPanel.add(rdbtnL);
-		}
-		{
-			rdbtnXL = new JRadioButton("XL");
-			rdbtnXL.setForeground(Color.WHITE);
-			rdbtnXL.setBackground(new Color(255, 20, 147));
-			rdbtnXL.setBounds(411, 364, 46, 23);
-			contentPanel.add(rdbtnXL);
-		}
 
 		// GRUPO DE BOTONES DE CATEGORIA
 		categoria = new ButtonGroup();
@@ -352,166 +308,173 @@ public class InsertarProducto extends JDialog {
 		categoria.add(rdbtnJuguete);
 		categoria.add(rdbtnCosmetico);
 
-		// GRUPO DE BOTONES DE SEXO
-		sexo = new ButtonGroup();
-		sexo.add(rdbtnHombre);
-		sexo.add(rdbtnMujer);
-		sexo.add(rdbtnUnisex);
-
-		// GRUPO DE BOTONES DE TALLA
-		talla = new ButtonGroup();
-		talla.add(rdbtnXs);
-		talla.add(rdbtnS);
-		talla.add(rdbtnM);
-		talla.add(rdbtnL);
-		talla.add(rdbtnXL);
+		comboSexo = new JComboBox();
+		comboSexo.setForeground(new Color(255, 255, 255));
+		comboSexo.setBackground(new Color(255, 20, 147));
+		comboSexo.setModel(new DefaultComboBoxModel(new String[] { "MUJER", "HOMBRE", "UNISEX" }));
+		comboSexo.setBounds(226, 172, 111, 22);
+		contentPanel.add(comboSexo);
+		{
+			comboTalla = new JComboBox();
+			comboTalla.setModel(new DefaultComboBoxModel(new String[] { "XS", "S", "M", "L", "XL" }));
+			comboTalla.setForeground(new Color(255, 255, 255));
+			comboTalla.setBackground(new Color(255, 20, 147));
+			comboTalla.setBounds(226, 364, 111, 22);
+			contentPanel.add(comboTalla);
+		}
 	}
 
 	protected void cerrarVentana() {
 		this.dispose();
-		
+
 	}
 
 	protected void categoriaElegida() {
 
 		// SI ELIGES LA CATEGORIA LENCERIA
 		if (rdbtnLenceria.isSelected()) {
-
 			// JUGUETES
 			textMaterial.setVisible(false);
-
+			lblMaterial.setVisible(false);
 			// COSMETICOS
+			lblCaducidad.setVisible(false);
+			lblIngredientes.setVisible(false);
 
-			textInredientes.setVisible(false);
+			textIngredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
+			lblTalla.setVisible(true);
+			comboTalla.setVisible(true);
 
-			rdbtnXs.setVisible(true);
-			rdbtnS.setVisible(true);
-			rdbtnM.setVisible(true);
-			rdbtnL.setVisible(true);
-			rdbtnXL.setVisible(true);
-		
-			//SI LA CATEGORIA ELEGIDA ES JUGUETE
+			// SI LA CATEGORIA ELEGIDA ES JUGUETE
+
 		} else if (rdbtnJuguete.isSelected()) {
 
 			// JUGUETES
 			textMaterial.setVisible(true);
+			lblMaterial.setVisible(true);
 
 			// COSMETICOS
+			lblCaducidad.setVisible(false);
+			lblIngredientes.setVisible(false);
 
-			textInredientes.setVisible(false);
+			textIngredientes.setVisible(false);
 			textCaducidad.setVisible(false);
 
 			// LENCERIA
+			lblTalla.setVisible(false);
+			comboTalla.setVisible(false);
 
-			rdbtnXs.setVisible(false);
-			rdbtnS.setVisible(false);
-			rdbtnM.setVisible(false);
-			rdbtnL.setVisible(false);
-			rdbtnXL.setVisible(false);
-			
-			//SI LA CATEGORIA ELEGIDA ES
+			// SI LA CATEGORIA ELEGIDA ES
 		} else if (rdbtnCosmetico.isSelected()) {
 
 			// JUGUETES
 			textMaterial.setVisible(false);
+			lblMaterial.setVisible(false);
 
 			// COSMETICOS
-
-			textInredientes.setVisible(true);
+			lblCaducidad.setVisible(true);
+			lblIngredientes.setVisible(true);
+			textIngredientes.setVisible(true);
 			textCaducidad.setVisible(true);
 
 			// LENCERIA
-
-			rdbtnXs.setVisible(false);
-			rdbtnS.setVisible(false);
-			rdbtnM.setVisible(false);
-			rdbtnL.setVisible(false);
-			rdbtnXL.setVisible(false);
-		} else {
+			lblTalla.setVisible(false);
+			comboTalla.setVisible(false);
 
 		}
 	}
 
 	protected void agregarProducto() {
 		Producto prod;
+		ControladorBDImplementacion bd = new ControladorBDImplementacion();
+		boolean v = bd.validarInteger(textPrecio.getText());
 
 		// SI FALTA ALGUN CAMPO POR RELLENAR
-		if ((rdbtnHombre.isSelected() || rdbtnMujer.isSelected() || rdbtnUnisex.isSelected())
-				|| (rdbtnLenceria.isSelected() || rdbtnCosmetico.isSelected() || rdbtnJuguete.isSelected())
-				|| (rdbtnXs.isSelected()) || rdbtnS.isSelected() || rdbtnM.isSelected() || rdbtnL.isSelected()
-				|| rdbtnXL.isSelected()) {
-
-			
-			//SI LA CATEGORIA ELEGIDA ES LENCERIA
-			if (categoria.equals("LENCERIA")) {
-
-				textMaterial.setVisible(false);
-				textCaducidad.setEnabled(false);
-				prod = new Lenceria();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Lenceria) prod).setTalla(talla.getSelection().toString());
-				
-			//SI LA CATEGORIA ELEGIDA ES JUGUETE
-			} else if (categoria.equals("JUGUETES")) {
-				prod = new Juguete();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Juguete) prod).setMaterial(textMaterial.getText());
-
-				//SI LA CATEGORIA ELEGIDA ES COSMETICO
-			} else if (categoria.equals("COSMETICOS")) {
-				prod = new Cosmetico();
-				prod.setIdProducto(textID.getText());
-				prod.setNombreProd(textNombreProd.getText());
-				prod.setCategoria(categoria.getSelection().toString());
-				prod.setSexo(sexo.getSelection().toString());
-				prod.setTipo(textTipo.getText());
-				((Cosmetico) prod).setCaducidad(textCaducidad.getText());
-				((Cosmetico) prod).setIngrediente(textInredientes.getText());
-			}
-			
-			JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMEMTE");
+		if (textID.getText().equals("") || textPrecio.getText().equals("") || textNombreProd.getText().equals("")
+				|| textTipo.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR!");
 		} else {
 
-			JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");		
+			if (v != false) {
+				if (bd.existeProducto(textID.getText()) == 0) {
+					// SI LA CATEGORIA ELEGIDA ES LENCERIA
+					if (rdbtnLenceria.isSelected()) {
+
+						prod = new Lenceria();
+						prod.setIdProducto(textID.getText());
+						prod.setNombreProd(textNombreProd.getText());
+						prod.setCategoria("LENCERIA");
+						prod.setSexo(comboSexo.getSelectedItem().toString());
+						prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+						prod.setTipo(textTipo.getText());
+						((Lenceria) prod).setTalla(comboTalla.getSelectedItem().toString());
+
+						datos = new ControladorBDImplementacion();
+						datos.insertarProducto(prod);
+
+						JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
+
+						// SI LA CATEGORIA ELEGIDA ES JUGUETE
+					} else if (rdbtnJuguete.isSelected()) {
+						if (textMaterial.getText().equals("")) {
+							JOptionPane.showMessageDialog(this, "FALTA RELLENAR EL CAMPO MATERIAL");
+						} else {
+							prod = new Juguete();
+							prod.setIdProducto(textID.getText());
+							prod.setNombreProd(textNombreProd.getText());
+							prod.setCategoria("JUGUETE");
+							prod.setSexo(comboSexo.getSelectedItem().toString());
+							prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+							prod.setTipo(textTipo.getText());
+							((Juguete) prod).setMaterial(textMaterial.getText());
+
+							datos = new ControladorBDImplementacion();
+							datos.insertarProducto(prod);
+							JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
+						}
+
+						// SI LA CATEGORIA ELEGIDA ES COSMETICO
+					} else if (rdbtnCosmetico.isSelected()) {
+						if (textIngredientes.getText().equals("") || textCaducidad.getText().equals("")) {
+							JOptionPane.showMessageDialog(this, "FALTAN CAMPOS POR RELLENAR");
+						} else {
+							prod = new Cosmetico();
+							prod.setIdProducto(textID.getText());
+							prod.setNombreProd(textNombreProd.getText());
+							prod.setCategoria("COSMETICO");
+							prod.setSexo(comboSexo.getSelectedItem().toString());
+							prod.setPrecio(Integer.parseInt(textPrecio.getText()));
+							prod.setTipo(textTipo.getText());
+
+							DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+							LocalDate fecha = LocalDate.parse(textCaducidad.getText(), formateador);
+							
+							
+							((Cosmetico) prod).setCaducidad(fecha.toString());
+							((Cosmetico) prod).setIngrediente(textIngredientes.getText());
+
+							JOptionPane.showMessageDialog(this, "PRODUCTO AÑADIDO CORRECTAMENTE");
+							datos = new ControladorBDImplementacion();
+							datos.insertarProducto(prod);
+						}
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "EL CODIGO ESTA REPETIDO");
+				}
+			}else {
+				JOptionPane.showMessageDialog(this, "EL PRECIO DEBE SER UN NÚMERO");
+			}
 		}
+
 	}
 
 	
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-//	protected void consultarSexo() {
-//		if (comboBox_Sexo.getSelectedIndex() == -1) {
-//			JOptionPane.showMessageDialog(this, "Selecciona el sexo");
-//		} else {
-//			String cadena = (String) comboBox_Sexo.getSelectedItem();
-//			int pos = cadena.indexOf(" ");
-//
-//		}
-//	}
-
-//	private void cargarProductos(ControladorDatos datos) {
-//
-//		ArrayList<Producto> listaProductos = datos.listarProducto();
-//		comboBox_Sexo.removeAllItems();
-//
-//		for (int i = 0; i < listaProductos.size(); i++) {
-//			comboBox_Sexo.addItem(listaProductos.get(i).getSexo().toString());
-//		}
-//
-//	}
 
 }

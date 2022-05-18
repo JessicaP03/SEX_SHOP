@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Persona;
+import modelo.ControladorBDImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
@@ -23,6 +24,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JFormattedTextField;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
 public class Registro extends JDialog {
@@ -32,21 +35,24 @@ public class Registro extends JDialog {
 	private JTextField textApellido;
 	private JTextField textEmail;
 	private JPasswordField passwordConstrasena;
-	private JTextField textContrasena;
 
 	/**
 	 * Launch the application.
 	 */
-
+	public static void main(String[] args) {
+		try {
+			Registro dialog = new Registro();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Create the dialog.
 	 */
-
-
-	public Registro(ControladorDatos datos) {
-		// TODO Auto-generated constructor stub
-		
+	public Registro() {
 		setBounds(100, 100, 450, 439);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
@@ -111,29 +117,30 @@ public class Registro extends JDialog {
 			contentPanel.add(textEmail);
 		}
 		{
-			JLabel lblContrasena = new JLabel("CONTRASE\u00D1A");
-			lblContrasena.setForeground(Color.WHITE);
-			lblContrasena.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblContrasena.setBounds(30, 239, 128, 14);
-			contentPanel.add(lblContrasena);
+			JLabel lblContrasea = new JLabel("CONTRASE\u00D1A");
+			lblContrasea.setForeground(Color.WHITE);
+			lblContrasea.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblContrasea.setBounds(30, 239, 128, 14);
+			contentPanel.add(lblContrasea);
 		}
-		
+
 		passwordConstrasena = new JPasswordField();
 		passwordConstrasena.setBackground(new Color(255, 20, 147));
 		passwordConstrasena.setBounds(25, 264, 208, 20);
 		contentPanel.add(passwordConstrasena);
-		
+
 		JButton btnCrearCuenta = new JButton("CREAR CUENTA");
 		btnCrearCuenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nuevaCuenta();
 			}
+
 		});
 		btnCrearCuenta.setForeground(Color.BLACK);
 		btnCrearCuenta.setBackground(new Color(255, 255, 153));
 		btnCrearCuenta.setBounds(37, 310, 132, 23);
 		contentPanel.add(btnCrearCuenta);
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(20, 355, 365, 2);
 		contentPanel.add(separator);
@@ -144,18 +151,10 @@ public class Registro extends JDialog {
 			contentPanel.add(lblNewLabel_2);
 		}
 		
-
-		textContrasena = new JTextField();
-		textContrasena.setForeground(Color.WHITE);
-		textContrasena.setColumns(10);
-		textContrasena.setBackground(new Color(255, 20, 147));
-		textContrasena.setBounds(30, 264, 208, 20);
-		contentPanel.add(textContrasena);
-
 		JButton btnVolver = new JButton("VOLVER");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				volverInicio(datos);
+				volverInicio();
 			}
 
 			
@@ -165,11 +164,11 @@ public class Registro extends JDialog {
 		btnVolver.setBounds(213, 310, 132, 23);
 		contentPanel.add(btnVolver);
 	}
-	
+
 	// Metodo para crear nueva cuenta
 	private void nuevaCuenta() {
 
-		ControladorDatos bd = new ControladorDatos();
+		ControladorBDImplementacion bd = new ControladorBDImplementacion();
 
 		// VALIDAR QUE NO FALTA CAMPOS POR RELLENAR
 		if (textNombre.getText().equals("") || textApellido.getText().equals("") || textEmail.getText().equals("")
@@ -192,10 +191,10 @@ public class Registro extends JDialog {
 					//Pasar contraseña a String
 					pers.setContrasena(new String(passwordConstrasena.getPassword()));
 
-					ControladorDatos datos = new ControladorDatos();
+					ControladorBDImplementacion datos = new ControladorBDImplementacion();
 					datos.insertarPersona(pers);
 					
-					InicioSesion is= new InicioSesion(datos);
+					InicioSesion is= new InicioSesion();
 					is.setVisible(true);
 					this.dispose();
 
@@ -211,8 +210,8 @@ public class Registro extends JDialog {
 	}
 	
 	//Boton de volver al inicio
-	private void volverInicio(ControladorDatos datos) {
-		InicioSesion is= new InicioSesion(datos);
+	private void volverInicio() {
+		InicioSesion is= new InicioSesion();
 		is.setVisible(true);
 		this.dispose();
 		

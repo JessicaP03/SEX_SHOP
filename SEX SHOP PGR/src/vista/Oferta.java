@@ -16,39 +16,15 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollBar;
 import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class Oferta extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			Oferta dialog = new Oferta(null, true);
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	
 
-	/**
-	 * Create the dialog.
-	 * @param b 
-	 * @param piñaMeloco 
-	 */
-	
-//	public Oferta() {
-//		}
-	
-	public Oferta(PiñaMeloco padre, boolean modal) {
-		super(padre);
-		this.setModal(modal);
-		setBounds(100, 100, 492, 645);
+	public Oferta(PiñaMeloco piñaMeloco, boolean b) {
+		setBounds(100, 100, 474, 592);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -201,22 +177,22 @@ public class Oferta extends JDialog {
 		contentPanel.add(lblNewLabel_1_1_7_8);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\consolador (2) (2).png"));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\consolador.png"));
 		lblNewLabel_2.setBounds(295, 255, 48, 50);
 		contentPanel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\muneca (1) (1) (1).png"));
+		lblNewLabel_3.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\muneca.png"));
 		lblNewLabel_3.setBounds(50, 142, 42, 52);
 		contentPanel.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("New label");
-		lblNewLabel_4.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\consolador (1) (1) (1).png"));
+		lblNewLabel_4.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\consolador.png"));
 		lblNewLabel_4.setBounds(50, 249, 46, 58);
 		contentPanel.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_5 = new JLabel("New label");
-		lblNewLabel_5.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\vr (1) (1).png"));
+		lblNewLabel_5.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\vr.png"));
 		lblNewLabel_5.setBounds(181, 140, 48, 54);
 		contentPanel.add(lblNewLabel_5);
 		
@@ -265,27 +241,11 @@ public class Oferta extends JDialog {
 		lblNewLabel_14.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\offer_5.png"));
 		lblNewLabel_14.setBounds(168, 82, 36, 36);
 		contentPanel.add(lblNewLabel_14);
-		
-		JButton btnCerrar = new JButton("CERRAR");
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cerrar();
-			}
-
-			
-		});
-		btnCerrar.setBackground(new Color(255, 255, 153));
-		btnCerrar.setBounds(335, 562, 101, 23);
-		contentPanel.add(btnCerrar);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBackground(SystemColor.controlDkShadow);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
-	}
-	private void cerrar() {
-		// TODO Auto-generated method stub
-		this.dispose();
 	}
 }

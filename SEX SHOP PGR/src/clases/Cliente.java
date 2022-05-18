@@ -1,5 +1,7 @@
 package clases;
 
+import java.util.Vector;
+
 public class Cliente extends Persona {
 
 	private String direccion;
@@ -23,5 +25,10 @@ public class Cliente extends Persona {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
+
+
+
+	
+
 
 }
