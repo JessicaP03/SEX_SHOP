@@ -164,7 +164,6 @@ public class GestionaEmpleados extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
 
-		ButtonGroup jefe = new ButtonGroup();
 
 		ButtonGroup admin = new ButtonGroup();
 		admin.add(rdbtnAdminSi);
@@ -311,11 +310,6 @@ public class GestionaEmpleados extends JDialog {
 
 		contentPanel.add(scroll);
 		scroll.setBounds(310, 112, 366, 132);
-		
-		textID = new JTextField();
-		textID.setBounds(48, 99, 133, 20);
-		contentPanel.add(textID);
-		textID.setColumns(10);
 	}
 
 	private JTable cargarTabla(Empleado empleado, ControladorDatos datos) {

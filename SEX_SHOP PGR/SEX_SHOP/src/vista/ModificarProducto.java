@@ -339,19 +339,6 @@ public class ModificarProducto extends JDialog {
 			comboTalla.setBounds(226, 364, 111, 22);
 			contentPanel.add(comboTalla);
 		}
-		
-		JButton btnBaja = new JButton("Baja");
-		btnBaja.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				eliminarProducto(datos);
-			}
-		});
-		btnBaja.setForeground(Color.BLACK);
-		btnBaja.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnBaja.setBackground(new Color(255, 255, 153));
-		btnBaja.setBounds(218, 440, 133, 23);
-		contentPanel.add(btnBaja);
 	
 		this.presentarTabla(producto, datos);
 	}
@@ -365,15 +352,6 @@ public class ModificarProducto extends JDialog {
 		prod = datos.obtenerProducto(textID.getText());;
 		
 	}
-
-	protected void eliminarProducto(ControladorDatos datos) {
-		Producto prod;
-		prod = new Producto();
-		
-			prod.setIdProducto(textID.getText());
-
-			JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
-		}
 
 	
 		

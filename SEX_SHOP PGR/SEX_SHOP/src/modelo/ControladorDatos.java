@@ -33,6 +33,13 @@ public interface ControladorDatos {
 
 	public void modificarUsuario(Persona pers);
 
-	public Map<String, Persona> listarUsuario();
+	public Map<Integer, Persona> listarUsuario();
 
+	public Map<String, Producto> listarJuguetes();
+
+	public Map<String, Producto> listarCosmetico();
+
+	public Map<String, Producto> listarLenceria();
+
+	
 }

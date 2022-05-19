@@ -63,7 +63,7 @@ public class GestionarUsuarios extends JDialog {
 	private ControladorDatos datos;
 	private JTable tablaEmpleado;
 	private Map<String, Empleado> empleados;
-	private Map<String, Persona> personas;
+	private Map<Integer, Persona> personas;
 
 	public GestionarUsuarios(Configuracion padre, boolean modal, ControladorDatos datos, Persona persona) {
 		super(padre);
@@ -205,7 +205,7 @@ public class GestionarUsuarios extends JDialog {
 
 		JScrollPane scroll = new JScrollPane();
 		scroll.setForeground(new Color(255, 153, 204));
-		tablaEmpleado = this.cargarTabla(persona, datos);
+		tablaEmpleado = this.cargarTabla(datos);
 		scroll.setViewportView(tablaEmpleado);
 
 		contentPanel.add(scroll);
@@ -213,7 +213,7 @@ public class GestionarUsuarios extends JDialog {
 
 	}
 
-	private JTable cargarTabla(Persona pers, ControladorDatos datos) {
+	private JTable cargarTabla( ControladorDatos datos) {
 
 		String[] nombreColumnas = { "COD_USUARIO", "NOMRBE", "EMAIL" };
 		String[] registros = new String[3];
@@ -224,9 +224,9 @@ public class GestionarUsuarios extends JDialog {
 		personas = datos.listarUsuario();
 
 		for (Persona per : personas.values()) {
-			registros[0] = String.valueOf(pers.getCodUsuario());
-			registros[1] = pers.getNombre();
-			registros[2] = pers.getEmail();
+			registros[0] = String.valueOf(per.getCodUsuario());
+			registros[1] = per.getNombre();
+			registros[2] = per.getEmail();
 
 			modelo.addRow(registros);
 		}

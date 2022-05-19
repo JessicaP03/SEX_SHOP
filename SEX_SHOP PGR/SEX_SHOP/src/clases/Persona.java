@@ -7,7 +7,7 @@ public class Persona {
 	//ATTRIBUTOS
 	private int codUsuario;
 	private String email;
-	protected static String nombre;
+	private String nombre;
 	private String apellido;
 	private String contrasena;
 	private String tipo;

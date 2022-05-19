@@ -77,6 +77,12 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	final String DELETEProducto = "DELETE FROM producto where idproducto=?";
 
+	final String DELETEJuguete = "DELETE FROM juguete where idproducto=?";
+
+	final String DELETELenceria = "DELETE FROM lenceria where idproducto=?";
+
+	final String DELETECosmetico = "DELETE FROM cosmetico where idproducto=?";
+
 	final String INSERTempleado = "INSERT INTO empleado (puesto, horario, administrador, codjefe) VALUES (?,?,?,?)";
 
 	final String UPDATEmpleado = "UPDATE empleado SET puesto=?, horario=?, administrador=?, codjefe=? WHERE codusuario=?";
@@ -84,8 +90,19 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	final String DELETEempleado = "DELETE FROM empleado WHERE codusuario=?";
 
 	final String ObtenerEmpleado = "SELECT * FROM empleado";
+
+	final String ObtenerUsuario = "SELECT codusuario, nombre, email FROM persona WHERE TIPO LIKE '%CLIENTE%'";
+
+	final String obtenerJuguete = "SELECT * FROM juguete";
+
+	final String obtenerSoloJuguete = "SELECT * FROM producto WHERE categori like '%JUGUETE%'";
+
+	final String obtenerSoloCosmetico = "SELECT * FROM producto WHERE categori like '%COSMETICO%'";
+
+	final String obtenerSoloLenceria = "SELECT * FROM producto WHERE categori like '%LENCERIA%'";
 	
-	final String ObtenerUsuario = "SELECT codusuario, nombre, email	 FROM persona";
+	final String seleccionarCategoria ="SELECT CATEGORI FROM producto";
+
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
@@ -212,9 +229,6 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 		return mather.find();
 	}
-	
-	
-
 
 	// METODO PARA LOGEARSE
 	public Persona login(Persona pers) {
@@ -434,6 +448,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		return listaProductos;
 	}
 
+
+	
+
 	public Producto obtenerProducto(String idproducto) {
 		ResultSet rs = null;
 		Producto prod = null;
@@ -567,8 +584,6 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	}
 
-	
-
 	public void eliminarEmpleado(Empleado emp) {
 
 		ResultSet rs = null;
@@ -601,16 +616,20 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		}
 
 	}
-	
+
 	public void eliminarProducto(Producto prod) {
 
 		this.openConnection();
 
 		try {
+			
+			
 			stmt = con.prepareStatement(DELETEProducto);
 			stmt.setString(1, prod.getIdProducto());
-			
 			stmt.executeUpdate();
+			
+			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -625,7 +644,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 			}
 
 		}
-	
+
 	}
 
 	public void insertarEmpleado(Empleado emp) {
@@ -735,10 +754,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		}
 	}
 
-	public Map<String, Persona> listarUsuario() {
+	public Map<Integer, Persona> listarUsuario() {
 		ResultSet rs = null;
 		Persona pers;
-		Map<String, Persona> listaUsuarios = new HashMap<>();
+		Map<Integer, Persona> listaUsuarios = new HashMap<>();
 
 		this.openConnection();
 
@@ -752,6 +771,8 @@ public class ControladorBDImplementacion implements ControladorDatos {
 				pers.setCodUsuario(rs.getInt("codusuario"));
 				pers.setNombre(rs.getString("nombre"));
 				pers.setEmail(rs.getString("email"));
+
+				listaUsuarios.put(pers.getCodUsuario(), pers);
 
 			}
 
@@ -833,5 +854,166 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Map<String, Producto> listarJuguetes() {
+		ResultSet rs = null;
+		Producto prod;
+		Map<String, Producto> listarProducto = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(obtenerSoloJuguete);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombre_prod"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setTipo(rs.getString("tipo"));
+				listarProducto.put(prod.getIdProducto(), prod);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+
+		}
+		return listarProducto;
+	}
+	
+	
+	
+	
+
+	public Map<String, Producto> listarCosmetico() {
+		ResultSet rs = null;
+		Producto prod;
+		Map<String, Producto> listarProducto = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(obtenerSoloCosmetico);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombre_prod"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setTipo(rs.getString("tipo"));
+				listarProducto.put(prod.getIdProducto(), prod);
+
+				if (prod.getPrecio() < 10) {
+					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio<10");
+				
+				} else if (prod.getPrecio() < 20 & prod.getPrecio() > 10) {
+					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio>10 AND precio<20");
+				} else if (prod.getPrecio() < 30 & prod.getPrecio() > 20) {
+					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio>20 AND precio<30");
+				} else if (prod.getPrecio() < 40 & prod.getPrecio() > 30) {
+					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio>30 AND precio<40");
+				} else if (prod.getPrecio() < 50 & prod.getPrecio() > 40) {
+					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio>50 AND precio<100");
+
+				}
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listarProducto;
+	}
+
+	public Map<String, Producto> listarLenceria() {
+		ResultSet rs = null;
+		Producto prod;
+		Map<String, Producto> listarProducto = new HashMap<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(obtenerSoloLenceria);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				prod = new Producto();
+				prod.setIdProducto(rs.getString("idproducto"));
+				prod.setNombreProd(rs.getString("nombre_prod"));
+				prod.setCategoria(rs.getString("categori"));
+				prod.setPrecio(rs.getInt("precio"));
+				prod.setSexo(rs.getString("sexo"));
+				prod.setTipo(rs.getString("tipo"));
+				listarProducto.put(prod.getIdProducto(), prod);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listarProducto;
+	}
+
 
 }

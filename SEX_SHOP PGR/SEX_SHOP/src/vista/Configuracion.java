@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class Configuracion extends JDialog {
 
@@ -28,7 +29,7 @@ public class Configuracion extends JDialog {
 	public Configuracion(ControladorDatos datos) {
 //		super(padre);
 //		this.setModal(modal);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\1dam\\Downloads\\logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\logo.png"));
 		getContentPane().setBackground(SystemColor.controlDkShadow);
 		setBounds(100, 100, 532, 300);
 		getContentPane().setLayout(null);

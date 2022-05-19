@@ -177,22 +177,22 @@ public class Oferta extends JDialog {
 		contentPanel.add(lblNewLabel_1_1_7_8);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\consolador (2) (2).png"));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\consolador.png"));
 		lblNewLabel_2.setBounds(295, 255, 48, 50);
 		contentPanel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\muneca (1) (1) (1).png"));
+		lblNewLabel_3.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\muneca.png"));
 		lblNewLabel_3.setBounds(50, 142, 42, 52);
 		contentPanel.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("New label");
-		lblNewLabel_4.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\consolador (1) (1) (1).png"));
+		lblNewLabel_4.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\consolador.png"));
 		lblNewLabel_4.setBounds(50, 249, 46, 58);
 		contentPanel.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_5 = new JLabel("New label");
-		lblNewLabel_5.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\vr (1) (1).png"));
+		lblNewLabel_5.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\vr.png"));
 		lblNewLabel_5.setBounds(181, 140, 48, 54);
 		contentPanel.add(lblNewLabel_5);
 		
@@ -223,22 +223,22 @@ public class Oferta extends JDialog {
 		
 		JLabel lblNewLabel_11 = new JLabel("New label");
 		lblNewLabel_11.setBackground(SystemColor.controlDkShadow);
-		lblNewLabel_11.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\offer_50 (1).png"));
+		lblNewLabel_11.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\offer_50.png"));
 		lblNewLabel_11.setBounds(30, 82, 36, 37);
 		contentPanel.add(lblNewLabel_11);
 		
 		JLabel lblNewLabel_12 = new JLabel("New label");
-		lblNewLabel_12.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\offer_20 (1).png"));
+		lblNewLabel_12.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\offer_20 (1).png"));
 		lblNewLabel_12.setBounds(76, 82, 37, 37);
 		contentPanel.add(lblNewLabel_12);
 		
 		JLabel lblNewLabel_13 = new JLabel("New label");
-		lblNewLabel_13.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\offer_10.png"));
+		lblNewLabel_13.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\offer_10.png"));
 		lblNewLabel_13.setBounds(123, 82, 36, 36);
 		contentPanel.add(lblNewLabel_13);
 		
 		JLabel lblNewLabel_14 = new JLabel("New label");
-		lblNewLabel_14.setIcon(new ImageIcon("C:\\Users\\1dam\\Downloads\\offer_5.png"));
+		lblNewLabel_14.setIcon(new ImageIcon("C:\\SEX_SHOP\\SEX_SHOP\\SEX_SHOP PGR\\SEX_SHOP\\src\\imagenes\\offer_5.png"));
 		lblNewLabel_14.setBounds(168, 82, 36, 36);
 		contentPanel.add(lblNewLabel_14);
 		{

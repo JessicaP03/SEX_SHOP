@@ -146,8 +146,11 @@ public class DarBajaProducto extends JDialog {
 		Producto prod;
 		prod = new Producto();
 
+		
 		prod.setIdProducto(textID.getText());
 		datos.eliminarProducto(prod);
+	
+		JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO CORRECTAMENTE");
 
 	}
 
@@ -193,8 +196,14 @@ public class DarBajaProducto extends JDialog {
 
 	}
 
-//	protected void baja(ControladorDatos Datos, ModificarProducto modificar) {
-//		Producto prod= modificar.leerDatosPantalla();
-//	}
+	protected void baja(ControladorDatos datos, ModificarProducto modificar) {
+		Producto prod= modificar.leerDatosPantalla(textID.getText());
+		
+		datos.eliminarProducto(prod);
+		
+		JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO CORRECTAMENTE");
+	}
+	
+
 
 }
