@@ -36,6 +36,10 @@ import javax.swing.border.BevelBorder;
 import java.awt.ComponentOrientation;
 import javax.swing.JTable;
 
+/**
+ * @author 1dam
+ *
+ */
 public class DarBajaProducto extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();

@@ -16,6 +16,8 @@ import modelo.ControladorDatos;
 
 import java.awt.SystemColor;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JSeparator;
@@ -43,24 +45,35 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Juguetes extends JDialog implements ItemListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private Map<String, Producto> productos;
 	private JTable tablaProducto;
-	private JTextField textBuscador;
 	private TableRowSorter<DefaultTableModel> sorter;
 	private JComboBox comboProducto;
 	private TableRowSorter trsfiltro;
 	private DefaultTableModel modelo;
+	Producto prod = null;
+	private double precio = 0;
+	private int cantidad = 0;
+	private JLabel lblPrecio_1;
 
+	/**
+	 * @param piñaMeloco
+	 * @param modal
+	 * @param datos
+	 * @param producto
+	 */
 	public Juguetes(PiñaMeloco piñaMeloco, boolean modal, ControladorDatos datos, Producto producto) {
 
 		super(piñaMeloco);
 		this.setModal(modal);
-		llenarCombo(datos);
-		setBounds(100, 100, 652, 789);
+
+		setBounds(100, 100, 652, 614);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.controlDkShadow);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -81,11 +94,17 @@ public class Juguetes extends JDialog implements ItemListener {
 		}
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(31, 680, 554, 2);
+		separator.setBounds(45, 494, 554, 2);
 		contentPanel.add(separator);
 
 		comboProducto = new JComboBox();
-		comboProducto.setBounds(129, 101, 107, 22);
+		comboProducto.setFont(new Font("Tahoma", Font.BOLD, 11));
+		comboProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		comboProducto.setBounds(129, 101, 136, 22);
 		comboProducto.setIgnoreRepaint(true);
 		comboProducto.setForeground(Color.WHITE);
 		comboProducto.setToolTipText("");
@@ -98,7 +117,7 @@ public class Juguetes extends JDialog implements ItemListener {
 				cerrar();
 			}
 		});
-		btnNewButton.setBounds(489, 693, 107, 46);
+		btnNewButton.setBounds(492, 507, 107, 46);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setBackground(new Color(255, 255, 153));
 		contentPanel.add(btnNewButton);
@@ -109,18 +128,18 @@ public class Juguetes extends JDialog implements ItemListener {
 		lblProduco.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblProduco.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
+
 			}
 		});
 		contentPanel.add(lblProduco);
-
-		JLabel lblNewLabel_2_1 = new JLabel("CANTIDAD");
-		lblNewLabel_2_1.setBounds(31, 147, 107, 14);
-		lblNewLabel_2_1.setForeground(new Color(255, 255, 153));
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		contentPanel.add(lblNewLabel_2_1);
-
+		
+		
+		llenarCombo(datos);
+		
 		this.presentarTabla(producto, datos);
 	}
+
+	
 
 	protected void cerrar() {
 		this.dispose();
@@ -136,59 +155,46 @@ public class Juguetes extends JDialog implements ItemListener {
 		scroll.setViewportView(tablaProducto);
 
 		contentPanel.add(scroll);
-		scroll.setBounds(53, 294, 532, 375);
+		scroll.setBounds(53, 224, 532, 242);
 
-		textBuscador = new JTextField();
-
-		textBuscador.setBackground(new Color(204, 204, 255));
-		textBuscador.setBounds(411, 88, 168, 34);
-		contentPanel.add(textBuscador);
-		textBuscador.setColumns(10);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(1, 1, 10, 1));
-		spinner.setBounds(130, 146, 30, 20);
-		contentPanel.add(spinner);
-		
 		JButton btnComprar = new JButton("COMPRAR PRODUCTO");
-		btnComprar.setBackground(new Color(154, 205, 50));
+		btnComprar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnComprar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comprarProducto();
+				
+			}
+		});
+		btnComprar.setBackground(new Color(0, 153, 204));
 		btnComprar.setForeground(Color.BLACK);
-		btnComprar.setBounds(411, 204, 174, 46);
+		btnComprar.setBounds(66, 148, 199, 46);
 		contentPanel.add(btnComprar);
-		
-		JLabel lblPrecio = new JLabel("PRECIO");
-		lblPrecio.setForeground(new Color(255, 255, 153));
-		lblPrecio.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPrecio.setBounds(31, 191, 107, 14);
-		contentPanel.add(lblPrecio);
-		
-		JLabel lblImporte = new JLabel("IMPORTE");
-		lblImporte.setForeground(new Color(255, 255, 153));
-		lblImporte.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblImporte.setBounds(31, 239, 107, 14);
-		contentPanel.add(lblImporte);
-		
-		JLabel lblPrecio_1 = new JLabel("0.00\u20AC");
-		lblPrecio_1.setBackground(new Color(216, 191, 216));
-		lblPrecio_1.setForeground(new Color(255, 192, 203));
-		lblPrecio_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPrecio_1.setBounds(129, 193, 107, 14);
-		contentPanel.add(lblPrecio_1);
-		
-		JLabel lblPrecio_2 = new JLabel("0.00\u20AC");
-		lblPrecio_2.setForeground(new Color(255, 192, 203));
-		lblPrecio_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPrecio_2.setBounds(129, 239, 107, 14);
-		contentPanel.add(lblPrecio_2);
 
 	}
+
+	protected void comprarProducto() {
+		if (comboProducto.getSelectedIndex()==1) {
+			int input = JOptionPane.showConfirmDialog(this, "SEGURO QUE QUIERES COMPRAR?",
+					"SELECIONA UNA OPCIÓN:", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			
+			if (input==0) {
+				JOptionPane.showMessageDialog(this, "HAS COMPRADO EL PRODUCTO");
+			}else if (input==1) {
+				JOptionPane.showMessageDialog(this, "SE HA CANCELADO LA COMPRA");
+			}
+		}else {
+			JOptionPane.showMessageDialog(this, "ELIGA UN PRODUCTO");
+		}
+		
+		
+	}
+
+
 
 	private JTable cargarTabla(Producto producto, ControladorDatos datos) {
 		// ASIGNAR LOS NOMBRES DE LAS COLUMNAS
 		String[] nombreColumnas = { "IDPRODUCTO", "NOMBRE_PROD", "CATEGORI", "SEXO", "PRECIO", "TIPO" };
 		String[] registros = new String[6];
-		double precio=0;
-		int cantidad=0;
 
 		DefaultTableModel modelo = new DefaultTableModel(null, nombreColumnas);
 		modelo.setRowCount(0);
@@ -210,21 +216,26 @@ public class Juguetes extends JDialog implements ItemListener {
 		return new JTable(modelo);
 
 	}
+
 	
 	private void llenarCombo(ControladorDatos datos) {
-		
-		productos= datos.listarJuguetes();
 
-		for (int i=0; i< productos.size();i++) {
-			comboProducto.addItem(productos.get(i).getNombreProd());
+		productos = datos.listarJuguetes();
+
+		if (!productos.isEmpty()) {
+			for (Producto pro : productos.values()) {
+				comboProducto.addItem(pro.getNombreProd());
+			}
 		}
-		
+		comboProducto.setSelectedIndex(-1);
+
 	}
+
+	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
 }

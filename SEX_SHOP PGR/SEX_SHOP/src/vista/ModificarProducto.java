@@ -40,6 +40,10 @@ import javax.swing.JTable;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+/**
+ * @author 1dam
+ *
+ */
 public class ModificarProducto extends JDialog {
 
 	/**
@@ -64,6 +68,9 @@ public class ModificarProducto extends JDialog {
 	private JTable tablaProducto;
 	private Map<String, Producto> productos;
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			ModificarProducto dialog = new ModificarProducto(null, true, null, null);
@@ -75,6 +82,12 @@ public class ModificarProducto extends JDialog {
 	}
 
 	// Creamos este segundo constructor para saber cual es la ventana padre
+	/**
+	 * @param padre
+	 * @param modal
+	 * @param datos
+	 * @param producto
+	 */
 	public ModificarProducto(Configuracion padre, boolean modal, ControladorDatos datos, Producto producto) {
 		super(padre);
 		this.setModal(modal);

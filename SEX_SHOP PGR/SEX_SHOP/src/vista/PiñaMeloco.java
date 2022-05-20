@@ -19,6 +19,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
+/**
+ * @author 1dam
+ *
+ */
 public class PiñaMeloco extends JDialog {
 
 	/**
@@ -57,19 +61,9 @@ public class PiñaMeloco extends JDialog {
 			lblNewLabel.setBounds(10, 7, 134, 14);
 			contentPanel.add(lblNewLabel);
 		}
-		{
-			JButton btnOferta = new JButton("OFERTA");
-			btnOferta.setBackground(new Color(153, 204, 255));
-			btnOferta.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Oferta(datos);
-				}
+		
 
-				
-			});
-			btnOferta.setBounds(261, 59, 89, 23);
-			contentPanel.add(btnOferta);
-		}
+		
 		{
 			JButton btnCerrar = new JButton("CERRAR");
 			btnCerrar.addActionListener(new ActionListener() {
@@ -180,16 +174,10 @@ public class PiñaMeloco extends JDialog {
 		juguetes.setVisible(true);
 	}
 	
-	//Este boton te lleva a ofertas
-	private void Oferta(ControladorDatos datos) {
-		
-		Oferta ofertas = new Oferta(this, true);
-		ofertas.setVisible(true);
-	}
 	
 	private void listaPedido(ControladorDatos datos) {
 		
-		ListaPedidos listaPedidos = new ListaPedidos(this, true);
+		ListaPedidos listaPedidos = new ListaPedidos(this, true, datos, null);
 		listaPedidos.setVisible(true);
 	}
 	

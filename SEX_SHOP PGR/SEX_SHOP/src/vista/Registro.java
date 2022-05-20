@@ -28,6 +28,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author 1dam
+ *
+ */
 public class Registro extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();

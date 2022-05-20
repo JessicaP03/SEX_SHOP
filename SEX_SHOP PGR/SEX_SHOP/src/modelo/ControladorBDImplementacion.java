@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.mysql.cj.xdevapi.Result;
 
+import clases.Compra;
 import clases.Cosmetico;
 import clases.Empleado;
 import clases.Juguete;
@@ -93,20 +95,24 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	final String ObtenerUsuario = "SELECT codusuario, nombre, email FROM persona WHERE TIPO LIKE '%CLIENTE%'";
 
-	final String obtenerJuguete = "SELECT * FROM juguete";
-
 	final String obtenerSoloJuguete = "SELECT * FROM producto WHERE categori like '%JUGUETE%'";
 
 	final String obtenerSoloCosmetico = "SELECT * FROM producto WHERE categori like '%COSMETICO%'";
 
 	final String obtenerSoloLenceria = "SELECT * FROM producto WHERE categori like '%LENCERIA%'";
-	
-	final String seleccionarCategoria ="SELECT CATEGORI FROM producto";
 
+	final String seleccionarCategoria = "SELECT CATEGORI FROM producto";
+
+	final String ObtenerCompra = "SELECT* FROM compra";
+
+	final String comprarProducto = "INSERT INTO producto (fecha_compra, idproducto, codusuario) VALUES (?,?,?)";
 
 	// Para la conexión utilizamos un fichero de configuaración, configuracion que
 	// guardamos en el paquete control:
 
+	/**
+	 * 
+	 */
 	public ControladorBDImplementacion() {
 		this.configFichero = ResourceBundle.getBundle("modelo.configuracion");
 		this.driverBD = this.configFichero.getString("Driver");
@@ -138,6 +144,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	// Metodo para insertar un nuevo registro en la base de datos utilizando un
 	// procediemiento de mysql
+	/**
+	 * @param pers insertar persona en la base de datos
+	 */
 	public void insertarPersona(Persona pers) {
 		this.openConnection();
 
@@ -168,6 +177,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	}
 
 	// METODO PARA VERIFICAR SI EXISTE EL USUARIO
+	/**
+	 * @param persona
+	 * @return verifica si existe la persona , para que no se repita
+	 */
 	public int existePersona(String persona) {
 
 		ResultSet rs = null;
@@ -193,6 +206,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * @param producto
+	 * @return verifica si existe el producto, para que no se repita
+	 */
 	public int existeProducto(String producto) {
 		ResultSet rs = null;
 		String existeProducto = "SELECT COUNT(IDPRODUCTO)FROM PRODUCTO WHERE IDPRODUCTO=?";
@@ -218,6 +235,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	}
 
 	// METODO PARA VERIFICAR LOS PATRONES DE UN EMAIL
+	/**
+	 * @param email verifica que el email sigue el patron de un email convencional
+	 * @return
+	 */
 	public boolean esEmail(String email) {
 		// Patrón para validar el email
 		Pattern pattern = Pattern.compile(
@@ -231,6 +252,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	}
 
 	// METODO PARA LOGEARSE
+	/**
+	 * @param pers metodo mediante el que se loguea una persona
+	 * @return
+	 */
 	public Persona login(Persona pers) {
 
 		ResultSet rs = null;
@@ -262,6 +287,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 	}
 
 	// METODO PARA INSERTAR PRODUCTO DEPENDIENDO LA CATEGORIA
+	/**
+	 * @param prod metodo mediante el que el admin introduce un producto
+	 */
 	public void insertarProducto(Producto prod) {
 
 		ResultSet rs = null;
@@ -312,6 +340,23 @@ public class ControladorBDImplementacion implements ControladorDatos {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public void comprarProducto(Compra comp) {
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(comprarProducto);
+
+			stmt.setDate(1, comp.getFecha_compra());
+			stmt.setString(2, comp.getIdproducto());
+			stmt.setInt(3, comp.getCodusuario());
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -448,8 +493,49 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		return listaProductos;
 	}
 
+	public Map<String, Compra> listarCompra() {
+		ResultSet rs = null;
+		Compra comp;
+		Map<String, Compra> listaCompras = new HashMap<>();
 
-	
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerCompra);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				comp = new Compra();
+				comp.setFecha_compra(rs.getDate("fecha_compra"));
+				comp.setIdproducto(rs.getString("idproducto"));
+				comp.setCodusuario(rs.getInt("codusuario"));
+
+				listaCompras.put(comp.getIdproducto(), comp);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en cierre del ResultSet");
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				System.out.println("Error en el cierre de la BD");
+				e.printStackTrace();
+			}
+		}
+		return listaCompras;
+	}
 
 	public Producto obtenerProducto(String idproducto) {
 		ResultSet rs = null;
@@ -496,6 +582,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		return prod;
 	}
 
+	/**
+	 * @return recoges la informacion de empleados
+	 */
 	public Map<String, Empleado> listarEmpleados() {
 		ResultSet rs = null;
 		Empleado emp;
@@ -542,6 +631,12 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		return listaEmpleados;
 	}
 
+	/**
+	 * @return
+	 */
+	/**
+	 * @return muestra la informacion de productos
+	 */
 	public DefaultTableModel mostrarProductos() {
 
 		String[] nombreColumnas = { "IDPRODUCTO, NOMBRE_PRODUC, CATEGORI, SEXO, PRECIO, TIPO" };
@@ -590,6 +685,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		this.openConnection();
 
 		try {
+
 			stmt = con.prepareStatement(DELETEempleado);
 			stmt.setInt(1, emp.getCodUsuario());
 
@@ -622,13 +718,10 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		this.openConnection();
 
 		try {
-			
-			
+
 			stmt = con.prepareStatement(DELETEProducto);
 			stmt.setString(1, prod.getIdProducto());
 			stmt.executeUpdate();
-			
-			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -647,6 +740,9 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * @param emp metodo mediante el cual un admin inserta un empleado
+	 */
 	public void insertarEmpleado(Empleado emp) {
 		this.openConnection();
 
@@ -902,10 +998,6 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		}
 		return listarProducto;
 	}
-	
-	
-	
-	
 
 	public Map<String, Producto> listarCosmetico() {
 		ResultSet rs = null;
@@ -932,7 +1024,7 @@ public class ControladorBDImplementacion implements ControladorDatos {
 
 				if (prod.getPrecio() < 10) {
 					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio<10");
-				
+
 				} else if (prod.getPrecio() < 20 & prod.getPrecio() > 10) {
 					stmt = con.prepareStatement(obtenerSoloCosmetico + "AND precio>10 AND precio<20");
 				} else if (prod.getPrecio() < 30 & prod.getPrecio() > 20) {
@@ -1014,6 +1106,5 @@ public class ControladorBDImplementacion implements ControladorDatos {
 		}
 		return listarProducto;
 	}
-
 
 }

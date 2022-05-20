@@ -52,6 +52,10 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ * @author 1dam
+ *
+ */
 public class GestionaEmpleados extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -65,6 +69,12 @@ public class GestionaEmpleados extends JDialog {
 	private Map<String, Empleado> empleados;
 	private JTable tablaEmpleado;
 
+	/**
+	 * @param padre
+	 * @param modal
+	 * @param datos
+	 * @param empleado
+	 */
 	public GestionaEmpleados(Configuracion padre, boolean modal, ControladorDatos datos, Empleado empleado) {
 		super(padre);
 		this.setModal(modal);

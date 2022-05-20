@@ -41,6 +41,10 @@ import javax.swing.JRadioButton;
 import java.awt.Cursor;
 import java.awt.Dialog.ModalityType;
 
+/**
+ * @author 1dam
+ *
+ */
 public class InsertarProducto extends JDialog implements ActionListener {
 
 	/**
@@ -64,6 +68,11 @@ public class InsertarProducto extends JDialog implements ActionListener {
 	private int dia;
 	private int mes;
 
+	/**
+	 * @param padre
+	 * @param modal
+	 * @param datos
+	 */
 	public InsertarProducto(Configuracion padre, boolean modal, ControladorDatos datos) {
 		super(padre);
 		this.setModal(modal);

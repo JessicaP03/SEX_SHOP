@@ -36,6 +36,10 @@ import java.awt.Canvas;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 
+/**
+ * @author 1dam
+ *
+ */
 public class InicioSesion extends JFrame {
 
 	private JPanel contentPane;

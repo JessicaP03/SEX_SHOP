@@ -23,9 +23,16 @@ import javax.swing.JEditorPane;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
+/**
+ * @author 1dam
+ *
+ */
 public class Configuracion extends JDialog {
 
 	
+	/**
+	 * @param datos
+	 */
 	public Configuracion(ControladorDatos datos) {
 //		super(padre);
 //		this.setModal(modal);
