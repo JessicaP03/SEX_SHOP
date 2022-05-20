@@ -84,7 +84,7 @@ public class Juguetes extends JDialog {
 		comboPrecio.setBackground(new Color(255, 105, 180));
 		contentPanel.add(comboPrecio);
 		
-		 comboSexo = new JComboBox();
+		comboSexo = new JComboBox();
 		comboSexo.setBounds(218, 121, 107, 22);
 		comboSexo.setModel(new DefaultComboBoxModel(new String[] {"MUJER", "HOMBRE"}));
 		comboSexo.setToolTipText("");
