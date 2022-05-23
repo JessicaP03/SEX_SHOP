@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.awt.event.ItemListener"/>
+    <fullyQualifiedTypeName name="javax.swing.RowFilter"/>
+    <fullyQualifiedTypeName name="javax.swing.JTable"/>
+    <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
+    <fullyQualifiedTypeName name="javax.swing.table.TableRowSorter"/>
+    <fullyQualifiedTypeName name="vista.Juguetes"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="clases.Producto"/>
+    <fullyQualifiedTypeName name="javax.swing.JButton"/>
+    <fullyQualifiedTypeName name="javax.swing.JComboBox"/>
+    <fullyQualifiedTypeName name="vista.ConfirmacionComprar"/>
+    <fullyQualifiedTypeName name="clases.Juguete"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="java.time.LocalDate"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="clases.Compra"/>
+    <fullyQualifiedTypeName name="modelo.ControladorDatos"/>
+    <fullyQualifiedTypeName name="modelo.ControladorBDImplementacion"/>
+    <fullyQualifiedTypeName name="vista.InicioSesion"/>
+</qualifiedTypeNameHistroy>

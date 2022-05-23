@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.security.NoSuchAlgorithmException"/>
+    <fullyQualifiedTypeName name="modelo.ControladorDatos"/>
+    <fullyQualifiedTypeName name="java.util.logging.Logger"/>
+    <fullyQualifiedTypeName name="java.util.logging.Level"/>
+    <fullyQualifiedTypeName name="sun.tools.tree.ThisExpression"/>
+    <fullyQualifiedTypeName name="java.sql.DriverManager"/>
+    <fullyQualifiedTypeName name="clases.Persona"/>
+    <fullyQualifiedTypeName name="vista.PiñaMeloco"/>
+    <fullyQualifiedTypeName name="vista.InicioSesion"/>
+    <fullyQualifiedTypeName name="modelo.ControladorBDImplementacion"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="java.util.TreeMap"/>
+    <fullyQualifiedTypeName name="javax.swing.JComboBox"/>
+    <fullyQualifiedTypeName name="javax.swing.ComboBoxEditor"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="org.graalvm.compiler.lir.phases.PreAllocationOptimizationStage"/>
+    <fullyQualifiedTypeName name="clases.Producto"/>
+    <fullyQualifiedTypeName name="clases.Lenceria"/>
+    <fullyQualifiedTypeName name="vista.Configuracion"/>
+    <fullyQualifiedTypeName name="clases.Juguete"/>
+    <fullyQualifiedTypeName name="com.mysql.cj.x.protobuf.MysqlxSql.StmtExecute"/>
+    <fullyQualifiedTypeName name="clases.Cosmetico"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="java.text.DateFormat"/>
+    <fullyQualifiedTypeName name="java.util.Calendar"/>
+    <fullyQualifiedTypeName name="com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException"/>
+    <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+    <fullyQualifiedTypeName name="java.text.ParseException"/>
+    <fullyQualifiedTypeName name="vista.InsertarProducto"/>
+</qualifiedTypeNameHistroy>
