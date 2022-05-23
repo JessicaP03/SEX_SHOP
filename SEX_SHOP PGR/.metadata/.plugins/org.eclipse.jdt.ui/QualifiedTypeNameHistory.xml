@@ -14,10 +14,11 @@
     <fullyQualifiedTypeName name="clases.Juguete"/>
     <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
-    <fullyQualifiedTypeName name="modelo.ControladorDatos"/>
     <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
-    <fullyQualifiedTypeName name="modelo.ControladorBDImplementacion"/>
     <fullyQualifiedTypeName name="java.sql.Date"/>
     <fullyQualifiedTypeName name="clases.Compra"/>
+    <fullyQualifiedTypeName name="modelo.ControladorDatos"/>
+    <fullyQualifiedTypeName name="modelo.ControladorBDImplementacion"/>
+    <fullyQualifiedTypeName name="vista.InicioSesion"/>
 </qualifiedTypeNameHistroy>
